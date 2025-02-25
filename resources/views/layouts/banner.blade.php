@@ -44,7 +44,21 @@
             </ul>
         </div>
         @else
-        <a href="{{ route('login') }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Login</a>
+        <a href="{{ route('login') }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+            <button
+                type="button"
+                class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded="false"
+                data-dropdown-toggle="user-dropdown"
+                data-dropdown-placement="bottom">
+                <span class="sr-only">Open user menu</span>
+                <img
+                    class="w-8 h-8 rounded-full"
+                    src="{{ asset('/images/2606517_5856.jpg') }}"
+                    alt="user photo" />
+            </button>
+        </a>
         @endif
         
 

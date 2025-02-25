@@ -34,7 +34,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if ($this->userRepository->authenticate($credentials)) {
-            return redirect()->intended('/adminland/change-password');
+            return redirect()->intended('/workspaces');
         }
 
         return back()->withErrors([

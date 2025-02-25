@@ -5,6 +5,9 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\WorkspaceController;
+
+
 Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
@@ -22,6 +25,13 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // New route for validating recovery code
 Route::post('/validate-recovery-code', [AuthController::class, 'validateRecoveryCode'])->name('validate.recovery.code');
+
+Route::get('/workspaces', [WorkspaceController::class, 'workspaces'])->name('workspaces.workspaces');
+Route::post('/workspaces/update/{workspace_id}', [WorkspaceController::class, 'updateWorkspace'])->name('workspaces.updateWorkspace');
+Route::post('/workspaces/update-status/{workspace_id}', [WorkspaceController::class, 'updateWorkspaceStatus'])->name('workspaces.updateWorkspaceStatus');
+Route::get('/modules', function () {
+    return view('modules.modules');
+})->name('modules.modules');
 
 // Protected routes
 Route::middleware([Authenticate::class])->group(function () {
@@ -56,12 +66,7 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::POST('/accountsettings', [SettingController::class, 'updateAccountSettings']); 
     });
+
+    Route::post('/workspaces', [WorkspaceController::class, 'createWorkspace'])->name('workspaces.createWorkspace');
 });
 
-Route::get('/workspaces', function () {
-    return view('workspaces.workspaces');
-})->name('workspaces.workspaces');
-
-Route::get('/modules', function () {
-    return view('modules.modules');
-})->name('modules.modules');

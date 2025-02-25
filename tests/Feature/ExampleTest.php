@@ -16,4 +16,14 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_create_workspace()
+    {
+        $response = $this->post('/workspaces', [
+            'title' => 'Test Workspace',
+            'description' => 'Test Description',
+        ]);
+
+        $response->assertStatus(200);
+    }
 }
