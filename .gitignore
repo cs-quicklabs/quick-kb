@@ -29,3 +29,6 @@ Homestead.json
 .phpactor.json
 auth.json
 /.vite
+
+public/.htaccess
+public/index.php

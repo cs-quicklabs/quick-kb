@@ -14,6 +14,7 @@
                             type="text"
                             name="name"
                             id="name"
+                            value="{{ old('name') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="John Doe"
                             required="" />
@@ -28,6 +29,7 @@
                             type="email"
                             name="email"
                             id="email"
+                            value="{{ old('email') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="name@company.com"
                             required="" />
@@ -41,6 +43,7 @@
                             type="text"
                             name="knowledge_base"
                             id="knowledge_base"
+                            value="{{ old('knowledge_base') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Knowledge Base Name"
                             required="" />

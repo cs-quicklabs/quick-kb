@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 class UserRepository
 {
-    public function register(array $data): User
+    public function register(array $data)
     {
         DB::beginTransaction();
         try {
@@ -29,7 +29,8 @@ class UserRepository
             ]);
             
             DB::commit();
-            return $user;
+            $encryptedId = encrypt($user->id);
+            return $encryptedId;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Failed to register user: ' . $e->getMessage());
@@ -37,18 +38,25 @@ class UserRepository
         }
     }
 
-    public function findById(int $id): ?User
+    public function findByEncryptedId($encryptedUserId)
     {
-        return User::find($id);
+
+        $decryptedId = decrypt($encryptedUserId);
+        return User::find($decryptedId);
     }
 
-    public function login(array $credentials): bool
+    public function login(array $credentials)
     {
         return Auth::attempt($credentials);
     }
 
-    public function authenticate(array $credentials): bool
+    public function authenticate($params)
     {
+        $credentials = [
+            'email' => $params['email'],
+            'password' => $params['password']
+        ];
+
         if ($this->login($credentials)) {
             session()->regenerate();
             return true;
@@ -64,8 +72,9 @@ class UserRepository
         session()->regenerateToken();
     }
 
-    public function validateRecoveryCode(string $recoveryCode): ?string
+    public function validateRecoveryCode(array $params)
     {
+        $recoveryCode = $params['recovery_code'];
         $user = User::where('recovery_code', $recoveryCode)->first();
 
         if ($user) {
@@ -75,7 +84,7 @@ class UserRepository
         return null;
     }
 
-    public function validateEncryptedUserId(string $encryptedId): bool
+    public function validateEncryptedUserId(string $encryptedId)
     {
         try {
             $userId = decrypt($encryptedId);
@@ -85,8 +94,10 @@ class UserRepository
         }
     }
 
-    public function resetPassword(int $userId, string $password): bool
+    public function resetPassword(array $params)
     {
+        $userId = decrypt($params['user_id']);
+        $password = $params['password'];
         $user = User::find($userId);
 
         if ($user) {
@@ -97,8 +108,10 @@ class UserRepository
         return false;
     }
 
-    public function updatePassword(string $oldPasswordOrRecoveryCode, string $newPassword): bool
+    public function updatePassword(array $params)
     {
+        $oldPasswordOrRecoveryCode = $params['old_password_or_recovery_code'];
+        $newPassword = $params['new_password'];
         $user = Auth::user();
     
         if (Hash::check($oldPasswordOrRecoveryCode, $user->password) || $user->recovery_code === $oldPasswordOrRecoveryCode) {

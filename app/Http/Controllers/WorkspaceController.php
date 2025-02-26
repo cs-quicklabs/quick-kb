@@ -43,8 +43,7 @@ class WorkspaceController extends Controller
 
     public function workspaces(Request $request)
     {
-        $params = $request->all();
-        $workspaces = $this->workspaceRepository->getAllWorkspaces($params);
+        $workspaces = $this->workspaceRepository->getAllWorkspaces($request->all());
         
         return view('workspaces.workspaces', compact('workspaces'));
     }

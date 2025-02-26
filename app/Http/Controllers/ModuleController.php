@@ -16,8 +16,7 @@ class ModuleController extends Controller
 
     public function modules(Request $request, $workspace_slug)
     {
-        $params = $request->all();  
-        $modulesData = $this->moduleRepository->getModules($params, $workspace_slug);
+        $modulesData = $this->moduleRepository->getModules($request->all(), $workspace_slug);
 
         return view('modules.modules', [
             'modules' => $modulesData['modules'],

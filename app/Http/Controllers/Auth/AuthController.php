@@ -31,9 +31,8 @@ class AuthController extends Controller
 
     public function authenticate(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
 
-        if ($this->userRepository->authenticate($credentials)) {
+        if ($this->userRepository->authenticate($request->all())) {
             return redirect()->intended('/workspaces');
         }
 
@@ -44,8 +43,7 @@ class AuthController extends Controller
 
     public function recoveryCode($userId)
     {   
-        $decryptedId = decrypt($userId);
-        $user = $this->userRepository->findById($decryptedId);
+        $user = $this->userRepository->findByEncryptedId($userId);
         return view('firstrun.recoverycode', ['recoveryCode' => $user->recovery_code ?? null]);
     }
 
@@ -56,9 +54,8 @@ class AuthController extends Controller
 
     public function register(SignupRequest $request)
     {
-        $user = $this->userRepository->register($request->all());
-        $encryptedId = encrypt($user->id);
-
+        $encryptedId = $this->userRepository->register($request->all());
+        
         return redirect()->route('recovery.code', ['userId' => $encryptedId]);
     }
 
@@ -70,8 +67,7 @@ class AuthController extends Controller
 
     public function validateRecoveryCode(Request $request)
     {
-        $recoveryCode = $request->input('recovery_code');
-        $encryptedId = $this->userRepository->validateRecoveryCode($recoveryCode);
+        $encryptedId = $this->userRepository->validateRecoveryCode($request->all());
 
         if ($encryptedId) {
             return redirect()->route('reset-password', ['userId' => $encryptedId]);
@@ -95,10 +91,8 @@ class AuthController extends Controller
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $userId = decrypt($request->input('user_id'));
-        $password = $request->input('password');
 
-        if ($this->userRepository->resetPassword($userId, $password)) {
+        if ($this->userRepository->resetPassword($request->all())) {
             return redirect()->route('login')->with('status', 'Password has been reset successfully.');
         }
 
@@ -109,10 +103,8 @@ class AuthController extends Controller
 
     public function updatePassword(ChangePasswordRequest $request)
     {
-        $oldPasswordOrRecoveryCode = $request->input('old_password_or_recovery_code');
-        $newPassword = $request->input('new_password');
 
-        if ($this->userRepository->updatePassword($oldPasswordOrRecoveryCode, $newPassword)) {
+        if ($this->userRepository->updatePassword($request->all())) {
             return redirect()->route('adminland.changepassword')->with('status', 'Password has been changed successfully.');
         }
 
