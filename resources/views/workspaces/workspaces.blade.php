@@ -3,7 +3,7 @@
 <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
     <nav class="flex" aria-label="Breadcrumb">
         <ol class="inline-flex justify-self-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li class="inline-flex items-center"><a href="/quick-kb" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline"><svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <li class="inline-flex items-center"><a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline"><svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
                     </svg> Home</a></li>
         </ol>
@@ -27,13 +27,44 @@
     </div>
     
     
-    <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+    <div id="draggable-list" class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
         
         @if ($workspaces['workspaceCount'] > 0)
             @foreach ($workspaces['workspaces'] as $i => $workspace)
-                <div id="workspacediv-{{$workspace['id']}}" class="pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700">
-                    <a id="workspacetitle-{{$workspace['id']}}" href="/workspaces/{{$workspace['slug']}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">{{$workspace['shortTitle']}}</a>
-                    <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">{{$workspace['description']}}</p>
+                <div id="workspacediv-{{$workspace['id']}}" 
+                    class="mt-5 pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
+                    draggable="true"
+                    data-draggablelist-id="{{$workspace['id']}}"
+                    data-position="{{$i}}">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex-1">
+                            <a id="workspacetitle-{{$workspace['id']}}" href="/workspaces/{{$workspace['slug']}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+                                {{$workspace['shortTitle']}}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex-1">
+                            <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                {{$workspace['description']}}
+                            </p>
+                        </div>
+                            
+                        @auth
+                        <span title="Drag to reorder" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="9" cy="6" r="2"/>
+                                <circle cx="9" cy="12" r="2"/>
+                                <circle cx="9" cy="18" r="2"/>
+                                <circle cx="15" cy="6" r="2"/>
+                                <circle cx="15" cy="12" r="2"/>
+                                <circle cx="15" cy="18" r="2"/>
+                            </svg>
+                        </span>
+                        @endauth
+                        
+                    </div>
                     @auth
                         <div class="sm:flex sm:items-center sm:justify-right mt-2">
                             <button onclick="editWorkspaceModal({{$workspace['id']}})" data-tooltip-target="tooltip-edit-{{$workspace['id']}}" data-modal-target="editWorkspaceModal" data-modal-toggle="editWorkspaceModal" type="button" class="text-black bg-gray-300 hover:bg-blue-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -218,9 +249,9 @@
     }
 
     function editWorkspaceModal(id) {
-        document.getElementById('editworkspace-title').value = document.getElementById('workspacetitle-'+id).textContent;
-        document.getElementById('editworkspace-description').value = document.getElementById('workspacedescription-'+id).textContent;
-        document.getElementById('editworkspace-description').textContent = document.getElementById('workspacedescription-'+id).textContent;
+        document.getElementById('editworkspace-title').value = document.getElementById('workspacetitle-'+id).textContent.trim();
+        document.getElementById('editworkspace-description').value = document.getElementById('workspacedescription-'+id).textContent.trim();
+        document.getElementById('editworkspace-description').textContent = document.getElementById('workspacedescription-'+id).textContent.trim();
         document.getElementById('editworkspace-id').value = id;
     }
 
@@ -296,6 +327,115 @@
             console.error('Error:', error);
         });
     }
+
+
+
+    //// Drag and drop
+    document.addEventListener('DOMContentLoaded', function() {
+        @auth
+        const draggableList = document.getElementById('draggable-list');
+        let draggingElement = null;
+
+        // Add event listeners to all draggable workspace items
+        const draggableItems = document.querySelectorAll('[data-draggablelist-id]');
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+            item.addEventListener('dragover', handleDragOver);
+            item.addEventListener('drop', handleDrop);
+        });
+
+        function handleDragStart(e) {
+            draggingElement = e.target;
+            e.target.classList.add('opacity-50');
+        }
+
+        function handleDragEnd(e) {
+            draggingElement = null;
+            e.target.classList.remove('opacity-50');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (!draggingElement) return;
+
+            const dropTarget = e.target.closest('[data-draggablelist-id]');
+            if (!dropTarget || dropTarget === draggingElement) return;
+
+            // Get the list of all workspace items
+            const items = [...draggableList.children];
+            const fromIndex = items.indexOf(draggingElement);
+            const toIndex = items.indexOf(dropTarget);
+
+            console.log("items: ", items);
+
+            // Reorder elements
+            if (fromIndex < toIndex) {
+                dropTarget.parentNode.insertBefore(draggingElement, dropTarget.nextSibling);
+            } else {
+                dropTarget.parentNode.insertBefore(draggingElement, dropTarget);
+            }
+
+            // Remove existing border classes from all child divs
+            items.forEach((item, index) => {
+                const childDivs = item.querySelectorAll('.pb-5');
+                console.log("childDivs: ", childDivs);
+                childDivs.forEach(div => {
+                    console.log(index, items.length);
+                    // Remove existing border classes
+                    div.classList.remove('border-b');
+                    
+                    // Add border classes if not the last item
+                    if (index !== items.length - 1) {
+                        div.classList.add('border-b');
+                    }
+                });
+            });
+
+            // Update positions and save to backend
+            updateWorkspacePositions();
+        }
+
+        function updateWorkspacePositions() {
+            const items = [...document.querySelectorAll('[data-draggablelist-id]')];
+            //console.log("items: ", items);
+            const positions = items.map((item, index) => ({
+                id: item.dataset.draggablelistId,
+                order: index
+            }));
+
+            // Send the new order to the server
+            fetch('{{route("workspaces.updateWorkspacePositions")}}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ positions })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Failed to update workspace order');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating workspace order:', error);
+            });
+
+            
+        }
+        @endauth
+        
+    });
+
+    
 </script>
 
 @endsection

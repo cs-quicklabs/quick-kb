@@ -27,8 +27,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/validate-recovery-code', [AuthController::class, 'validateRecoveryCode'])->name('validate.recovery.code');
 
 Route::get('/workspaces', [WorkspaceController::class, 'workspaces'])->name('workspaces.workspaces');
-Route::post('/workspaces/update/{workspace_id}', [WorkspaceController::class, 'updateWorkspace'])->name('workspaces.updateWorkspace');
-Route::post('/workspaces/update-status/{workspace_id}', [WorkspaceController::class, 'updateWorkspaceStatus'])->name('workspaces.updateWorkspaceStatus');
 Route::get('/modules', function () {
     return view('modules.modules');
 })->name('modules.modules');
@@ -56,17 +54,12 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::get('/settings', [SettingController::class, 'settings'])->name('adminland.settings');
 
-        // Route::get('/settings', function () {
-        //     return view('adminland.accountsettings');
-        // })->name('adminland.settings');
-        
-        // Route::post('/accountsettings', function() {
-        //     dd(request()->all());
-        // })->name('adminland.accountsettings.update');
-
         Route::POST('/accountsettings', [SettingController::class, 'updateAccountSettings']); 
     });
 
     Route::post('/workspaces', [WorkspaceController::class, 'createWorkspace'])->name('workspaces.createWorkspace');
+    Route::post('/workspaces/update/{workspace_id}', [WorkspaceController::class, 'updateWorkspace'])->name('workspaces.updateWorkspace');
+    Route::post('/workspaces/update-status/{workspace_id}', [WorkspaceController::class, 'updateWorkspaceStatus'])->name('workspaces.updateWorkspaceStatus');
+    Route::post('/workspaces/update-positions', [WorkspaceController::class, 'updateWorkspacePositions'])->name('workspaces.updateWorkspacePositions');
 });
 

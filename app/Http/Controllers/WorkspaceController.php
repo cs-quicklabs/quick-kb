@@ -41,9 +41,10 @@ class WorkspaceController extends Controller
         }
     }
 
-    public function workspaces()
+    public function workspaces(Request $request)
     {
-        $workspaces = $this->workspaceRepository->getAllWorkspaces();
+        $params = $request->all();
+        $workspaces = $this->workspaceRepository->getAllWorkspaces($params);
         
         return view('workspaces.workspaces', compact('workspaces'));
     }
@@ -81,6 +82,24 @@ class WorkspaceController extends Controller
                 'message' => 'Failed to update workspace status',
                 'errors' => ['general' => [$e->getMessage()]]
             ], 500);
+        }
+    }
+
+    public function updateWorkspacePositions(Request $request)
+    {
+        try {
+            $this->workspaceRepository->updateWorkspacePositions($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Workspace positions updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update workspace positions',
+                'errors' => ['general' => [$e->getMessage()]]
+            ], 500);    
         }
     }
 }

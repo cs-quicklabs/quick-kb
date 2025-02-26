@@ -65,7 +65,7 @@
     </div>
 </div>
 <div class="max-w-3xl px-4 mx-auto lg:px-6 sm:py-8 lg:py-12">
-    <a href="{{ url('/quick-kb') }}">
+    <a href="{{ url('/') }}">
         <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Quick KB</h2>
     </a>
     <p class="mt-2 text-lg text-pretty text-gray-700 sm:text-xl/8">
@@ -75,8 +75,51 @@
     <div class="mb-2">
         <input
             type="text"
-            id="default-input"
             placeholder="What can we help you with? Search with for a topic or question..."
-            class="bg-gray-50 mt-1 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+            class="bg-gray-50 mt-1 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            id="search-input" 
+            value="{{ request()->get('search', '') }}"
+        />
     </div>
+    <div id="search-results"></div>
 </div> 
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('keypress', function(e) {
+        const query = this.value.trim();
+        const type = this.dataset.type;
+
+        // Check if Enter key is pressed and query length is at least 3
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            // Get current URL and create URL object
+            const currentUrl = new URL(window.location.href);
+            
+            // Set or update the search parameter
+            if(query.length >= 3) {
+                if (query) {
+                    currentUrl.searchParams.set('search', query);
+                } else {
+                    currentUrl.searchParams.delete('search');
+                }
+            } else {
+                currentUrl.searchParams.delete('search');
+            }
+            
+            
+            // Navigate to the new URL
+            window.location.href = currentUrl.toString();
+        }
+    });
+
+});
+    
+    
+</script>
+    

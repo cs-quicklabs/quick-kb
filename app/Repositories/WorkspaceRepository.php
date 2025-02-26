@@ -44,20 +44,27 @@ class WorkspaceRepository
     }
 
 
-    public function getAllWorkspaces()
+    public function getAllWorkspaces($params)
     {
-        $workspaces = Workspace::where('status', 1)->orderBy('order', 'asc')->get()->map(function($workspace) {
-            return [
-                'id' => $workspace->id,
-                'title' => $workspace->title,
-                'slug' => $workspace->slug,
-                'description' => $workspace->description,
-                'shortTitle' => StringHelper::getShortTitle($workspace->title, 150, '...'),
-                'created_at' => $workspace->created_at,
-                'updated_at' => $workspace->updated_at
-            ];
-        })->toArray();
         
+        $search = $params['search'] ?? '';
+        $workspaces = Workspace::where('status', 1)
+                ->where('title', 'like', '%'.$search.'%')
+                ->orWhere('description', 'like', '%'.$search.'%')
+                ->orderBy('order', 'asc')
+                ->get()
+                ->map(function($workspace) {
+                    return [
+                        'id' => $workspace->id,
+                        'title' => $workspace->title,
+                        'slug' => $workspace->slug,
+                        'description' => $workspace->description,
+                        'shortTitle' => StringHelper::getShortTitle($workspace->title, 150, '...'),
+                        'created_at' => $workspace->created_at,
+                        'updated_at' => $workspace->updated_at
+                    ];
+                })->toArray();
+
         $workspaceCount = count($workspaces);
         return [
             'workspaces' => $workspaces,
@@ -96,5 +103,22 @@ class WorkspaceRepository
             DB::rollBack();
             throw new \Exception('Failed to update workspace status: ' . $e->getMessage());
         }   
-    }   
+    } 
+    
+    public function updateWorkspacePositions(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($data['positions'] as $position) {
+                $workspace = Workspace::find($position['id']);  
+                $workspace->order = $position['order'] + 1;
+                $workspace->save();
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {   
+            DB::rollBack();
+            throw new \Exception('Failed to update workspace positions: ' . $e->getMessage());
+        }
+    }
 } 
