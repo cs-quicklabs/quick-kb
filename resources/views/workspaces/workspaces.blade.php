@@ -38,7 +38,7 @@
                     data-position="{{$i}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
-                            <a id="workspacetitle-{{$workspace['id']}}" href="/workspaces/{{$workspace['slug']}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+                            <a id="workspacetitle-{{$workspace['id']}}" href="{{route('modules.modules', ['workspace_slug' => $workspace['slug']])}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                                 {{$workspace['shortTitle']}}
                             </a>
                         </div>

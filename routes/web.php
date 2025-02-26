@@ -6,7 +6,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WorkspaceController;
-
+use App\Http\Controllers\ModuleController;
 
 Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
@@ -27,9 +27,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/validate-recovery-code', [AuthController::class, 'validateRecoveryCode'])->name('validate.recovery.code');
 
 Route::get('/workspaces', [WorkspaceController::class, 'workspaces'])->name('workspaces.workspaces');
-Route::get('/modules', function () {
-    return view('modules.modules');
-})->name('modules.modules');
+Route::get('/modules/{workspace_slug}', [ModuleController::class, 'modules'])->name('modules.modules');
 
 // Protected routes
 Route::middleware([Authenticate::class])->group(function () {
