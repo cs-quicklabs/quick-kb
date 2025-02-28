@@ -84,10 +84,10 @@ class WorkspaceController extends Controller
         }
     }
 
-    public function updateWorkspacePositions(Request $request)
+    public function updateWorkspaceOrder(Request $request)
     {
         try {
-            $this->workspaceRepository->updateWorkspacePositions($request->all());
+            $this->workspaceRepository->updateWorkspaceOrder($request->all());
 
             return response()->json([
                 'success' => true,
@@ -100,5 +100,13 @@ class WorkspaceController extends Controller
                 'errors' => ['general' => [$e->getMessage()]]
             ], 500);    
         }
+    }
+
+
+    public function archivedWorkspaces()
+    {
+        $workspaces = $this->workspaceRepository->getArchivedWorkspaces();
+
+        return view('adminland.archivedworkspace', compact('workspaces'));
     }
 }

@@ -28,8 +28,9 @@ class UserRepository
                 'user_id' => $user->id,
             ]);
             
-            DB::commit();
             $encryptedId = encrypt($user->id);
+            DB::commit();
+            
             return $encryptedId;
         } catch (\Exception $e) {
             DB::rollBack();

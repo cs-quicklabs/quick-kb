@@ -54,4 +54,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(KnowledgeBase::class);
     }
+
 }

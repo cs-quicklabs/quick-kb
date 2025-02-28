@@ -38,9 +38,7 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::post('/update-password', [AuthController::class, 'updatePassword'])->name('adminland.updatepassword');
 
-        Route::get('/workspaces', function () {
-            return view('adminland.archivedworkspace');
-        })->name('adminland.workspaces');
+        Route::get('/workspaces', [WorkspaceController::class, 'archivedWorkspaces'])->name('adminland.workspaces');
 
         Route::get('/modules', function () {
             return view('adminland.archivedmodule');
@@ -58,6 +56,10 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::post('/workspaces', [WorkspaceController::class, 'createWorkspace'])->name('workspaces.createWorkspace');
     Route::post('/workspaces/update/{workspace_id}', [WorkspaceController::class, 'updateWorkspace'])->name('workspaces.updateWorkspace');
     Route::post('/workspaces/update-status/{workspace_id}', [WorkspaceController::class, 'updateWorkspaceStatus'])->name('workspaces.updateWorkspaceStatus');
-    Route::post('/workspaces/update-positions', [WorkspaceController::class, 'updateWorkspacePositions'])->name('workspaces.updateWorkspacePositions');
+    Route::post('/workspaces/update-order', [WorkspaceController::class, 'updateWorkspaceOrder'])->name('workspaces.updateWorkspaceOrder');
+
+    Route::post('/modules', [ModuleController::class, 'createModule'])->name('modules.createModule');
+    Route::post('/modules/update/{module_id}', [ModuleController::class, 'updateModule'])->name('modules.update');
+    Route::post('/modules/update-order', [ModuleController::class, 'updateModuleOrder'])->name('modules.updateModuleOrder');
 });
 

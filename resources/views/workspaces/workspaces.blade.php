@@ -32,13 +32,14 @@
         @if ($workspaces['workspaceCount'] > 0)
             @foreach ($workspaces['workspaces'] as $i => $workspace)
                 <div id="workspacediv-{{$workspace['id']}}" 
-                    class="mt-5 pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
+                    class="draggable-item pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
                     draggable="true"
                     data-draggablelist-id="{{$workspace['id']}}"
                     data-position="{{$i}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
-                            <a id="workspacetitle-{{$workspace['id']}}" href="{{route('modules.modules', ['workspace_slug' => $workspace['slug']])}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+                            <input type="hidden" id="workspacetitle-{{$workspace['id']}}" value="{{$workspace['title']}}">
+                            <a href="{{route('modules.modules', ['workspace_slug' => $workspace['slug']])}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                                 {{$workspace['shortTitle']}}
                             </a>
                         </div>
@@ -241,15 +242,13 @@
 
     // Function to clear form fields
     function clearAddWorkspaceForm() {
-        document.getElementById('title').value = '';
-        document.getElementById('description').value = '';
-        
+        document.getElementById('addWorkspaceForm').reset();
         document.querySelector('.error-title').textContent = '';
         document.querySelector('.error-description').textContent = '';
     }
 
     function editWorkspaceModal(id) {
-        document.getElementById('editworkspace-title').value = document.getElementById('workspacetitle-'+id).textContent.trim();
+        document.getElementById('editworkspace-title').value = document.getElementById('workspacetitle-'+id).value.trim();
         document.getElementById('editworkspace-description').value = document.getElementById('workspacedescription-'+id).textContent.trim();
         document.getElementById('editworkspace-description').textContent = document.getElementById('workspacedescription-'+id).textContent.trim();
         document.getElementById('editworkspace-id').value = id;
@@ -330,110 +329,46 @@
 
 
 
-    //// Drag and drop
-    document.addEventListener('DOMContentLoaded', function() {
-        @auth
-        const draggableList = document.getElementById('draggable-list');
-        let draggingElement = null;
+    // Update workspace order...
+    function updateDraggableListOrder() {
+        const items = [...document.querySelectorAll('.draggable-item')];
+        console.log("items: ", items);
+        const orders = items.map((item, index) => ({
+            id: item.dataset.draggablelistId,
+            order: index
+        }));
 
-        // Add event listeners to all draggable workspace items
-        const draggableItems = document.querySelectorAll('[data-draggablelist-id]');
-        draggableItems.forEach(item => {
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-            item.addEventListener('dragover', handleDragOver);
-            item.addEventListener('drop', handleDrop);
+        // Add/remove border-b class
+        items.forEach((item, index) => {
+            if (index < items.length - 1) {
+                item.classList.add('border-b');
+            } else {
+                item.classList.remove('border-b');
+            }
         });
 
-        function handleDragStart(e) {
-            draggingElement = e.target;
-            e.target.classList.add('opacity-50');
-        }
-
-        function handleDragEnd(e) {
-            draggingElement = null;
-            e.target.classList.remove('opacity-50');
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            if (!draggingElement) return;
-
-            const dropTarget = e.target.closest('[data-draggablelist-id]');
-            if (!dropTarget || dropTarget === draggingElement) return;
-
-            // Get the list of all workspace items
-            const items = [...draggableList.children];
-            const fromIndex = items.indexOf(draggingElement);
-            const toIndex = items.indexOf(dropTarget);
-
-            console.log("items: ", items);
-
-            // Reorder elements
-            if (fromIndex < toIndex) {
-                dropTarget.parentNode.insertBefore(draggingElement, dropTarget.nextSibling);
-            } else {
-                dropTarget.parentNode.insertBefore(draggingElement, dropTarget);
+        // Send the new order to the server
+        fetch('{{route("workspaces.updateWorkspaceOrder")}}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ orders })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                console.error('Failed to update workspace order');
             }
+        })
+        .catch(error => {
+            console.error('Error updating workspace order:', error);
+        });
 
-            // Remove existing border classes from all child divs
-            items.forEach((item, index) => {
-                const childDivs = item.querySelectorAll('.pb-5');
-                console.log("childDivs: ", childDivs);
-                childDivs.forEach(div => {
-                    console.log(index, items.length);
-                    // Remove existing border classes
-                    div.classList.remove('border-b');
-                    
-                    // Add border classes if not the last item
-                    if (index !== items.length - 1) {
-                        div.classList.add('border-b');
-                    }
-                });
-            });
-
-            // Update positions and save to backend
-            updateWorkspacePositions();
-        }
-
-        function updateWorkspacePositions() {
-            const items = [...document.querySelectorAll('[data-draggablelist-id]')];
-            //console.log("items: ", items);
-            const positions = items.map((item, index) => ({
-                id: item.dataset.draggablelistId,
-                order: index
-            }));
-
-            // Send the new order to the server
-            fetch('{{route("workspaces.updateWorkspacePositions")}}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ positions })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    console.error('Failed to update workspace order');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating workspace order:', error);
-            });
-
-            
-        }
-        @endauth
         
-    });
+    }
 
     
 </script>

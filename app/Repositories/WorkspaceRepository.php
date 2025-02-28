@@ -6,7 +6,8 @@ use App\Models\Workspace;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Helpers\StringHelper;
+use Carbon\Carbon;
+
 class WorkspaceRepository
 {
     /**
@@ -49,8 +50,10 @@ class WorkspaceRepository
         
         $search = $params['search'] ?? '';
         $workspaces = Workspace::where('status', 1)
-                ->where('title', 'like', '%'.$search.'%')
-                ->orWhere('description', 'like', '%'.$search.'%')
+                ->where(function($query) use ($search) {
+                    $query->where('title', 'like', '%'.$search.'%')
+                          ->orWhere('description', 'like', '%'.$search.'%');
+                })
                 ->orderBy('order', 'asc')
                 ->get()
                 ->map(function($workspace) {
@@ -59,7 +62,7 @@ class WorkspaceRepository
                         'title' => $workspace->title,
                         'slug' => $workspace->slug,
                         'description' => $workspace->description,
-                        'shortTitle' => StringHelper::getShortTitle($workspace->title, 150, '...'),
+                        'shortTitle' => getShortTitle($workspace->title, 150, '...'),
                         'created_at' => $workspace->created_at,
                         'updated_at' => $workspace->updated_at
                     ];
@@ -96,7 +99,12 @@ class WorkspaceRepository
         try {
             $workspace = Workspace::find($workspace_id);
             $workspace->status = $data['status'];
+            $workspace->updated_by = Auth::id();
             $workspace->save();
+
+            if($workspace){
+                $workspace->modules()->update(['status' => 0]);
+            }
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -105,13 +113,13 @@ class WorkspaceRepository
         }   
     } 
     
-    public function updateWorkspacePositions(array $data)
+    public function updateWorkspaceOrder(array $data)
     {
         DB::beginTransaction();
         try {
-            foreach ($data['positions'] as $position) {
-                $workspace = Workspace::find($position['id']);  
-                $workspace->order = $position['order'] + 1;
+            foreach ($data['orders'] as $order) {
+                $workspace = Workspace::find($order['id']);  
+                $workspace->order = $order['order'] + 1;
                 $workspace->save();
             }
             DB::commit();
@@ -120,5 +128,23 @@ class WorkspaceRepository
             DB::rollBack();
             throw new \Exception('Failed to update workspace positions: ' . $e->getMessage());
         }
+    }
+
+
+    public function getArchivedWorkspaces()
+    {
+        $workspaces = Workspace::with('updatedBy')
+            ->where('status', 0)
+            ->get()
+            ->map(function($workspace) {
+                return [
+                    'id' => $workspace->id,
+                    'title' => $workspace->title,
+                    'updated_by' => $workspace->updatedBy->name,
+                    'updated_at' => Carbon::parse($workspace->updated_at)->format('F d, Y')
+                ];
+            });
+
+        return $workspaces;
     }
 } 

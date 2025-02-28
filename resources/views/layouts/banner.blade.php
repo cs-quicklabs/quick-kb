@@ -84,41 +84,98 @@
     <div id="search-results"></div>
 </div> 
 
+<style>
+    .draggable-ghost {
+        background-color: #f3f4f6;
+        border: 2px dashed #4f46e5;
+        opacity: 0.5;
+    }
 
+    .dark .draggable-ghost {
+        background-color: #374151;
+        border-color: #6366f1;
+    }
+
+    .draggable-chosen {
+        background-color: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .draggable-chosen {
+        background-color: #1f2937;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .draggable-drag {
+        opacity: 0.8;
+    }
+
+    .drag-handle {
+        cursor: move;
+        cursor: -webkit-grabbing;   
+    }
+
+    /* Optional: Hover effect for drag handle */
+    .drag-handle:hover {
+        color: #4f46e5;
+    }
+
+    .dark .drag-handle:hover {
+        color: #6366f1;
+    }
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('search-input');
         const searchResults = document.getElementById('search-results');
 
-    searchInput.addEventListener('keypress', function(e) {
-        const query = this.value.trim();
-        const type = this.dataset.type;
+        searchInput.addEventListener('keypress', function(e) {
+            const query = this.value.trim();
+            const type = this.dataset.type;
 
-        // Check if Enter key is pressed and query length is at least 3
-        if (e.key === 'Enter') {
-            e.preventDefault();
+            // Check if Enter key is pressed and query length is at least 3
+            if (e.key === 'Enter') {
+                e.preventDefault();
 
-            // Get current URL and create URL object
-            const currentUrl = new URL(window.location.href);
-            
-            // Set or update the search parameter
-            if(query.length >= 3) {
-                if (query) {
-                    currentUrl.searchParams.set('search', query);
+                // Get current URL and create URL object
+                const currentUrl = new URL(window.location.href);
+                
+                // Set or update the search parameter
+                if(query.length >= 3) {
+                    if (query) {
+                        currentUrl.searchParams.set('search', query);
+                    } else {
+                        currentUrl.searchParams.delete('search');
+                    }
                 } else {
                     currentUrl.searchParams.delete('search');
                 }
-            } else {
-                currentUrl.searchParams.delete('search');
+                
+                
+                // Navigate to the new URL
+                window.location.href = currentUrl.toString();
             }
-            
-            
-            // Navigate to the new URL
-            window.location.href = currentUrl.toString();
-        }
-    });
+        });
 
-});
+
+        //Drag and drop modules
+        const modulesList = document.getElementById('draggable-list');
+        
+        Sortable.create(modulesList, {
+            animation: 150,
+            ghostClass: 'draggable-ghost',
+            chosenClass: 'draggable-chosen',
+            dragClass: 'draggable-drag',
+            handle: '.drag-handle', // if you want to use a specific handle
+            onEnd: function(evt) {
+                updateDraggableListOrder();
+            }
+        });
+
+    });
     
     
 </script>
