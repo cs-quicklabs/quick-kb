@@ -128,4 +128,6 @@ class UserRepository
         $userCount = User::count();
         return $userCount;
     }
+
+    
 }
