@@ -33,9 +33,7 @@
             @foreach ($workspaces['workspaces'] as $i => $workspace)
                 <div id="workspacediv-{{$workspace['id']}}" 
                     class="draggable-item pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
-                    draggable="true"
-                    data-draggablelist-id="{{$workspace['id']}}"
-                    data-position="{{$i}}">
+                    data-draggablelist-id="{{$workspace['id']}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
                             <input type="hidden" id="workspacetitle-{{$workspace['id']}}" value="{{$workspace['title']}}">

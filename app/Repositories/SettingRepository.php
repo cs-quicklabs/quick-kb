@@ -49,11 +49,12 @@ class SettingRepository
     }
 
     public function getThemeData()
-    {
+    {   
         $user = Auth::user();
         $knowledgeBase = $user->knowledgeBase;
         $theme = $knowledgeBase->theme;
-        $themeData = json_decode($theme->theme, true);
+        $themeData = json_decode($theme->theme??"{}", true);        
+        
         $accountSettings['user'] = $user;
         $accountSettings['knowledgeBase'] = $knowledgeBase;
         $accountSettings['themeData'] = $themeData;

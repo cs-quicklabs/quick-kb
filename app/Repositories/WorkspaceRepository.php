@@ -103,7 +103,7 @@ class WorkspaceRepository
             $workspace->save();
 
             if($workspace){
-                $workspace->modules()->update(['status' => 0]);
+                $workspace->modules()->update(['status' => $data['status']]);
             }
             DB::commit();
             return true;
