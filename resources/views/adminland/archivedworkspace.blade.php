@@ -55,7 +55,7 @@
 								<td class="table-cell">
 									<div class="flex justify-end">
 										<button onclick="restoreWorkspaceModal({{$workspace['id']}})" class="btn-inline-delete" data-modal-target="popup-modal-activate" data-modal-toggle="popup-modal-activate" href="#">Restore</button> 
-										<button class="btn-inline-delete ml-2" data-modal-target="popup-modal" data-modal-toggle="popup-modal" href="#">Delete</button>
+										<button onclick="deleteWorkspaceModal({{$workspace['id']}})" class="btn-inline-delete ml-2" data-modal-target="popup-modal" data-modal-toggle="popup-modal" href="#">Delete</button>
 									</div>
 								</td>
 							</tr>
@@ -82,7 +82,9 @@
 				</svg>
 				<h3 class="text-lg font-bold text-gray-700 dark:text-gray-400">Are you sure you want to delete this workspace?</h3>
 				<p class="mb-5 font-xs text-gray-500">All the information regarding this workspace will be lost and its content will also be
-					lost. This is not reversible.</p> <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Yes, I'm sure</button> <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+					lost. This is not reversible.</p> 
+					<button onclick="deleteWorkspace()" data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">Yes, I'm sure</button> 
+					<button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
 			</div>
 		</div>
 	</div>
@@ -146,6 +148,42 @@
 			console.error('Error:', error);
 		});
 	}
+
+	function deleteWorkspaceModal(workspace_id) {
+		document.getElementById('workspace_id').value = workspace_id;
+		console.log(workspace_id);
+	}
 	
+
+	function deleteWorkspace() {
+		const workspace_id = document.getElementById('workspace_id').value;
+		const formData = new FormData();
+		
+		formData.append('workspace_id', workspace_id);
+		console.log(formData, workspace_id);
+		return false;
+
+		fetch('#', {
+			method: 'post',
+			headers: {
+				'X-CSRF-TOKEN': '{{ csrf_token() }}',
+				'Accept': 'application/json'
+			},
+			body: formData
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				alert(data.message);	
+				window.location.reload();
+			} else {
+				alert(data.message);
+			}
+		})
+		.catch(error => {
+			alert("Something went wrong.");
+			console.error('Error:', error);	
+		});
+	}
 </script>
 @endsection

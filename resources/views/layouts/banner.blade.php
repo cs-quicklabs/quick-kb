@@ -79,7 +79,21 @@
             class="bg-gray-50 mt-1 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="search-input" 
             value="{{ request()->get('search', '') }}"
+            autocomplete="off"
         />
+
+        <div id="search-list-div" class="bg-white relative border border-gray-300 rounded hidden" id="search-results-container">
+    
+            <div class="p-4">
+                <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Search Results:</h2>
+                <ul id="search-list-ul" class="space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
+                    <li class="text-sm ">
+                        No results found.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
     <div id="search-results"></div>
 </div> 
@@ -129,37 +143,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-
-        searchInput.addEventListener('keypress', function(e) {
-            const query = this.value.trim();
-            const type = this.dataset.type;
-
-            // Check if Enter key is pressed and query length is at least 3
-            if (e.key === 'Enter') {
-                e.preventDefault();
-
-                // Get current URL and create URL object
-                const currentUrl = new URL(window.location.href);
-                
-                // Set or update the search parameter
-                if(query.length >= 3) {
-                    if (query) {
-                        currentUrl.searchParams.set('search', query);
-                    } else {
-                        currentUrl.searchParams.delete('search');
-                    }
-                } else {
-                    currentUrl.searchParams.delete('search');
-                }
-                
-                
-                // Navigate to the new URL
-                window.location.href = currentUrl.toString();
-            }
-        });
-
 
         //Drag and drop modules
         const modulesList = document.getElementById('draggable-list');
@@ -177,6 +160,106 @@
 
     });
     
-    
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const resultsList = document.getElementById('search-list-ul');
+        const searchListDiv = document.getElementById("search-list-div");
+
+        let searchTimeout;
+
+        let pathSegments = window.location.pathname.split('/').filter(segment => segment);
+        let firstSegment = pathSegments.length > 0 ? pathSegments[0] : null;
+
+
+
+        searchInput.addEventListener('keyup', function(e) {
+            const query = this.value.trim();
+
+            // Clear previous timeout
+            clearTimeout(searchTimeout);
+
+            // Fetch results only if the query length is more than 3 characters
+            if (query.length > 2) {
+                searchTimeout = setTimeout(() => {
+                    fetchData(query, firstSegment);
+                }, 300); // Delay request to prevent too many calls
+            } else if(query.length === 0) {
+                searchListDiv.classList.add("hidden");
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">No results found.</li>`;
+                return;
+            } else{
+                searchListDiv.classList.remove("hidden");
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">Enter atleast 3 characters to search.</li>`;
+                return;
+            }
+        });
+
+
+        function fetchData(query, type) {
+        
+            fetch('{{route("search.content")}}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    search: query,
+                    type: type
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displaySearchList(data.data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displaySearchList(lists) {
+            const routes = {
+                modules: '{{ route("modules.modules", ":workspaceSlug") }}',
+                articles: '{{ route("articles.articles", [":workspaceSlug", ":moduleSlug"]) }}', // Updated for two slugs
+                //workspaces: '{{ route("workspaces.workspaces", ":slug") }}',
+            };
+
+            resultsList.innerHTML = ''; // Clear previous results
+
+            if (lists.length === 0) {
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">No results found.</li>`;
+                return;
+            }
+
+            searchListDiv.classList.remove("hidden");
+
+            console.log(lists);
+            
+            lists.forEach((list, index) => {
+                console.log(list);
+                const li = document.createElement('li');
+
+                const link = document.createElement('a'); // Create an anchor element
+
+                link.textContent = list.title; // Set the text content to the title
+                
+                link.href = list.link;
+
+                link.className = 'block text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700'; // Add classes for styling
+                //link.setAttribute('target', '_blank'); // Optional: Open in a new tab
+
+                // Append the link to the list item
+                li.appendChild(link);
+
+                if((index + 1) == lists.length){
+                    li.classList.add('text-sm', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                    //li.textContent = list.title; // Assuming response contains `title`
+                } else {
+                    li.classList.add('text-sm', 'border-b', 'border-gray-300', 'pb-2', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                    //li.textContent = list.title; // Assuming response contains `title`
+                }
+
+                resultsList.appendChild(li);
+            });
+        }
+    });
 </script>
     

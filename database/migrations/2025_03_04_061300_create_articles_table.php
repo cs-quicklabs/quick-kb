@@ -11,22 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workspaces', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->text('slug');
+            $table->longText('content');
+            $table->integer('status')->default(1)->comment('1- active, 0- archived');
+            $table->text('slug')->unique();
+            $table->boolean('is_draft')->default(false);
             $table->integer('order')->default(0);
-            $table->integer('status')->default(1)->comment('1 - active, 0 - archived');
+            $table->foreignId('modules_id')
+                  ->constrained('modules')
+                  ->onDelete('cascade');
             $table->foreignId('created_by')
                   ->constrained('users')
                   ->onDelete('cascade');
             $table->foreignId('updated_by')
-                  ->nullable()
-                  ->default(null)
                   ->constrained('users')
-                  ->onDelete('set null');
+                  ->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 
@@ -35,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workspaces');
+        Schema::dropIfExists('articles');
     }
 };

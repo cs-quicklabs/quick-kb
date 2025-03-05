@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Workspace extends Model
 {
+    use Searchable;
+
     protected $table = 'workspaces';
 
     protected $fillable = [
+        'id',
         'title',
         'description',
         'slug',
@@ -31,5 +35,15 @@ class Workspace extends Model
     public function modules()   
     {
         return $this->hasMany(Module::class);
+    }
+
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+        ];
     }
 }

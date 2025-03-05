@@ -7,7 +7,7 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\ModuleController;
-
+use App\Http\Controllers\ArticleController;
 Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
@@ -28,6 +28,9 @@ Route::post('/validate-recovery-code', [AuthController::class, 'validateRecovery
 
 Route::get('/workspaces', [WorkspaceController::class, 'workspaces'])->name('workspaces.workspaces');
 Route::get('/modules/{workspace_slug}', [ModuleController::class, 'modules'])->name('modules.modules');
+
+Route::get('/articles/{workspace_slug}/{module_slug}', [ArticleController::class, 'articles'])->name('articles.articles');
+Route::post('search-content', [WorkspaceController::class, 'searchContent'])->name('search.content');
 
 // Protected routes
 Route::middleware([Authenticate::class])->group(function () {

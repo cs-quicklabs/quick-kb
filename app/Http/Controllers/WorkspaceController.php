@@ -109,4 +109,24 @@ class WorkspaceController extends Controller
 
         return view('adminland.archivedworkspace', compact('workspaces'));
     }
+
+
+
+    public function searchContent(Request $request) {
+
+        try {
+            $searchResults = $this->workspaceRepository->searchContent($request->all());
+
+            return response()->json([
+                'success' => true,
+                'data' => $searchResults
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to search content.',
+                'errors' => ['general' => [$e->getMessage()]]
+            ], 500);    
+        }
+    }
 }

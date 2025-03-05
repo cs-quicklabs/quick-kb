@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Module;
 
 class WorkspaceRepository
 {
@@ -89,6 +90,7 @@ class WorkspaceRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack(); 
+            dd($e->getMessage());
             throw new \Exception('Failed to update workspace: ' . $e->getMessage());
         }
     }
@@ -146,5 +148,53 @@ class WorkspaceRepository
             });
 
         return $workspaces;
+    }
+
+
+    public function searchContent($params) {
+        $searchResults = [];
+        $search = $params['search'] ?? '';
+
+        if($params['type'] === 'workspaces'){
+            $searchResults = Workspace::search($search)
+                ->query(function ($query) {
+                    $query->where('status', 1)
+                        ->orderBy('order', 'asc');
+                })
+                ->get()
+                ->map(function($list) {
+                    return [
+                        'id' => $list->id,
+                        'title' => $list->title,
+                        'slug' => $list->slug,
+                        'description' => $list->description,
+                        'shortTitle' => getShortTitle($list->title, 50, '...'),
+                        'link' => route('modules.modules', [$list->slug])
+                    ];
+                })
+                ->values();
+        }
+
+        if($params['type'] === 'modules'){
+            $searchResults = Module::search($search)
+            ->query(function ($query) {
+                $query->where('status', 1)
+                    ->orderBy('order', 'asc');
+            })
+            ->get()
+            ->map(function($list) {
+                return [
+                    'id' => $list->id,
+                    'title' => $list->title,
+                    'slug' => $list->slug,
+                    'description' => $list->description,
+                    'shortTitle' => getShortTitle($list->title, 50, '...'),
+                    'link' => route('articles.articles', [$list->workspace->slug??Null, $list->slug])
+                ];
+            })
+            ->values();
+        }
+        return $searchResults;
+        
     }
 } 

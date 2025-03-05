@@ -94,7 +94,7 @@
                         <div class="flex-1">
                             <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
                             <a
-                                href="/quick-kb/articles"
+                                href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
                                 class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                                 {{$module['shortTitle']}}
                             </a>
