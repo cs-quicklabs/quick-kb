@@ -99,3 +99,82 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: var(--read-more-line-clamp, 3);
 }
+
+.toastify {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keeps close button on the right */
+    width: 300px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    background: #ffffff !important; /* White background */
+    color: #000000 !important; /* Black text */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border-left: 5px solid #22c55e !important; /* Green left border */
+    gap: 8px; /* Space between text and close button */
+    white-space: nowrap; /* Prevents text wrapping */
+    position: relative; /* Needed for close button positioning */
+}
+
+.toastify .toast-close {
+    color: #666; /* Gray color */
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: auto; /* Pushes close button to the right */
+    padding-left: 10px;
+}
+
+/* For success messages */
+.toastify-success {
+    border-left-color: #22c55e !important; /* Green border */
+}
+
+/* For error messages */
+.toastify-error {
+    border-left-color: #ef4444 !important; /* Red border */
+}
+
+
+/* Drag and Drop Css Start */
+.draggable-ghost {
+    background-color: #f3f4f6;
+    border: 2px dashed #4f46e5;
+    opacity: 0.5;
+}
+
+.dark .draggable-ghost {
+    background-color: #374151;
+    border-color: #6366f1;
+}
+
+.draggable-chosen {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark .draggable-chosen {
+    background-color: #1f2937;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.draggable-drag {
+    opacity: 0.8;
+}
+
+.drag-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;   
+}
+
+/* Optional: Hover effect for drag handle */
+.drag-handle:hover {
+    color: #4f46e5;
+}
+
+.dark .drag-handle:hover {
+    color: #6366f1;
+}
+/* Drag and Drop Css End */

@@ -66,10 +66,10 @@
 </div>
 <div class="max-w-3xl px-4 mx-auto lg:px-6 sm:py-8 lg:py-12">
     <a href="{{ url('/') }}">
-        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Quick KB</h2>
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">{{getKnowledgeBase()}}</h2>
     </a>
     <p class="mt-2 text-lg text-pretty text-gray-700 sm:text-xl/8">
-        Search through Quick KB's knowledge base to get the answer to your question.
+        Search through {{getKnowledgeBase()}}'s knowledge base to get the answer to your question.
     </p>
 
     <div class="mb-2">
@@ -98,49 +98,8 @@
     <div id="search-results"></div>
 </div> 
 
-<style>
-    .draggable-ghost {
-        background-color: #f3f4f6;
-        border: 2px dashed #4f46e5;
-        opacity: 0.5;
-    }
-
-    .dark .draggable-ghost {
-        background-color: #374151;
-        border-color: #6366f1;
-    }
-
-    .draggable-chosen {
-        background-color: #fff;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .dark .draggable-chosen {
-        background-color: #1f2937;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .draggable-drag {
-        opacity: 0.8;
-    }
-
-    .drag-handle {
-        cursor: move;
-        cursor: -webkit-grabbing;   
-    }
-
-    /* Optional: Hover effect for drag handle */
-    .drag-handle:hover {
-        color: #4f46e5;
-    }
-
-    .dark .drag-handle:hover {
-        color: #6366f1;
-    }
-</style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 

@@ -196,6 +196,7 @@
 </div>
 @endauth
 
+
 <script>
     document.getElementById('addWorkspaceForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -220,13 +221,10 @@
         .then(data => {
             if (data.success) {
                 // Success handling
-                alert(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    alert(data.message);
-
                     Object.keys(data.errors).forEach(key => {
                         document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
                     });
@@ -234,7 +232,7 @@
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
@@ -279,13 +277,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                toastify.success(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    alert(data.message);
-
                     Object.keys(data.errors).forEach(key => {
                         document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
                     });
@@ -293,7 +289,7 @@
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
@@ -318,14 +314,13 @@
         .then(response => response.json())
         .then(data => { 
             if (data.success) {
-                alert(data.message);
                 window.location.reload();
             } else {
-                alert(data.message);
+                toastify.error(data.message);
+                console.log(data.message);
             }   
         })
         .catch(error => {
-            alert("Something went wrong.");
             console.error('Error:', error);
         });
     }
@@ -335,7 +330,7 @@
     // Update workspace order...
     function updateDraggableListOrder() {
         const items = [...document.querySelectorAll('.draggable-item')];
-        console.log("items: ", items);
+        
         const orders = items.map((item, index) => ({
             id: item.dataset.draggablelistId,
             order: index
@@ -363,10 +358,13 @@
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                console.error('Failed to update workspace order');
+                toastify.error(data.message);
+            } else {
+                toastify.success(data.message);
             }
         })
         .catch(error => {
+            toastify.error("Something went wrong.");
             console.error('Error updating workspace order:', error);
         });
 

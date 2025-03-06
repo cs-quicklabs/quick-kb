@@ -18,7 +18,7 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            return redirect()->intended('/workspaces');
+            return redirect()->intended('/');
         }
 
         return $next($request);

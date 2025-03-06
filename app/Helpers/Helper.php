@@ -1,5 +1,6 @@
 <?php
-
+    use App\Models\KnowledgeBase;
+    use Illuminate\Support\Facades\Auth;
     /**
      * Truncates a string to a specified length and appends a suffix if needed
      * 
@@ -12,5 +13,34 @@
         function getShortTitle($string, $length = 20, $append = "...")
         {
             return (strlen($string) > $length) ? substr($string, 0, $length) . $append : $string;
+        }
+    }
+
+    if(!function_exists('getLoggedInUser')){
+        function getLoggedInUser() {
+            $userData = [];
+            $user = Auth::user();
+            if(!empty($user)){
+                $knowledgeBase = $user->knowledgeBase;
+                if(!empty($knowledgeBase)){
+                    $knowledgeBaseTheme = $knowledgeBase->theme;
+                    if(!empty($knowledgeBaseTheme)){
+                        $theme = json_decode($knowledgeBaseTheme->theme??"{}", true); 
+                    }
+                }
+            }
+
+            $userData['user'] = $user ?? [];
+            $userData['knowledgeBase'] = $knowledgeBase ?? [];
+            $userData['themeData'] = $theme ?? [];
+            return $userData;
+        }
+    }
+
+
+    if(!function_exists('getKnowledgeBase')){
+        function getKnowledgeBase() {
+            $knowledgeBase = KnowledgeBase::first();
+            return $knowledgeBase->knowledge_base_name??"Knowledge_base_name";
         }
     }

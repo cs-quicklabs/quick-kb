@@ -27,7 +27,7 @@ class SettingController extends Controller
 
     public function settings()
     {
-        $accountSettings = $this->settingRepository->getThemeData();
-        return view('adminland.accountsettings', compact('accountSettings'));
+        $userSettings = $this->settingRepository->settings();
+        return view('adminland.accountsettings', compact('userSettings'));
     }
 } 

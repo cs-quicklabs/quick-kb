@@ -441,13 +441,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Success handling
-                alert(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    alert(data.message);
+                    toastify.error(data.message);
 
                     Object.keys(data.errors).forEach(key => {
                         document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
@@ -456,7 +454,7 @@
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
@@ -474,10 +472,10 @@
 
     function archiveModule() {
         const moduleId = document.getElementById('archiveModule-id').value;
-        console.log(moduleId);
+        
         const formData = new FormData();
         formData.append('status', '0');
-        console.log(formData);
+        
         fetch('{{route("modules.update", ["module_id" => ":module_id"])}}'.replace(':module_id', moduleId), {
             method: 'post',
             headers: {
@@ -489,14 +487,13 @@
         .then(response => response.json())
         .then(data => { 
             if (data.success) {
-                alert(data.message);
                 window.location.reload();
             } else {
-                alert(data.message);
+                toastify.error(data.message);
             }   
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     }
@@ -558,12 +555,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    alert(data.message);
+                    toastify.error(data.message);
 
                     Object.keys(data.errors).forEach(key => {
                         document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
@@ -572,7 +568,7 @@
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
@@ -584,7 +580,6 @@
             id: module.dataset.moduleId,
             order: index
         }));
-        console.log('orders',orders);
 
         // Add/remove border-b class
         modules.forEach((module, index) => {
@@ -608,10 +603,13 @@
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                console.error('Failed to update module order');
+                toastify.error(data.message);
+            } else {
+                toastify.success(data.message);
             }
         })
         .catch(error => {
+            toastify.error("Something went wrong.");
             console.error('Error updating module order:', error);
         });
     }

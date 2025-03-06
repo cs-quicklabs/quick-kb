@@ -23,11 +23,9 @@ class SettingRepository
 
             // Prepare theme data
             $themeData = [
-                $data['theme_color'] => [
-                    'color' => $data['theme_color'],
-                    'theme_spacing' => $data['theme_spacing'],
-                    'theme_type' => 'default'
-                ]
+                'color' => $data['theme_color'],
+                'theme_spacing' => $data['theme_spacing'],
+                'theme_type' => 'default'
             ];
             $themeData = json_encode($themeData);
             // Update or create theme based on knowledge_base_id
@@ -48,16 +46,9 @@ class SettingRepository
         }
     }
 
-    public function getThemeData()
+    public function settings()
     {   
-        $user = Auth::user();
-        $knowledgeBase = $user->knowledgeBase;
-        $theme = $knowledgeBase->theme;
-        $themeData = json_decode($theme->theme??"{}", true);        
-        
-        $accountSettings['user'] = $user;
-        $accountSettings['knowledgeBase'] = $knowledgeBase;
-        $accountSettings['themeData'] = $themeData;
-        return $accountSettings;
+        $userSettings = getLoggedInUser();
+        return $userSettings;
     }
 } 
