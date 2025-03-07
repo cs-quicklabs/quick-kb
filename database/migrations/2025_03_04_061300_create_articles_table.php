@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('content');
-            $table->integer('status')->default(1)->comment('1- active, 0- archived');
+            $table->integer('status')->default(1)->comment('0- archived, 1- active, 2- draft');
             $table->text('slug')->unique();
-            $table->boolean('is_draft')->default(false);
             $table->integer('order')->default(0);
-            $table->foreignId('modules_id')
+            $table->foreignId('module_id')
                   ->constrained('modules')
                   ->onDelete('cascade');
             $table->foreignId('created_by')

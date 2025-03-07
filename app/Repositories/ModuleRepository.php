@@ -7,6 +7,7 @@ use App\Models\Workspace;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ModuleRepository
 {
@@ -14,8 +15,16 @@ class ModuleRepository
     {
         $search = $params['search'] ?? '';
 
-        $workspace = Workspace::where('slug', $workspace_slug)->first();
-        //dd($workspace);
+        $workspace = Workspace::with(['updatedBy' => function ($q) {
+                    $q->select('id', 'name');
+                }])
+                ->where('slug', $workspace_slug)
+                ->first();
+
+        if(!empty($workspace)){
+            $workspace->shortTitle = getShortTitle($workspace->title, 20, '...');
+        }
+        
         $modules = Module::where('modules.status', 1)
                 ->where('modules.workspace_id', $workspace->id??0)
                 ->where(function($query) use ($search) {

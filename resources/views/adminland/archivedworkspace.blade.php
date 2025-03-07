@@ -16,7 +16,7 @@
 							<path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
 						</svg>
 					</div> 
-					<input type="search" name="search" id="search" class="pl-10 form-text-field" placeholder="Search" data-nav-search-target="input" autocomplete="off" spellcheck="false">
+					<input type="search" name="search" id="search-input" class="pl-10 form-text-field" placeholder="Search" data-nav-search-target="input" autocomplete="off" spellcheck="false" value="{{ request('search') }}">
 				</div>
 				<div class="relative">
 					<div class="absolute left-0 z-10 block w-full mt-1 origin-top-right bg-white rounded-md shadow-lg focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
@@ -36,7 +36,7 @@
 									<td class="table-cell whitespace-nowrap">
 									<div class="flex items-center">
 										<div class="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">
-											<div><a href="/quick-learn/team/1" class="truncate hover:text-gray-600 hover:underline">
+											<div><a href="{{route('workspaces.getArchivedWorkspace', ['workspace_slug' => $workspace['slug']])}}" class="truncate hover:text-gray-600 hover:underline">
 													<div class="flex text-sm font-medium text-gray-600 truncate">
 														<p>{{$workspace['title']}}</p>
 													</div>
@@ -137,21 +137,19 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-				alert(data.message);
                 window.location.reload();
 			} else {
-				alert(data.message);
+				toastify.error(data.message);
 			}
 		})
 		.catch(error => {
-			alert("Something went wrong.");
+			toastify.error("Something went wrong.");
 			console.error('Error:', error);
 		});
 	}
 
 	function deleteWorkspaceModal(workspace_id) {
 		document.getElementById('workspace_id').value = workspace_id;
-		console.log(workspace_id);
 	}
 	
 
@@ -160,11 +158,9 @@
 		const formData = new FormData();
 		
 		formData.append('workspace_id', workspace_id);
-		console.log(formData, workspace_id);
-		return false;
 
-		fetch('#', {
-			method: 'post',
+		fetch('{{route("adminland.deleteWorkSpace", ["workspace_id" => ":workspace_id"])}}'.replace(':workspace_id', workspace_id), {
+			method: 'delete',
 			headers: {
 				'X-CSRF-TOKEN': '{{ csrf_token() }}',
 				'Accept': 'application/json'
@@ -174,16 +170,38 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-				alert(data.message);	
 				window.location.reload();
 			} else {
-				alert(data.message);
+				toastify.error(data.message);
 			}
 		})
 		.catch(error => {
-			alert("Something went wrong.");
+			toastify.error("Something went wrong.");
 			console.error('Error:', error);	
 		});
 	}
+
+
+	document.addEventListener('DOMContentLoaded', function() {
+		const searchInput = document.getElementById('search-input');
+
+		searchInput.addEventListener('keydown', function(event) {
+			if (event.key === 'Enter') {
+				const query = searchInput.value.trim();
+				if (query.length >= 3) {
+					// Reload the page with the search parameter
+					const currentUrl = new URL(window.location.href);
+					currentUrl.searchParams.set('search', query); // Set the search parameter
+					window.location.href = currentUrl.toString(); // Reload the page with the new URL
+				} 
+				else if (query.length === 0) {
+					// Reload the page without any parameters
+					const currentUrl = new URL(window.location.href);
+					currentUrl.searchParams.delete('search'); // Remove the search parameter
+					window.location.href = currentUrl.toString(); // Reload the page without the search parameter
+				}
+			}
+		});
+	});
 </script>
 @endsection

@@ -103,9 +103,9 @@ class WorkspaceController extends Controller
     }
 
 
-    public function archivedWorkspaces()
+    public function archivedWorkspaces(Request $request)
     {
-        $workspaces = $this->workspaceRepository->getArchivedWorkspaces();
+        $workspaces = $this->workspaceRepository->getAdminlandArchivedWorkspaces($request->all());
 
         return view('adminland.archivedworkspace', compact('workspaces'));
     }
@@ -129,4 +129,33 @@ class WorkspaceController extends Controller
             ], 500);    
         }
     }
+
+
+    public function deleteWorkspace($workspaceId)
+    {
+        try {
+            // Call the repository method to delete the workspace
+            $this->workspaceRepository->deleteWorkspace($workspaceId);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Workspace deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete workspace',
+                'errors' => ['general' => [$e->getMessage()]]
+            ], 500);
+        }
+    }
+
+
+    public function getArchivedWorkspace($workspaceSlug)
+    {
+        $workspace = $this->workspaceRepository->getArchivedWorkspace($workspaceSlug);
+
+        return view('workspaces.archivedworkspace', compact('workspace'));
+    }
+    
 }

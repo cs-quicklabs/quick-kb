@@ -32,7 +32,7 @@
         @if ($workspaces['workspaceCount'] > 0)
             @foreach ($workspaces['workspaces'] as $i => $workspace)
                 <div id="workspacediv-{{$workspace['id']}}" 
-                    class="draggable-item pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
+                    class="draggable-item {{ $loop->last ? '' : 'border-b pb-5' }} border-gray-200 dark:border-gray-700"
                     data-draggablelist-id="{{$workspace['id']}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
@@ -196,6 +196,22 @@
 </div>
 @endauth
 
+
+@if(session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            toastify.success('{{session("success")}}');
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            toastify.error('{{session("error")}}');
+        });
+    </script>
+@endif
 
 <script>
     document.getElementById('addWorkspaceForm').addEventListener('submit', function(e) {

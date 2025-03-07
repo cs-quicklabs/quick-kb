@@ -195,25 +195,25 @@
             lists.forEach((list, index) => {
                 console.log(list);
                 const li = document.createElement('li');
-
                 const link = document.createElement('a'); // Create an anchor element
-
-                link.textContent = list.title; // Set the text content to the title
+                if(list.parent !== null){
+                    link.innerHTML = `<strong>${list.parent.title}</strong> > ${list.title}`; 
+                } else {
+                    link.textContent = list.title; // Set the text content to the title
+                }
+                
                 
                 link.href = list.link;
 
                 link.className = 'block text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700'; // Add classes for styling
-                //link.setAttribute('target', '_blank'); // Optional: Open in a new tab
 
                 // Append the link to the list item
                 li.appendChild(link);
 
                 if((index + 1) == lists.length){
                     li.classList.add('text-sm', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
-                    //li.textContent = list.title; // Assuming response contains `title`
                 } else {
                     li.classList.add('text-sm', 'border-b', 'border-gray-300', 'pb-2', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
-                    //li.textContent = list.title; // Assuming response contains `title`
                 }
 
                 resultsList.appendChild(li);

@@ -33,7 +33,7 @@ class AuthController extends Controller
     {
 
         if ($this->userRepository->authenticate($request->all())) {
-            return redirect()->intended('/workspaces');
+            return redirect()->intended('/workspaces')->with('success', 'User logged in successfully.');
         }
 
         return back()->withErrors([

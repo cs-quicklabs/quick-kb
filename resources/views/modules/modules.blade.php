@@ -38,7 +38,7 @@
                     <a
                         href="{{route('workspaces.workspaces')}}"
                         class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
-                        >{{$workspace['title']??""}}</a>
+                        >{{$workspace['shortTitle']??""}}</a>
                 </div>
             </li>
         </ol>
@@ -88,7 +88,7 @@
         
         @if($moduleCount > 0)
             @foreach($modules as $module)
-                <div data-module-id="{{ $module['id'] }}" class="draggable-item pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700">
+                <div data-module-id="{{ $module['id'] }}" class="draggable-item {{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
                     
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">

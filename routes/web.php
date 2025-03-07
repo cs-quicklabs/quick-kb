@@ -41,15 +41,17 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::post('/update-password', [AuthController::class, 'updatePassword'])->name('adminland.updatepassword');
 
-        Route::get('/workspaces', [WorkspaceController::class, 'archivedWorkspaces'])->name('adminland.workspaces');
+        Route::get('/archived/workspaces', [WorkspaceController::class, 'archivedWorkspaces'])->name('adminland.archivedworkspaces');
 
-        Route::get('/modules', function () {
+        Route::delete('/delete/workspace/{workspace_id}', [WorkspaceController::class, 'deleteWorkspace'])->name('adminland.deleteWorkSpace');
+
+        Route::get('/archived/modules', function () {
             return view('adminland.archivedmodule');
-        })->name('adminland.modules');
+        })->name('adminland.archivedmodules');
 
-        Route::get('/articles', function () {
+        Route::get('/archived/articles', function () {
             return view('adminland.archivedarticle');
-        })->name('adminland.articles');
+        })->name('adminland.archivedarticle');
 
         Route::get('/settings', [SettingController::class, 'settings'])->name('adminland.settings');
 
@@ -60,6 +62,7 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::post('/workspaces/update/{workspace_id}', [WorkspaceController::class, 'updateWorkspace'])->name('workspaces.updateWorkspace');
     Route::post('/workspaces/update-status/{workspace_id}', [WorkspaceController::class, 'updateWorkspaceStatus'])->name('workspaces.updateWorkspaceStatus');
     Route::post('/workspaces/update-order', [WorkspaceController::class, 'updateWorkspaceOrder'])->name('workspaces.updateWorkspaceOrder');
+    Route::get('/workspaces/archived/{workspace_slug}', [WorkspaceController::class, 'getArchivedWorkspace'])->name('workspaces.getArchivedWorkspace');
 
     Route::post('/modules', [ModuleController::class, 'createModule'])->name('modules.createModule');
     Route::post('/modules/update/{module_id}', [ModuleController::class, 'updateModule'])->name('modules.update');

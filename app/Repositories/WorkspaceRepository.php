@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Module;
+use App\Models\Article;
+
 
 class WorkspaceRepository
 {
@@ -90,7 +92,6 @@ class WorkspaceRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack(); 
-            dd($e->getMessage());
             throw new \Exception('Failed to update workspace: ' . $e->getMessage());
         }
     }
@@ -133,15 +134,21 @@ class WorkspaceRepository
     }
 
 
-    public function getArchivedWorkspaces()
-    {
+    public function getAdminlandArchivedWorkspaces($params)
+    {  
+        $search = $params['search']??"";
         $workspaces = Workspace::with('updatedBy')
             ->where('status', 0)
+            ->where(function ($query) use($search) {
+                $query->where('title', 'LIKE', '%'.$search.'%')
+                    ->orWhere('description', 'LIKE', '%'.$search.'%');
+            })
             ->get()
             ->map(function($workspace) {
                 return [
                     'id' => $workspace->id,
                     'title' => $workspace->title,
+                    'slug' => $workspace->slug,
                     'updated_by' => $workspace->updatedBy->name,
                     'updated_at' => Carbon::parse($workspace->updated_at)->format('F d, Y')
                 ];
@@ -169,7 +176,8 @@ class WorkspaceRepository
                         'slug' => $list->slug,
                         'description' => $list->description,
                         'shortTitle' => getShortTitle($list->title, 50, '...'),
-                        'link' => route('modules.modules', [$list->slug])
+                        'link' => route('modules.modules', [$list->slug]),
+                        'parent' => Null
                     ];
                 })
                 ->values();
@@ -178,7 +186,7 @@ class WorkspaceRepository
         if($params['type'] === 'modules'){
             $searchResults = Module::search($search)
             ->query(function ($query) {
-                $query->where('status', 1)
+                $query->with('workspace:id,title,slug')->where('status', 1)
                     ->orderBy('order', 'asc');
             })
             ->get()
@@ -189,12 +197,55 @@ class WorkspaceRepository
                     'slug' => $list->slug,
                     'description' => $list->description,
                     'shortTitle' => getShortTitle($list->title, 50, '...'),
-                    'link' => route('articles.articles', [$list->workspace->slug??Null, $list->slug])
+                    'link' => route('articles.articles', [$list->workspace->slug??Null, $list->slug]),
+                    'parent' => $list->workspace??Null
                 ];
             })
             ->values();
         }
         return $searchResults;
         
+    }
+
+
+
+    public function deleteWorkspace($workspaceId)
+    {
+        DB::beginTransaction();
+        
+        try {
+            $workspace = Workspace::findOrFail($workspaceId);
+            
+            // Delete all articles related to the workspace
+            Article::whereHas('module', function($query) use ($workspaceId) {
+                $query->where('workspace_id', $workspaceId);
+            })->delete();
+            
+            // Delete all modules related to the workspace
+            Module::where('workspace_id', $workspaceId)->delete();
+            
+            // Finally, delete the workspace
+            $workspace->delete();
+            
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception('Failed to delete workspace positions: ' . $e->getMessage());
+        }
+    }
+
+
+    public function getArchivedWorkspace($workspaceSlug)
+    {
+        $workspace = Workspace::with('modules', 'updatedBy')
+                        ->where('status', 0)
+                        ->where('slug', $workspaceSlug)
+                        ->first();
+        if(!empty($workspace)){
+            $workspace->archived_at = Carbon::parse($workspace->updated_at)->format('F d, Y');
+        }
+        
+        return $workspace;
     }
 } 
