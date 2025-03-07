@@ -105,7 +105,7 @@ class AuthController extends Controller
     {
 
         if ($this->userRepository->updatePassword($request->all())) {
-            return redirect()->route('adminland.changepassword')->with('status', 'Password has been changed successfully.');
+            return redirect()->route('adminland.changepassword')->with('error', 'Password has been changed successfully.');
         }
 
         return back()->withErrors([

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\CheckUserExists;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\ModuleController;
@@ -11,7 +12,9 @@ use App\Http\Controllers\ArticleController;
 Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
-    Route::get('/signup', [AuthController::class, 'signup']);
+    Route::middleware([CheckUserExists::class])->group(function () {
+        Route::get('/signup', [AuthController::class, 'signup']);
+    });
     Route::get('/login', [AuthController::class, 'login'])->name('login');
 });
 
