@@ -23,7 +23,7 @@ class UpdateAccountSettingsRequest extends FormRequest
     {
         return [
             'knowledge_base_name' => ['required', 'string', 'max:255'],
-            'theme_color' => ['required', 'string', 'in:red,blue,green,yellow,purple,gray'], // adjust colors as needed
+            'theme_color' => ['required', 'string', 'in:red,blue,green,yellow,teal,orange'], // adjust colors as needed
             'theme_spacing' => ['required', 'string', 'in:default,compact'],
         ];
     }

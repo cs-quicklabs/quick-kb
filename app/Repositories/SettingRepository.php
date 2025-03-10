@@ -6,6 +6,7 @@ use App\Models\Theme;
 use App\Models\KnowledgeBase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SettingRepository
 {
@@ -28,6 +29,7 @@ class SettingRepository
                 'theme_type' => 'default'
             ];
             $themeData = json_encode($themeData);
+            
             // Update or create theme based on knowledge_base_id
             Theme::updateOrCreate(
                 ['knowledge_base_id' => $knowledgeBase->id],

@@ -4,7 +4,7 @@
     <div>
         <h1 class="text-lg font-semibold dark:text-white">Account Settings</h1>
         <p class="text-gray-500 dark:text-gray-400 text-sm">Configure your account settings</p>
-        <form action="/adminland/accountsettings" method="POST">
+        <form id="accountSettingsForm" action="/adminland/accountsettings" method="POST">
             @csrf
             <div>
                 <h1 class="text-md font-semibold dark:text-white mt-6">Theme Color</h1>
@@ -15,6 +15,7 @@
                 <div class="flex flex-wrap mt-2">
                     <div class="flex items-center me-4">
                         <input
+                            @if($userSettings["themeData"]["color"] == "red") checked @endif
                             id="red-radio"
                             type="radio"
                             value="red"
@@ -26,6 +27,7 @@
                     </div>
                     <div class="flex items-center me-4">
                         <input
+                            @if($userSettings["themeData"]["color"] == "green") checked @endif
                             id="green-radio"
                             type="radio"
                             value="green"
@@ -37,7 +39,7 @@
                     </div>
                     <div class="flex items-center me-4">
                         <input
-                            checked
+                            @if($userSettings["themeData"]["color"] == "blue") checked @endif
                             id="blue-radio"
                             type="radio"
                             value="blue"
@@ -49,6 +51,7 @@
                     </div>
                     <div class="flex items-center me-4">
                         <input
+                            @if($userSettings["themeData"]["color"] == "teal") checked @endif
                             id="teal-radio"
                             type="radio"
                             value="teal"
@@ -60,6 +63,7 @@
                     </div>
                     <div class="flex items-center me-4">
                         <input
+                            @if($userSettings["themeData"]["color"] == "yellow") checked @endif
                             id="yellow-radio"
                             type="radio"
                             value="yellow"
@@ -71,6 +75,7 @@
                     </div>
                     <div class="flex items-center me-4">
                         <input
+                            @if($userSettings["themeData"]["color"] == "orange") checked @endif
                             id="orange-radio"
                             type="radio"
                             value="orange"
@@ -92,25 +97,26 @@
                 <div class="flex flex-wrap mt-2">
                     <div class="flex items-center me-4">
                         <input
-                            checked
-                            id="blue-radio"
+                            @if($userSettings["themeData"]["theme_spacing"] == "default") checked @endif
+                            id="default-radio"
                             type="radio"
                             value="default"
                             name="theme_spacing"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                         <label
-                            for="blue-radio"
+                            for="default-radio"
                             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default</label>
                     </div>
                     <div class="flex items-center me-4">
                         <input
-                            id="blue-radio"
+                            @if($userSettings["themeData"]["theme_spacing"] == "compact") checked @endif
+                            id="compact-radio"
                             type="radio"
                             value="compact"
                             name="theme_spacing"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                         <label
-                            for="blue-radio"
+                            for="compact-radio"
                             class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Compact</label>
                     </div>
                 </div>
@@ -139,4 +145,20 @@
         </form>
     </div>
 </main>
+
+    @if(session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastify.success('{{session("success")}}');
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastify.error('{{session("error")}}');
+            });
+        </script>
+    @endif
 @endsection 
