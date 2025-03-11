@@ -15,19 +15,30 @@ class SettingController extends Controller
         $this->settingRepository = $settingRepository;
     }
 
+    /**
+     * Handle the incoming request for updating account settings.
+     *
+     * @param  \App\Http\Requests\UpdateAccountSettingsRequest  $request
+     * @return \Illuminate\Http\Response
+     */
     public function updateAccountSettings(UpdateAccountSettingsRequest $request)
     {
         try {
             $this->settingRepository->updateAccountSettings($request->validated(), Auth::id());
-            return redirect()->back()->with('success', 'Settings updated successfully');
+            return redirect()->back()->with('success', config('response_messages.settings_updated'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
+            return redirect()->back()->with('error', config('response_messages.failed_to_update_settings'))->withInput();
         }
     }
 
+    /**
+     * Get the user settings.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function settings()
     {
-        $accountSettings = $this->settingRepository->getThemeData();
-        return view('adminland.accountsettings', compact('accountSettings'));
+        $userSettings = $this->settingRepository->settings();
+        return view('adminland.accountsettings', compact('userSettings'));
     }
 } 

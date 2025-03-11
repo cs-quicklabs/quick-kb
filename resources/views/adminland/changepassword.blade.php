@@ -4,6 +4,11 @@
     <div>
         <h1 class="text-lg font-semibold dark:text-white">Change Password</h1> 
         <p class="text-gray-500 dark:text-gray-400 text-sm">Please change your password.</p> 
+        @if (session('status'))
+            <div class="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
+                {{ session('status') }}
+            </div>
+        @endif
         <form class="w-full mt-6" action="{{ route('adminland.updatepassword') }}" method="POST">
             @csrf
             <div class="mb-5 mt-6">
@@ -31,4 +36,21 @@
         </form>
     </div>
 </main>
+
+    @if(session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastify.success('{{session("success")}}');
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastify.error('{{session("error")}}');
+            });
+        </script>
+    @endif
+
 @endsection

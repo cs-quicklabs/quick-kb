@@ -7,11 +7,11 @@
 	<meta charset="utf-8" />
 	<link rel="icon" href="../../favicon.png" />
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script> -->
 	<meta name="viewport" content="width=device-width" />
 	
 		<!-- <link href="../../_app/immutable/assets/0.B0WjZmEn.css" rel="stylesheet"> -->
-        @vite('resources/css/app.css')
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body data-sveltekit-preload-data="hover">

@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 class UserRepository
 {
+    
+    /**
+     * Registers a new user and creates an associated knowledge base.
+     *
+     * @param array $data User data including 'knowledge_base', 'password', and other attributes.
+     * @return string Encrypted ID of the newly created user.
+     * @throws \Exception If the registration process fails.
+     */
+
     public function register(array $data)
     {
         DB::beginTransaction();
@@ -34,11 +43,16 @@ class UserRepository
             return $encryptedId;
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to register user: ' . $e->getMessage());
-            throw new \Exception('Failed to register user: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
+    /**
+     * Retrieves a user by the encrypted ID.
+     *
+     * @param string $encryptedUserId Encrypted ID of the user to retrieve.
+     * @return User|null The user instance if found, otherwise null.
+     */
     public function findByEncryptedId($encryptedUserId)
     {
 
@@ -46,11 +60,23 @@ class UserRepository
         return User::find($decryptedId);
     }
 
+    /**
+     * Attempt to log in with the given credentials.
+     *
+     * @param array $credentials The credentials to use for the login attempt.
+     * @return bool True if the login attempt is successful, otherwise false.
+     */
     public function login(array $credentials)
     {
         return Auth::attempt($credentials);
     }
 
+    /**
+     * Attempts to authenticate the user with the given credentials.
+     *
+     * @param array $params The credentials to use for the login attempt.
+     * @return bool True if the login attempt is successful, otherwise false.
+     */
     public function authenticate($params)
     {
         $credentials = [
@@ -66,12 +92,28 @@ class UserRepository
         return false;
     }
 
+    /**
+     * Log out the current user and invalidate their session.
+     *
+     * This will remove the session data from the storage and
+     * regenerate the session token.
+     */
     public function logout()
     {
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
     }
+
+    /**
+     * Validates the recovery code provided in the parameters.
+     *
+     * This function checks if the given recovery code exists in the database
+     * and returns the encrypted user ID if found.
+     *
+     * @param array $params An associative array containing the 'recovery_code'.
+     * @return string|null The encrypted user ID if the recovery code is valid, otherwise null.
+     */
 
     public function validateRecoveryCode(array $params)
     {
@@ -85,6 +127,16 @@ class UserRepository
         return null;
     }
 
+    /**
+     * Validates the encrypted user ID.
+     *
+     * This function attempts to decrypt the encrypted user ID and checks
+     * whether a user with the corresponding ID exists in the database.
+     *
+     * @param string $encryptedId The encrypted user ID to validate.
+     * @return bool True if the user ID is valid and the user exists, otherwise false.
+     */
+
     public function validateEncryptedUserId(string $encryptedId)
     {
         try {
@@ -95,6 +147,16 @@ class UserRepository
         }
     }
 
+    /**
+     * Resets the password for a user with the given ID and new password.
+     *
+     * This function takes an associative array containing the 'user_id' and 'password'
+     * to reset the password. The 'user_id' is expected to be an encrypted user ID
+     * using the app's encryption key. The password is expected to be a raw string.
+     *
+     * @param array $params An associative array containing the 'user_id' and 'password'.
+     * @return bool True if the password was successfully reset, otherwise false.
+     */
     public function resetPassword(array $params)
     {
         $userId = decrypt($params['user_id']);
@@ -109,6 +171,12 @@ class UserRepository
         return false;
     }
 
+    /**
+     * Updates the password for the currently authenticated user.
+     *
+     * @param array $params An associative array containing the 'old_password_or_recovery_code' and 'new_password'.
+     * @return bool True if the password was successfully updated, otherwise false.
+     */
     public function updatePassword(array $params)
     {
         $oldPasswordOrRecoveryCode = $params['old_password_or_recovery_code'];
@@ -123,9 +191,20 @@ class UserRepository
         return false;
     }
 
+    /**
+     * Counts the total number of users in the database.
+     *
+     * This function uses the User model to retrieve the count of
+     * all user records present in the database.
+     *
+     * @return int The total number of users.
+     */
+
     public function count(): int
     {
         $userCount = User::count();
         return $userCount;
     }
+
+    
 }

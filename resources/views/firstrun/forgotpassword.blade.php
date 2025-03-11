@@ -37,4 +37,12 @@
                     </p>
                 </form>
             </div>
+
+    @if(session('error'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastify.error('{{session("error")}}');
+            });
+        </script>
+    @endif
 @endsection

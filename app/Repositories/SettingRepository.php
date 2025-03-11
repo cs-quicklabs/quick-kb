@@ -4,33 +4,43 @@ namespace App\Repositories;
 
 use App\Models\Theme;
 use App\Models\KnowledgeBase;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SettingRepository
 {
+    
+    /**
+     * Update account settings including the knowledge base name and theme data.
+     *
+     * @param array $data Associative array containing 'knowledge_base_name', 'theme_color', and 'theme_spacing'.
+     * @param int $userId The ID of the user whose settings are to be updated.
+     * @return bool True on successful update.
+     * @throws \Exception If the knowledge base is not found or the update fails.
+     */
+
     public function updateAccountSettings(array $data, int $userId)
     {
-        DB::beginTransaction();
+        
         try {
-            // Get knowledge base id for the user
             $knowledgeBase = KnowledgeBase::where('user_id', $userId)->first();
+            if(!$knowledgeBase){
+                throw new \Exception(config("response_messages.knowledge_base_not_found"));
+            }
             
-            // Update knowledge base name
+            DB::beginTransaction();
             if (isset($data['knowledge_base_name'])) {
                 $knowledgeBase->update(['knowledge_base_name' => $data['knowledge_base_name']]);
             }
 
-            // Prepare theme data
             $themeData = [
-                $data['theme_color'] => [
-                    'color' => $data['theme_color'],
-                    'theme_spacing' => $data['theme_spacing'],
-                    'theme_type' => 'default'
-                ]
+                'color' => $data['theme_color'],
+                'theme_spacing' => $data['theme_spacing'],
+                'theme_type' => 'default'
             ];
-            $themeData = json_encode($themeData);
-            // Update or create theme based on knowledge_base_id
+            
             Theme::updateOrCreate(
                 ['knowledge_base_id' => $knowledgeBase->id],
                 [
@@ -44,20 +54,19 @@ class SettingRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception('Failed to update settings: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
-    public function getThemeData()
+    /**
+     * Retrieve the settings for the currently authenticated user.
+     *
+     * @return array an array containing user settings, knowledge base, and theme data.
+     */
+
+    public function settings()
     {   
-        $user = Auth::user();
-        $knowledgeBase = $user->knowledgeBase;
-        $theme = $knowledgeBase->theme;
-        $themeData = json_decode($theme->theme??"{}", true);        
-        
-        $accountSettings['user'] = $user;
-        $accountSettings['knowledgeBase'] = $knowledgeBase;
-        $accountSettings['themeData'] = $themeData;
-        return $accountSettings;
+        $userSettings = getLoggedInUser();
+        return $userSettings;
     }
 } 

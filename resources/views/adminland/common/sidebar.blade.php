@@ -48,8 +48,8 @@
 			<span class="truncate ml-2"> Change Password </span>
 		</a>
 		<a
-			href="{{route('adminland.workspaces')}}"
-			class="{{ request()->routeIs('adminland.workspaces') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} text-gray-900 hover:text-gray-900  rounded px-3 py-2 flex items-center text-sm font-medium">
+			href="{{route('adminland.archivedworkspaces')}}"
+			class="{{ request()->routeIs('adminland.archivedworkspaces') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} text-gray-900 hover:text-gray-900  rounded px-3 py-2 flex items-center text-sm font-medium">
 			<!-- Heroicon name: outline/user-circle -->
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +67,8 @@
 			<span class="truncate ml-2"> Archived Workspaces </span>
 		</a>
 		<a
-			href="{{route('adminland.modules')}}"
-			class="{{ request()->routeIs('adminland.modules') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
+			href="{{route('adminland.archivedmodules')}}"
+			class="{{ request()->routeIs('adminland.archivedmodules') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
 			<!-- Heroicon name: outline/user-circle -->
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +86,8 @@
 			<span class="truncate ml-2"> Archived Modules </span>
 		</a>
 		<a
-			href="{{route('adminland.articles')}}"
-			class="{{ request()->routeIs('adminland.articles') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
+			href="{{route('adminland.archivedarticle')}}"
+			class="{{ request()->routeIs('adminland.archivedarticle') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
 			<!-- Heroicon name: outline/user-circle -->
 			<svg
 				class="w-6 h-6 text-gray-800 dark:text-white"

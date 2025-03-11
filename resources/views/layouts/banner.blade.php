@@ -66,10 +66,10 @@
 </div>
 <div class="max-w-3xl px-4 mx-auto lg:px-6 sm:py-8 lg:py-12">
     <a href="{{ url('/') }}">
-        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Quick KB</h2>
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">{{getKnowledgeBase()}}</h2>
     </a>
     <p class="mt-2 text-lg text-pretty text-gray-700 sm:text-xl/8">
-        Search through Quick KB's knowledge base to get the answer to your question.
+        Search through {{getKnowledgeBase()}}'s knowledge base to get the answer to your question.
     </p>
 
     <div class="mb-2">
@@ -79,87 +79,29 @@
             class="bg-gray-50 mt-1 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             id="search-input" 
             value="{{ request()->get('search', '') }}"
+            autocomplete="off"
         />
+
+        <div id="search-list-div" class="bg-white relative border border-gray-300 rounded hidden" id="search-results-container">
+    
+            <div class="p-4">
+                <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Search Results:</h2>
+                <ul id="search-list-ul" class="space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
+                    <li class="text-sm ">
+                        No results found.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
     <div id="search-results"></div>
 </div> 
 
-<style>
-    .draggable-ghost {
-        background-color: #f3f4f6;
-        border: 2px dashed #4f46e5;
-        opacity: 0.5;
-    }
-
-    .dark .draggable-ghost {
-        background-color: #374151;
-        border-color: #6366f1;
-    }
-
-    .draggable-chosen {
-        background-color: #fff;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .dark .draggable-chosen {
-        background-color: #1f2937;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    }
-
-    .draggable-drag {
-        opacity: 0.8;
-    }
-
-    .drag-handle {
-        cursor: move;
-        cursor: -webkit-grabbing;   
-    }
-
-    /* Optional: Hover effect for drag handle */
-    .drag-handle:hover {
-        color: #4f46e5;
-    }
-
-    .dark .drag-handle:hover {
-        color: #6366f1;
-    }
-</style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-
-        searchInput.addEventListener('keypress', function(e) {
-            const query = this.value.trim();
-            const type = this.dataset.type;
-
-            // Check if Enter key is pressed and query length is at least 3
-            if (e.key === 'Enter') {
-                e.preventDefault();
-
-                // Get current URL and create URL object
-                const currentUrl = new URL(window.location.href);
-                
-                // Set or update the search parameter
-                if(query.length >= 3) {
-                    if (query) {
-                        currentUrl.searchParams.set('search', query);
-                    } else {
-                        currentUrl.searchParams.delete('search');
-                    }
-                } else {
-                    currentUrl.searchParams.delete('search');
-                }
-                
-                
-                // Navigate to the new URL
-                window.location.href = currentUrl.toString();
-            }
-        });
-
 
         //Drag and drop modules
         const modulesList = document.getElementById('draggable-list');
@@ -177,6 +119,110 @@
 
     });
     
-    
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const resultsList = document.getElementById('search-list-ul');
+        const searchListDiv = document.getElementById("search-list-div");
+
+        let searchTimeout;
+
+        let pathSegments = window.location.pathname.split('/').filter(segment => segment);
+        let firstSegment = pathSegments.length > 0 ? pathSegments[0] : null;
+
+
+
+        searchInput.addEventListener('keyup', function(e) {
+            const query = this.value.trim();
+
+            // Clear previous timeout
+            clearTimeout(searchTimeout);
+
+            // Fetch results only if the query length is more than 3 characters
+            if (query.length > 2) {
+                searchTimeout = setTimeout(() => {
+                    fetchData(query, firstSegment);
+                }, 300); // Delay request to prevent too many calls
+            } else if(query.length === 0) {
+                searchListDiv.classList.add("hidden");
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">No results found.</li>`;
+                return;
+            } else{
+                searchListDiv.classList.remove("hidden");
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">Enter atleast 3 characters to search.</li>`;
+                return;
+            }
+        });
+
+
+        function fetchData(query, type) {
+        
+            fetch('{{route("search.content")}}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    search: query,
+                    type: type
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    displaySearchList(data.data);
+                } else {
+                    console.log(data.errors);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displaySearchList(lists) {
+            const routes = {
+                modules: '{{ route("modules.modules", ":workspaceSlug") }}',
+                articles: '{{ route("articles.articles", [":workspaceSlug", ":moduleSlug"]) }}', // Updated for two slugs
+                //workspaces: '{{ route("workspaces.workspaces", ":slug") }}',
+            };
+
+            resultsList.innerHTML = ''; // Clear previous results
+
+            if (lists.length === 0) {
+                resultsList.innerHTML = `<li id="noResults" class="text-sm">No results found.</li>`;
+                return;
+            }
+
+            searchListDiv.classList.remove("hidden");
+
+            console.log(lists);
+            
+            lists.forEach((list, index) => {
+                console.log(list);
+                const li = document.createElement('li');
+                const link = document.createElement('a'); // Create an anchor element
+                if(list.parent !== null){
+                    link.innerHTML = `<strong>${list.parent.title}</strong> > ${list.title}`; 
+                } else {
+                    link.textContent = list.title; // Set the text content to the title
+                }
+                
+                
+                link.href = list.link;
+
+                link.className = 'block text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700'; // Add classes for styling
+
+                // Append the link to the list item
+                li.appendChild(link);
+
+                if((index + 1) == lists.length){
+                    li.classList.add('text-sm', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                } else {
+                    li.classList.add('text-sm', 'border-b', 'border-gray-300', 'pb-2', 'cursor-pointer', 'hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                }
+
+                resultsList.appendChild(li);
+            });
+        }
+    });
 </script>
     

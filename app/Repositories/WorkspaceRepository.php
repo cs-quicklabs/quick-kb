@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Module;
+use App\Models\Article;
+
 
 class WorkspaceRepository
 {
@@ -40,20 +43,20 @@ class WorkspaceRepository
 
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception('Failed to create workspace: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
 
+    /**
+     * Retrieve all active workspaces.
+     * 
+     * @param array $params
+     * @return array
+     */
     public function getAllWorkspaces($params)
     {
-        
-        $search = $params['search'] ?? '';
         $workspaces = Workspace::where('status', 1)
-                ->where(function($query) use ($search) {
-                    $query->where('title', 'like', '%'.$search.'%')
-                          ->orWhere('description', 'like', '%'.$search.'%');
-                })
                 ->orderBy('order', 'asc')
                 ->get()
                 ->map(function($workspace) {
@@ -75,6 +78,14 @@ class WorkspaceRepository
         ];
     }
 
+    /**
+     * Update an existing workspace.
+     *
+     * @param array $data The update data to be saved.
+     * @param int $workspace_id The ID of the workspace to be updated.
+     * @return boolean True if the update was successful, false if not.
+     * @throws \Exception If the update fails.
+     */
     public function updateWorkspace(array $data, $workspace_id)
     {
         DB::beginTransaction();
@@ -89,10 +100,18 @@ class WorkspaceRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack(); 
-            throw new \Exception('Failed to update workspace: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
+    /**
+     * Update the status of an existing workspace.
+     *
+     * @param array $data The array containing the status value to be updated.
+     * @param int $workspace_id The ID of the workspace to be updated.
+     * @return boolean True if the update was successful, false if not.
+     * @throws \Exception If the update fails.
+     */
     public function updateWorkspaceStatus(array $data, $workspace_id)
     {
         DB::beginTransaction();
@@ -109,10 +128,17 @@ class WorkspaceRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception('Failed to update workspace status: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }   
     } 
     
+    /**
+     * Update the order of workspaces.
+     *
+     * @param array $data The array containing workspace order information with 'orders' as a key.
+     * @return boolean True if the update was successful, false if not.
+     * @throws \Exception If the update fails.
+     */
     public function updateWorkspaceOrder(array $data)
     {
         DB::beginTransaction();
@@ -126,25 +152,111 @@ class WorkspaceRepository
             return true;
         } catch (\Exception $e) {   
             DB::rollBack();
-            throw new \Exception('Failed to update workspace positions: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
 
-    public function getArchivedWorkspaces()
-    {
+    /**
+     * Retrieve all archived workspaces for adminland with optional search filter.
+     *
+     * @param array $params The array containing search parameters.
+     * @return array The list of archived workspaces with their details.
+     */
+    public function getAdminlandArchivedWorkspaces($params)
+    {  
+        $search = $params['search']??"";
         $workspaces = Workspace::with('updatedBy')
             ->where('status', 0)
+            ->where(function ($query) use($search) {
+                $query->where('title', 'LIKE', '%'.$search.'%')
+                    ->orWhere('description', 'LIKE', '%'.$search.'%');
+            })
             ->get()
             ->map(function($workspace) {
                 return [
                     'id' => $workspace->id,
                     'title' => $workspace->title,
+                    'slug' => $workspace->slug,
                     'updated_by' => $workspace->updatedBy->name,
                     'updated_at' => Carbon::parse($workspace->updated_at)->format('F d, Y')
                 ];
             });
 
         return $workspaces;
+    }
+
+
+    /**
+     * Searches for content in the workspaces and modules.
+     * 
+     * @param array $params The array containing search parameters.
+     * @return array The list of search results.
+     */
+    public function searchContent($params) {
+        $searchResults = [];
+        $search = $params['search'] ?? '';
+        switch ($params['type']) {
+            case 'workspaces':
+                $searchResults = Workspace::searchWorkspaces($search)->pluck('formatted_data');
+                break;
+            case 'modules':
+                $searchResults = Module::searchModules($search)->pluck('formatted_data');
+                break;
+        }
+        
+        return $searchResults;
+        
+    }
+
+
+
+    /**
+     * Deletes a workspace and all its associated modules and articles.
+     *
+     * @param int $workspaceId The ID of the workspace to be deleted.
+     * @return boolean True if the delete was successful, false if not.
+     * @throws \Exception If the delete fails.
+     */
+    public function deleteWorkspace($workspaceId)
+    {
+        try {
+            $workspace = Workspace::findOrFail($workspaceId);
+
+            DB::beginTransaction();
+
+            Article::whereHas('module', function($query) use ($workspaceId) {
+                $query->where('workspace_id', $workspaceId);
+            })->delete();
+            
+            Module::where('workspace_id', $workspaceId)->delete();
+            
+            $workspace->delete();
+            
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+    /**
+     * Retrieves an archived workspace.
+     *
+     * @param string $workspaceSlug The slug of the workspace to be retrieved.
+     * @return \App\Models\Workspace The archived workspace.
+     */
+    public function getArchivedWorkspace($workspaceSlug)
+    {   
+        $workspace = Workspace::with('modules', 'updatedBy')
+                        ->where('status', 0)
+                        ->where('slug', $workspaceSlug)
+                        ->first();
+        if(!empty($workspace)){
+            $workspace->archived_at = Carbon::parse($workspace->updated_at)->format('F d, Y');
+        }
+        return $workspace;
     }
 } 

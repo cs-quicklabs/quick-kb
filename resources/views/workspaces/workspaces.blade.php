@@ -32,7 +32,7 @@
         @if ($workspaces['workspaceCount'] > 0)
             @foreach ($workspaces['workspaces'] as $i => $workspace)
                 <div id="workspacediv-{{$workspace['id']}}" 
-                    class="draggable-item pb-5 {{ $loop->last ? '' : 'border-b' }} border-gray-200 dark:border-gray-700"
+                    class="draggable-item {{ $loop->last ? '' : 'border-b pb-5' }} border-gray-200 dark:border-gray-700"
                     data-draggablelist-id="{{$workspace['id']}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
@@ -95,6 +95,7 @@
         @endif
     </div>
 </div>
+
 
 @auth
 <div id="addWorkspaceModal" data-modal-backdrop="static" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
@@ -189,6 +190,23 @@
 </div>
 @endauth
 
+
+@if(session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            toastify.success('{{session("success")}}');
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            toastify.error('{{session("error")}}');
+        });
+    </script>
+@endif
+
 <script>
     document.getElementById('addWorkspaceForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -198,8 +216,6 @@
         document.querySelector('.error-description').textContent = '';
         
         const formData = new FormData(this);
-        console.log(formData);
-        //return false;
         
         fetch('{{route("workspaces.createWorkspace")}}', {
             method: 'POST',
@@ -212,30 +228,36 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Success handling
-                alert(data.message);
+                toastify.success(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    alert(data.message);
+                    if(typeof data.errors === 'object') {
+                        Object.entries(data.errors).forEach(([key, messages])  => {
+                            messages.forEach(message => {
+                                toastify.error(message);
+                                document.querySelector(`.error-${key}`).textContent = `${message}`;
+                            });
+                            
+                        });
+                    } else {
+                        toastify.error(data.message);
+                    }
 
-                    Object.keys(data.errors).forEach(key => {
-                        document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
-                    });
+                } else {
+                    console.log(data);
                 }
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-        //
-    });
+   
 
 
     // Function to clear form fields
@@ -274,21 +296,24 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(data.message);
+                toastify.success(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
-                // Error handling
-                if (data.errors) {
-                    alert(data.message);
-
-                    Object.keys(data.errors).forEach(key => {
-                        document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
+                if (data.errors.isArray) {
+                    Object.entries(data.errors).forEach(([key, messages])  => {
+                        messages.forEach(message => {
+                            toastify.error(message);
+                            document.querySelector(`#error-${key}`).textContent = `${message}`;
+                        });
+                        
                     });
+                } else {
+                    toastify.error(data.message);
                 }
             }
         })
         .catch(error => {
-            alert("Something went wrong.");
+            toastify.error("Something went wrong.");
             console.error('Error:', error);
         });
     });
@@ -313,14 +338,13 @@
         .then(response => response.json())
         .then(data => { 
             if (data.success) {
-                alert(data.message);
                 window.location.reload();
             } else {
-                alert(data.message);
+                toastify.error(data.message);
+                console.log(data.message);
             }   
         })
         .catch(error => {
-            alert("Something went wrong.");
             console.error('Error:', error);
         });
     }
@@ -330,7 +354,7 @@
     // Update workspace order...
     function updateDraggableListOrder() {
         const items = [...document.querySelectorAll('.draggable-item')];
-        console.log("items: ", items);
+        
         const orders = items.map((item, index) => ({
             id: item.dataset.draggablelistId,
             order: index
@@ -358,10 +382,13 @@
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                console.error('Failed to update workspace order');
+                toastify.error(data.message);
+            } else {
+                toastify.success(data.message);
             }
         })
         .catch(error => {
+            toastify.error("Something went wrong.");
             console.error('Error updating workspace order:', error);
         });
 
