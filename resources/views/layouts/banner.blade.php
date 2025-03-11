@@ -169,7 +169,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                displaySearchList(data.data);
+                if(data.success){
+                    displaySearchList(data.data);
+                } else {
+                    console.log(data.errors);
+                }
             })
             .catch(error => console.error('Error fetching data:', error));
         }

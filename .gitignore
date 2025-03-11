@@ -31,5 +31,5 @@ auth.json
 /.vite
 
 public/.htaccess
-/storage/search
+/storage/search/*
 
