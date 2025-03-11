@@ -11,6 +11,13 @@ use Carbon\Carbon;
 
 class ModuleRepository
 {
+    /**
+     * Retrieve all modules for the given workspace, with optional search filter.
+     *
+     * @param array $params
+     * @param string $workspace_slug
+     * @return array
+     */
     public function getModules($params, $workspace_slug)
     {
         $search = $params['search'] ?? '';
@@ -21,6 +28,10 @@ class ModuleRepository
                 ->where('slug', $workspace_slug)
                 ->first();
 
+        if(!$workspace) {
+            return false;
+        }
+        
         if(!empty($workspace)){
             $workspace->shortTitle = getShortTitle($workspace->title, 20, '...');
         }
@@ -62,12 +73,12 @@ class ModuleRepository
      */
     public function createModule($params)
     {
-        DB::beginTransaction();
         try {
             $workspace = Workspace::where('id', $params['workspace_id'])->first();
             if(!$workspace) {
-                throw new \Exception('Workspace not found');
+                throw new \Exception(config('response_messages.workspace_not_found'));
             }
+
             // Get the maximum order value
             $maxOrder = Module::where('workspace_id', $workspace->id)->max('order') ?? 0;
             $storeData = [
@@ -83,35 +94,45 @@ class ModuleRepository
             // Create the module
             $module = Module::create($storeData);
 
-            DB::commit();
             return true;
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            throw new \Exception('Failed to create module: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
+    /**
+     * Update a module
+     *
+     * @param array $params The module data to update
+     * @param int $module_id The ID of the module to update
+     * @return \App\Models\Module The updated module
+     * @throws \Exception
+     */
     public function updateModule($params, $module_id)
     {
-        DB::beginTransaction();
         try {
             $module = Module::find($module_id);
             if(!$module) {
-                throw new \Exception('Module not found');
+                throw new \Exception(config('response_messages.module_not_found'));
             }
 
             $params['updated_by'] = Auth::id();
             $module->update($params);
 
-            DB::commit();
             return $module;
         } catch (\Exception $e) {
-            DB::rollBack();
-            throw new \Exception('Failed to update module: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }  
     
+    /**
+     * Update the order of the modules.
+     *
+     * @param array $params The array of module orders, each item containing 'id' and 'order' keys
+     * @return boolean True if the update was successful, false if not
+     * @throws \Exception If the update fails
+     */
     public function updateModuleOrder($params)
     {
         DB::beginTransaction();
@@ -125,7 +146,7 @@ class ModuleRepository
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new \Exception('Failed to update module order: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 

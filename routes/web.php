@@ -70,5 +70,8 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::post('/modules', [ModuleController::class, 'createModule'])->name('modules.createModule');
     Route::post('/modules/update/{module_id}', [ModuleController::class, 'updateModule'])->name('modules.update');
     Route::post('/modules/update-order', [ModuleController::class, 'updateModuleOrder'])->name('modules.updateModuleOrder');
+
+
+    Route::get('/articles/{workspace_slug}/{module_slug}/create', [ArticleController::class, 'createArticle'])->name('articles.createArticle');
 });
 

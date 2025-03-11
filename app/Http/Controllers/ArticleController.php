@@ -23,4 +23,11 @@ class ArticleController extends Controller
             'module' => $articlesData['module']
         ]);
     }
+
+    public function createArticle(Request $request, $workspace_slug, $module_slug)
+    {
+        $searchResults = $this->articleRepository->createArticle($request->all(), $workspace_slug, $module_slug);
+
+        return view('articles.addarticle');
+    }
 } 

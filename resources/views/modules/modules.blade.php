@@ -446,7 +446,6 @@
                 // Error handling
                 if (data.errors) {
                     toastify.error(data.message);
-
                     Object.keys(data.errors).forEach(key => {
                         document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
                     });
@@ -559,11 +558,15 @@
             } else {
                 // Error handling
                 if (data.errors) {
-                    toastify.error(data.message);
 
-                    Object.keys(data.errors).forEach(key => {
-                        document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
-                    });
+                    if(data.errors.isArray) {
+                        Object.keys(data.errors).forEach(key => {
+                            document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
+                        });
+                    } else {
+                        toastify.error(data.data);
+                    }
+                    
                 }
             }
         })

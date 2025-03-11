@@ -216,8 +216,6 @@
         document.querySelector('.error-description').textContent = '';
         
         const formData = new FormData(this);
-        console.log(formData);
-        //return false;
         
         fetch('{{route("workspaces.createWorkspace")}}', {
             method: 'POST',
@@ -230,14 +228,25 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Success handling
+                toastify.success(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
                 // Error handling
                 if (data.errors) {
-                    Object.keys(data.errors).forEach(key => {
-                        document.querySelector(`.error-${key}`).textContent = data.errors[key][0];
-                    });
+                    if(typeof data.errors === 'object') {
+                        Object.entries(data.errors).forEach(([key, messages])  => {
+                            messages.forEach(message => {
+                                toastify.error(message);
+                                document.querySelector(`.error-${key}`).textContent = `${message}`;
+                            });
+                            
+                        });
+                    } else {
+                        toastify.error(data.message);
+                    }
+
+                } else {
+                    console.log(data);
                 }
             }
         })
@@ -290,11 +299,16 @@
                 toastify.success(data.message);
                 window.location.reload(); // Or update the UI without reload
             } else {
-                // Error handling
-                if (data.errors) {
-                    Object.keys(data.errors).forEach(key => {
-                        document.querySelector(`#error-${key}`).textContent = data.errors[key][0];
+                if (data.errors.isArray) {
+                    Object.entries(data.errors).forEach(([key, messages])  => {
+                        messages.forEach(message => {
+                            toastify.error(message);
+                            document.querySelector(`#error-${key}`).textContent = `${message}`;
+                        });
+                        
                     });
+                } else {
+                    toastify.error(data.message);
                 }
             }
         })

@@ -65,11 +65,19 @@
                 </div>
             </div>
 
-    @if(session('error'))
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                toastify.error('{{session("error")}}');
-            });
-        </script>
-    @endif
+        @if(session('success'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    toastify.success('{{session("success")}}');
+                });
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    toastify.error('{{session("error")}}');
+                });
+            </script>
+        @endif
 @endsection

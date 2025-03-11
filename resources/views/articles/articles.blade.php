@@ -66,7 +66,7 @@
 		<div class="text-left mt-4 flex justify-between">
 			<h2 class="text-xl font-extrabold text-gray-900 dark:text-white">Articles (6)</h2>
 			<a
-				href="/quick-kb/articles/add"
+				href="#"
 				type="button"
 				data-tooltip-target="tooltip-add"
 				class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -101,7 +101,7 @@
 			class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
 			<div class="pb-5 border-b border-gray-200 dark:border-gray-700">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 1: Introduction to Design Principles
 				</a>
@@ -112,7 +112,7 @@
 				</p>
 				<div class="sm:flex sm:items-center sm:justify-right mt-2">
 					<a
-						href="/quick-kb/articles/1"
+						href="#"
 						data-tooltip-target="tooltip-edit"
 						data-modal-target="editWorkspaceModal"
 						data-modal-toggle="editWorkspaceModal"
@@ -181,7 +181,7 @@
 
 			<div class="pb-5 border-b border-gray-200 dark:border-gray-700">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 2: Designing for User Experience
 				</a>
@@ -194,7 +194,7 @@
 
 			<div class="pb-5 border-b border-gray-200 dark:border-gray-700">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 3: Typography in Design
 				</a>
@@ -207,7 +207,7 @@
 
 			<div class="pb-5 border-b border-gray-200 dark:border-gray-700">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 4: Color Theory and its Applications
 				</a>
@@ -220,7 +220,7 @@
 
 			<div class="pb-5 border-b border-gray-200 dark:border-gray-700">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 5: Design for the Web
 				</a>
@@ -232,7 +232,7 @@
 
 			<div class="">
 				<a
-					href="/quick-kb/articles/1"
+					href="#"
 					class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
 					Chapter 6: Branding and Identity Design
 				</a>

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Workspace;
 use App\Models\Module;
+use App\Models\Article;
 class ArticleRepository
 {
     public function getAllArticles($workspace_slug, $module_slug)
@@ -23,4 +24,9 @@ class ArticleRepository
     }
 
     
+    public function createArticle($data, $workspace_slug, $module_slug)
+    {
+        return true;
+    }
+
 } 
