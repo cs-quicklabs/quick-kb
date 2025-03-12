@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\KnowledgeBase;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\Theme;
+
 class UserRepository
 {
     
@@ -32,9 +34,18 @@ class UserRepository
             
             $user = User::create($data);
             
-            KnowledgeBase::create([
+            $knowledgeBase = KnowledgeBase::create([
                 'knowledge_base_name' => $knowledge_base,
                 'user_id' => $user->id,
+            ]);
+
+            $themeData = getDefaultThemeValues(); //Getting default theme values from helper function.
+
+            Theme::create([
+                'knowledge_base_id' => $knowledgeBase->id,
+                'name' => 'default',
+                'theme_type' => 'default',
+                'theme' => $themeData
             ]);
             
             $encryptedId = encrypt($user->id);
