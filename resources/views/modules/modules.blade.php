@@ -108,7 +108,7 @@
                             </p>
                         </div>
                         @auth
-                            <span title="Drag to reorder" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
+                            <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                     <circle cx="9" cy="6" r="2"/>
                                     <circle cx="9" cy="12" r="2"/>
@@ -118,6 +118,10 @@
                                     <circle cx="15" cy="18" r="2"/>
                                 </svg>
                             </span>
+                            <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                Drag to reorder 
+                                <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                            </div>
                         @endauth
                     </div>
 

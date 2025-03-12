@@ -52,13 +52,13 @@ class ModuleController extends BaseController
         try {
             
             $module = $this->moduleRepository->createModule($request->all());
-            return $this->sendSuccessResponse($module, config('response_messages.module_created'), config('statuscodes.success')); 
+            return $this->sendSuccessResponse($module, config('response_messages.module_created'), config('statuscodes.OK')); 
 
         } catch (\Exception $e) {
             return $this->sendErrorResponse(
                 $e->getMessage(), 
                 config('response_messages.failed_to_create_module'), 
-                config('statuscodes.internal_server_error')
+                config('statuscodes.BAD_REQUEST')
             );
         }
     }
@@ -75,13 +75,13 @@ class ModuleController extends BaseController
         try {
             $module = $this->moduleRepository->updateModule($request->all(), $module_id);
 
-            return $this->sendSuccessResponse($module, config('response_messages.module_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse($module, config('response_messages.module_updated'), config('statuscodes.OK'));
 
         } catch (\Exception $e) {
             return $this->sendErrorResponse(
                 $e->getMessage(), 
                 config('response_messages.failed_to_update_module'), 
-                config('statuscodes.internal_server_error')
+                config('statuscodes.BAD_REQUEST')
             );
         }
     }
@@ -97,13 +97,13 @@ class ModuleController extends BaseController
         try {
             $this->moduleRepository->updateModuleOrder($request->all());
 
-            return $this->sendSuccessResponse([], config('response_messages.module_order_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.module_order_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
             return $this->sendErrorResponse(
                 $e->getMessage(), 
                 config('response_messages.failed_to_update_module_order'), 
-                config('statuscodes.internal_server_error')
+                config('statuscodes.BAD_REQUEST')
             );
         }
     }
@@ -134,9 +134,9 @@ class ModuleController extends BaseController
         try {
             $workspace = $this->moduleRepository->updateModuleStatus($request->all(), $module_id);
 
-            return $this->sendSuccessResponse([], config('response_messages.module_status_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.module_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_module_status'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_module_status'), config('statuscodes.BAD_REQUEST'));
         }
     }
 
@@ -154,10 +154,10 @@ class ModuleController extends BaseController
             // Call the repository method to delete the moduleId
             $this->moduleRepository->deleteModule($moduleId);
 
-            return $this->sendSuccessResponse([], config('response_messages.module_deleted'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.module_deleted'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_delete_module'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_delete_module'), config('statuscodes.BAD_REQUEST'));
         }
     }
 

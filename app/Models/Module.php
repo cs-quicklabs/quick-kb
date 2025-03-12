@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Carbon\Carbon;
 
 class Module extends Model
 {
     use Searchable;
     
     protected $table = 'modules';
-    protected $appends = ['formatted_data'];
+    protected $appends = ['formatted_data', 'archived_at'];
 
 
     protected $fillable = [
@@ -88,5 +89,15 @@ class Module extends Model
             'link' => route('articles.articles', [$this->workspace->slug ?? null, $this->slug]),
             'parent' => $this->workspace ?? null,
         ];
+    }
+
+
+    public function getArchivedAtAttribute()
+    {
+        if ($this->status == 0) {
+            return Carbon::parse($this->updated_at)->format('F d, Y');;
+        } else {
+            return $this->updated_at;
+        }
     }
 }

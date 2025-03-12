@@ -249,9 +249,7 @@ class ModuleRepository
                         ->where('status', 0)
                         ->where('slug', $moduleSlug)
                         ->first();
-        if(!empty($module)){
-            $module->archived_at = Carbon::parse($module->updated_at)->format('F d, Y');
-        }
+        
         return $module;
     }
 } 
