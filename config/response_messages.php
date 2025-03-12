@@ -2,6 +2,7 @@
     return [
         'module_created' => 'Module created successfully',
         'module_updated' > 'Module updated successfully',
+        'module_status_updated' => 'Module status updated successfully',
         'module_order_updated' => 'Module order updated successfully',
         'module_deleted' => 'Module deleted successfully',
         'module_archived' => 'Module archived successfully',
@@ -9,6 +10,7 @@
         'module_not_found' => 'Module not found',
         'failed_to_create_module' => 'Failed to create module',
         'failed_to_update_module' => 'Failed to update module',
+        'failed_to_update_module_status' => 'Failed to update module status',
         'failed_to_update_module_order' => 'Failed to update module order',
         'failed_to_delete_module' => 'Failed to delete module',
 

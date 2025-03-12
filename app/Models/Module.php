@@ -41,6 +41,12 @@ class Module extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+
+    public function articles()   
+    {
+        return $this->hasMany(Article::class);
+    }
+
     public function toSearchableArray()
     {
         return [

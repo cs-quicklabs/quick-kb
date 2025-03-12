@@ -52,8 +52,7 @@ class AuthController extends Controller
     {
 
         if ($this->userRepository->authenticate($request->all())) {
-            return redirect()->intended('/workspaces')->with('success', config('response_messages.
-            user_logged_in'));
+            return redirect()->intended('/workspaces')->with('success', config('response_messages.user_logged_in'));
         }
 
         return back()->withErrors([

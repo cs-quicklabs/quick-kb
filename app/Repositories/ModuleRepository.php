@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Models\Article;
 
 class ModuleRepository
 {
@@ -150,4 +151,107 @@ class ModuleRepository
         }
     }
 
+
+    /**
+     * Get the archived modules for the given workspace
+     *
+     * @param string $workspace_slug The slug of the workspace
+     * @return array The array of archived modules
+     */
+    public function getAdminlandArchivedModules($params)
+    {  
+        $search = $params['search']??"";
+        $modules = Module::with('workspace', 'updatedBy')
+            ->where('status', 0)
+            ->where(function ($query) use($search) {
+                $query->where('title', 'LIKE', '%'.$search.'%')
+                    ->orWhere('description', 'LIKE', '%'.$search.'%');
+            })
+            ->get()
+            ->map(function($module) {
+                return [
+                    'id' => $module->id,
+                    'title' => $module->title,
+                    'slug' => $module->slug,
+                    'workspace_id' => $module->workspace_id,
+                    'workspace_slug' => $module->workspace->slug??"",
+                    'updated_by' => $module->updatedBy->name,
+                    'updated_at' => Carbon::parse($module->updated_at)->format('F d, Y')
+                ];
+            });
+        
+        return $modules;
+    }
+
+
+
+    public function updateModuleStatus(array $data, $module_id)
+    {
+        DB::beginTransaction();
+        try {
+            $module = Module::find($module_id);
+            $module->status = $data['status'];
+            $module->updated_by = Auth::id();
+            $module->save();
+
+            if($module){
+                $module->articles()->update(['status' => $data['status']]);
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception($e->getMessage());
+        }   
+    } 
+
+
+    /**
+     * Delete a module and its associated articles.
+     *
+     * @param int $moduleId The ID of the module to delete
+     * @return bool True if the deletion was successful
+     * @throws \Exception If the module cannot be deleted
+     */
+    public function deleteModule($moduleId)
+    {
+        try {
+            $module = Module::findOrFail($moduleId);
+
+            DB::beginTransaction();
+
+            Article::where('module_id', $moduleId)->delete();
+            
+            $module->delete();
+            
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+    /**
+     * Retrieve an archived module by its workspace slug and module slug.
+     *
+     * @param string $workspaceSlug The slug of the workspace to which the module belongs.
+     * @param string $moduleSlug The slug of the module to retrieve.
+     * @return \App\Models\Module|null The archived module if found, otherwise null.
+     */
+    public function getArchivedModule($workspaceSlug, $moduleSlug)
+    {   
+        $module = Module::with('workspace:id,title,slug','articles:id,slug,module_id','updatedBy:id,name')
+                        ->whereHas('workspace', function ($q) use ($workspaceSlug) {
+                            $q->where('slug', $workspaceSlug);
+                        })
+                        ->where('status', 0)
+                        ->where('slug', $moduleSlug)
+                        ->first();
+        if(!empty($module)){
+            $module->archived_at = Carbon::parse($module->updated_at)->format('F d, Y');
+        }
+        return $module;
+    }
 } 

@@ -33,3 +33,4 @@ auth.json
 public/.htaccess
 /storage/search/*
 
+database/database.*
