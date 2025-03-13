@@ -31,11 +31,11 @@ class WorkspaceController extends BaseController
         try {
             $workspace = $this->workspaceRepository->createWorkspace($request->validated());
 
-            return $this->sendSuccessResponse($workspace, config('response_messages.workspace_created'), config('statuscodes.success'));
+            return $this->sendSuccessResponse($workspace, config('response_messages.workspace_created'), config('statuscodes.OK'));
 
         } catch (\Exception $e) {
 
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_create_workspace'), config('statuscodes.internal_server_error')
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_create_workspace'), config('statuscodes.BAD_REQUEST')
             );
         }
     }
@@ -65,10 +65,10 @@ class WorkspaceController extends BaseController
         try {
             $workspace = $this->workspaceRepository->updateWorkspace($request->all(), $workspace_id);
 
-            return $this->sendSuccessResponse( [], config('response_messages.workspace_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse( [], config('response_messages.workspace_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace'), config('statuscodes.BAD_REQUEST'));
         }
     }
 
@@ -84,9 +84,9 @@ class WorkspaceController extends BaseController
         try {
             $workspace = $this->workspaceRepository->updateWorkspaceStatus($request->all(), $workspace_id);
 
-            return $this->sendSuccessResponse([], config('response_messages.workspace_status_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.workspace_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace_status'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace_status'), config('statuscodes.BAD_REQUEST'));
         }
     }
 
@@ -101,11 +101,11 @@ class WorkspaceController extends BaseController
         try {
             $this->workspaceRepository->updateWorkspaceOrder($request->all());
 
-            return $this->sendSuccessResponse([], config('response_messages.workspace_order_updated'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.workspace_order_updated'), config('statuscodes.OK'));
 
         } catch (\Exception $e) {
             
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace_order'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace_order'), config('statuscodes.BAD_REQUEST'));
         }
     }
 
@@ -136,10 +136,10 @@ class WorkspaceController extends BaseController
         try {
             $searchResults = $this->workspaceRepository->searchContent($request->all());
 
-            return $this->sendSuccessResponse($searchResults, config('response_messages.search_results_retrieved'), config('statuscodes.success'));
+            return $this->sendSuccessResponse($searchResults, config('response_messages.search_results_retrieved'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_search_content'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_search_content'), config('statuscodes.BAD_REQUEST'));
         }
     }
 
@@ -156,10 +156,10 @@ class WorkspaceController extends BaseController
             // Call the repository method to delete the workspace
             $this->workspaceRepository->deleteWorkspace($workspaceId);
 
-            return $this->sendSuccessResponse([], config('response_messages.workspace_deleted'), config('statuscodes.success'));
+            return $this->sendSuccessResponse([], config('response_messages.workspace_deleted'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_delete_workspace'), config('statuscodes.internal_server_error'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_delete_workspace'), config('statuscodes.BAD_REQUEST'));
         }
     }
 

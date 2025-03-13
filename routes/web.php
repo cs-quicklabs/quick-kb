@@ -48,9 +48,8 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::delete('/delete/workspace/{workspace_id}', [WorkspaceController::class, 'deleteWorkspace'])->name('adminland.deleteWorkSpace');
 
-        Route::get('/archived/modules', function () {
-            return view('adminland.archivedmodule');
-        })->name('adminland.archivedmodules');
+        Route::get('/archived/modules', [ModuleController::class, 'archivedModules'])->name('adminland.archivedmodules');
+        Route::delete('/delete/module/{module_id}', [ModuleController::class, 'deleteModule'])->name('adminland.deleteModule');
 
         Route::get('/archived/articles', function () {
             return view('adminland.archivedarticle');
@@ -69,8 +68,9 @@ Route::middleware([Authenticate::class])->group(function () {
 
     Route::post('/modules', [ModuleController::class, 'createModule'])->name('modules.createModule');
     Route::post('/modules/update/{module_id}', [ModuleController::class, 'updateModule'])->name('modules.update');
+    Route::post('/modules/update-status/{module_id}', [ModuleController::class, 'updateModuleStatus'])->name('modules.updateModuleStatus');
     Route::post('/modules/update-order', [ModuleController::class, 'updateModuleOrder'])->name('modules.updateModuleOrder');
-
+    Route::get('/modules/archived/{workspace_slug}/{module_slug}', [ModuleController::class, 'getArchivedModule'])->name('modules.getArchivedModule');
 
     Route::get('/articles/{workspace_slug}/{module_slug}/create', [ArticleController::class, 'createArticle'])->name('articles.createArticle');
 });

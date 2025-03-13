@@ -1,11 +1,11 @@
 <?php
 
     return [
-        'success' => 200,
-        'bad_request' => 400,
-        'unauthorized' => 401,
-        'forbidden' => 403,
-        'not_found' => 404,
-        'internal_server_error' => 500,
-        'service_unavailable' => 503
+        'OK' => 200,
+        'BAD_REQUEST' => 400,
+        'UNAUTHORIZED' => 401,
+        'FORBIDDEN' => 403,
+        'NOT_FOUND' => 404,
+        'BAD_REQUEST' => 500,
+        'SERVICE_UNAVAILABLE' => 503
     ];

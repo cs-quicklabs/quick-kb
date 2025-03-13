@@ -122,7 +122,10 @@ class WorkspaceRepository
             $workspace->save();
 
             if($workspace){
-                $workspace->modules()->update(['status' => $data['status']]);
+                $workspace->modules()->update([
+                    'status' => $data['status'],
+                    'updated_by' => Auth::user()->id
+                ]);
             }
             DB::commit();
             return true;

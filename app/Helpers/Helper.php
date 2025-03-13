@@ -30,9 +30,9 @@
                 $knowledgeBase = $user->knowledgeBase;
                 if(!empty($knowledgeBase)){
                     $knowledgeBaseTheme = $knowledgeBase->theme;
-
+                    
                     if(!empty($knowledgeBaseTheme)){
-                        $theme = $knowledgeBaseTheme->theme_data;
+                        $theme = $knowledgeBaseTheme->theme;
                         
                     }
                 }
