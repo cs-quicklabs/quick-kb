@@ -59,7 +59,7 @@ Route::middleware([Authenticate::class])->group(function () {
 
         Route::get('/settings', [SettingController::class, 'settings'])->name('adminland.settings');
 
-        Route::POST('/accountsettings', [SettingController::class, 'updateAccountSettings']); 
+        Route::POST('/accountsettings', [SettingController::class, 'updateAccountSettings'])->name('adminland.updateAccountSettings'); 
     });
 
     Route::post('/workspaces', [WorkspaceController::class, 'createWorkspace'])->name('workspaces.createWorkspace');

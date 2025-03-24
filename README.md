@@ -83,6 +83,17 @@ If you face any permission issues, try running the commands with `sudo`:
 sudo chmod 777 -R storage/search database/database.sqlite bootstrap/cache
 ```
 
+## 📦 Deployment
+
+
+### One-Click Deploy Options
+
+| Platform | Deploy Button |
+|----------|--------------|
+| Digital Ocean | [![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/cs-quicklabs/quick-kb/tree/development) |
+
+
+
 For any issues, feel free to check the **Laravel documentation** or raise an issue in this repository.
 
 ---

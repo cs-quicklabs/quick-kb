@@ -69,4 +69,7 @@
 
         'restore_module_first' => 'Please restore its parent module first',
         'restore_workspace_first' => 'Please restore its parent workspace first',
+
+        'account_settings_updated' => 'Account settings updated successfully',
+        'account_settings_not_updated' => 'Failed to update account settings',
     ];
