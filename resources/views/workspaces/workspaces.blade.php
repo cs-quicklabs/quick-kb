@@ -32,8 +32,8 @@
         @if ($workspaces['workspaceCount'] > 0)
             @foreach ($workspaces['workspaces'] as $i => $workspace)
                 <div id="workspacediv-{{$workspace['id']}}" 
-                    class="draggable-item {{ $loop->last ? '' : 'border-b pb-5' }} border-gray-200 dark:border-gray-700"
-                    data-draggablelist-id="{{$workspace['id']}}">
+                        class="draggable-item {{ $loop->last ? '' : 'border-b pb-5' }} border-gray-200 dark:border-gray-700"
+                        data-draggablelist-id="{{$workspace['id']}}">
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
                             <input type="hidden" id="workspacetitle-{{$workspace['id']}}" value="{{$workspace['title']}}">
@@ -45,7 +45,7 @@
 
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
-                            <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                            <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-2">
                                 {{$workspace['description']}}
                             </p>
                         </div>

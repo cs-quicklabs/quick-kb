@@ -33,6 +33,8 @@ Route::get('/workspaces', [WorkspaceController::class, 'workspaces'])->name('wor
 Route::get('/modules/{workspace_slug}', [ModuleController::class, 'modules'])->name('modules.modules');
 
 Route::get('/articles/{workspace_slug}/{module_slug}', [ArticleController::class, 'articles'])->name('articles.articles');
+Route::get('/articles/{workspace_slug}/{module_slug}/add', [ArticleController::class, 'addArticle'])->name('articles.addArticle')->middleware(Authenticate::class);
+Route::get('/articles/{workspace_slug}/{module_slug}/{article_slug}', [ArticleController::class, 'articleDetails'])->name('articles.articleDetails');
 Route::post('search-content', [WorkspaceController::class, 'searchContent'])->name('search.content');
 
 // Protected routes
@@ -51,9 +53,9 @@ Route::middleware([Authenticate::class])->group(function () {
         Route::get('/archived/modules', [ModuleController::class, 'archivedModules'])->name('adminland.archivedmodules');
         Route::delete('/delete/module/{module_id}', [ModuleController::class, 'deleteModule'])->name('adminland.deleteModule');
 
-        Route::get('/archived/articles', function () {
-            return view('adminland.archivedarticle');
-        })->name('adminland.archivedarticle');
+        Route::get('/archived/articles', [ArticleController::class, 'archivedArticles'])->name('adminland.archivedarticles');
+        Route::delete('/delete/article/{article_id}', [ArticleController::class, 'deleteArticle'])->name('adminland.deleteArticle');
+
 
         Route::get('/settings', [SettingController::class, 'settings'])->name('adminland.settings');
 
@@ -72,6 +74,13 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::post('/modules/update-order', [ModuleController::class, 'updateModuleOrder'])->name('modules.updateModuleOrder');
     Route::get('/modules/archived/{workspace_slug}/{module_slug}', [ModuleController::class, 'getArchivedModule'])->name('modules.getArchivedModule');
 
-    Route::get('/articles/{workspace_slug}/{module_slug}/create', [ArticleController::class, 'createArticle'])->name('articles.createArticle');
+    
+    Route::post('/articles/store', [ArticleController::class, 'storeArticle'])->name('articles.store');
+    Route::post('/articles/update-status/{article_id}', [ArticleController::class, 'updateArticleStatus'])->name('articles.updateArticleStatus');
+    Route::post('/articles/update-order', [ArticleController::class, 'updateArticleOrder'])->name('articles.updateArticleOrder');
+    Route::post('/articles/update/{article_id}', [ArticleController::class, 'updateArticle'])->name('articles.update');
+    Route::get('/articles/archived/{workspace_slug}/{module_slug}/{article_slug}', [ArticleController::class, 'getArchivedArticle'])->name('articles.getArchivedArticle');
+
+
 });
 

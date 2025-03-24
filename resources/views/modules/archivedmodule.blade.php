@@ -79,11 +79,34 @@
                                 d="m1 9 4-4-4-4" />
                         </svg>
                         <a
-                            href="{{route('adminland.archivedmodules')}}"
+                            href="{{route('workspaces.getArchivedWorkspace', ['workspace_slug' => $module->workspace->slug])}}"
                             class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
+                            >{{getShortTitle($module->workspace->title??"", 50)}}</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg
+                            class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 6 10">
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <a
+                            href="#"
+                            class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
                             >{{getShortTitle($module['title']??"", 50)}}</a>
                     </div>
                 </li>
+
+                
             </ol>
         </nav>
         <div class="text-left mt-4">
@@ -100,8 +123,8 @@
                             class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                             {{$article->title}}
                         </a>
-                        <p class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
-                            {{$article->content}}
+                        <p class="line-clamp-3 mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                            {{$article->clean_content}}
                         </p>
                     </div>
                 @endforeach
@@ -186,8 +209,16 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-                //toastify.success(data.message);   
-                window.location.replace('{{route("adminland.archivedmodules")}}');
+                toastify.success(data.message);
+				const moduleData = data.data;
+				const workspace_slug = moduleData.workspace.slug;
+				const module_slug = moduleData.slug;
+
+				setTimeout(() => { 
+					window.location.href = "{{ route('articles.articles', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug']) }}"
+						.replace(':workspace_slug', workspace_slug)
+						.replace(':module_slug', module_slug);
+				}, 1000);
 			} else {
 				toastify.error(data.message);
 			}

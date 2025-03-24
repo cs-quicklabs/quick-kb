@@ -178,3 +178,193 @@
     color: #6366f1;
 }
 /* Drag and Drop Css End */
+
+
+/* quill editor */
+.ql-editor {
+    min-height: 200px;
+}
+
+.ql-code-block-container {
+    color: #000 !important;
+    background-color: #ccc !important;
+}
+
+.ql-snow.ql-toolbar {
+    padding: 8px 16px !important;
+  }
+  
+  .ql-snow.ql-toolbar button.custom-quill-button {
+    padding: 0 !important;
+  }
+  
+  .ql-snow.ql-toolbar button:focus {
+    color: #000000 !important;
+  }
+  
+  #toolbar:not(.ql-toolbar.ql-snow) .ql-image {
+    display: none !important;
+  }
+  
+  .quill .ql-container {
+    border: none !important;
+  }
+  
+  .quill .ql-container:focus {
+    border: 1px red solid !important;
+  }
+  
+  .quill .ql-container .ql-editor {
+    min-height: 100vh;
+    font:
+      400 16px/28px 'Open Sans',
+      sans-serif;
+    line-height: 2rem !important;
+    max-width: 100%;
+  }
+  
+  .quill .ql-container .ql-editor:focus {
+    outline: solid;
+    outline-width: 1px;
+    outline-color: #1c64f2;
+  }
+  
+  .quill .ql-container .ql-syntax {
+    background-color: #dedede !important;
+    color: #000000 !important;
+    margin: 1rem auto;
+    font-size: 14px;
+    padding: 1rem 2rem;
+    line-height: 1.5;
+    letter-spacing: normal;
+    max-width: 85%;
+  }
+  
+  
+  
+  .quill .ql-container .ql-editor a,
+  .quill .ql-container .ql-editor p {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0px;
+  }
+  .quill .ql-container .ql-editor a {
+    color: #1c64f2;
+  }
+  .quill .ql-container .ql-editor a:hover {
+    text-decoration-color: #1c64f2;
+    text-decoration-line: underline;
+  }
+  .quill .ql-container .ql-editor strong {
+    font-weight: 600;
+  }
+  .quill .ql-container .ql-editor h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  .quill .ql-container .ql-editor h2 {
+    font-size: 1.75rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  .ql-snow .ql-editor blockquote {
+    border-left: 4px solid #ccc;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-left: 16px;
+    background-color: #eee;
+    margin: 1rem auto;
+  }
+  
+  .ql-snow .ql-editor .ql-code-block-container{
+    background-color: #ccc;
+    color:black
+  }
+  
+  
+  .quill .ql-container ul,
+  .quill .ql-container ol {
+    padding-left: 2.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+  .quill .ql-container ul {
+    list-style-type: disc;
+  }
+  .quill .ql-container ol {
+    list-style-type: decimal;
+  }
+  .quill .ql-container img {
+    margin: 1rem auto;
+  }
+  .ql-clipboard {
+    position: fixed !important;
+    display: none !important;
+  
+    left: 50% !important;
+    top: 50% !important;
+  }
+
+
+  @media screen and (max-width: 640px) {
+    .quill .ql-container .ql-syntax {
+      background-color: #dedede !important;
+      color: #000000 !important;
+      margin: 1rem auto;
+      font-size: 12px;
+      padding: 1rem 2rem;
+      line-height: 1.5;
+      letter-spacing: normal;
+      max-width: 85%;
+    }
+    .quill .ql-container .ql-editor {
+    min-height: 100vh;
+    font:
+      400 16px/28px 'Open Sans',
+      sans-serif;
+    line-height: 2rem !important;
+    max-width: 100%;
+    padding-left: 0%;
+    padding-right: 0;
+  }
+  
+    .quill .ql-container .ql-editor a,
+    .quill .ql-container .ql-editor p {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      margin-bottom: 0.5rem;
+      margin-top: 0px;
+    }
+  
+    .quill .ql-container .ql-editor h1 {
+      font-size: 2rem;
+      line-height: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+  
+    .quill .ql-container .ql-editor h2 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+  
+    .quill .ql-container ul,
+    .quill .ql-container ol {
+      padding-left: 2.5rem;
+      padding-right: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+  
+    [class^='ql-indent-']:not(.ql-indent-1):not(.ql-indent-2):not(.ql-indent-3) {
+      white-space: nowrap;
+    }
+  }

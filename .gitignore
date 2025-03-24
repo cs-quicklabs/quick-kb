@@ -34,3 +34,4 @@ public/.htaccess
 /storage/search/*
 
 database/database.*
+.vscode/*

@@ -1,6 +1,8 @@
 <?php
     use App\Models\KnowledgeBase;
     use Illuminate\Support\Facades\Auth;
+    use App\Models\Theme;
+
     /**
      * Truncates a string to a specified length and appends a suffix if needed
      * 
@@ -83,6 +85,51 @@
                 'theme_type' => 'default'
             ]; 
 
+            return $themeData;
+        }
+    }
+
+
+    /**
+     * Returns the content without any HTML tags and without any Base64-encoded images
+     * 
+     * @param string $content The content to clean
+     * @return string The cleaned content
+     */
+    if(!function_exists('getCleanContent')){ 
+        function getCleanContent($content = "") {
+            // Remove Base64-encoded images
+            $content = preg_replace('/<img[^>]+src="data:image\/[^;]+;base64,[^"]+"[^>]*>/i', '', $content);
+            // Remove all HTML tags
+            return strip_tags($content);
+        }
+    }
+
+
+
+    /**
+     * Returns the theme data from the database
+     * 
+     * @return array An array containing the theme data
+     * 
+     * The theme data is an array with the following keys:
+     * - color: The color of the theme
+     * - color_hash: The hex color code of the theme
+     * - hover_color: The color of the theme when hovered
+     * - hover_color_hash: The hex color code of the theme when hovered
+     * - theme_spacing: The spacing of the theme
+     * - theme_type: The type of the theme
+     * 
+     * If no theme data is found in the database, the function returns the default theme data
+     */
+    if(!function_exists('getThemeValues')){ 
+        function getThemeValues() {
+            $themeData = Theme::first();
+            if(empty($themeData)){
+                $themeData = getDefaultThemeValues();
+            }
+            
+            $themeData = $themeData->theme;
             return $themeData;
         }
     }

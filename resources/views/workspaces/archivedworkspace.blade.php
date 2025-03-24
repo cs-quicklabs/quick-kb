@@ -79,8 +79,8 @@
                                 d="m1 9 4-4-4-4" />
                         </svg>
                         <a
-                            href="{{route('adminland.archivedworkspaces')}}"
-                            class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
+                            href="#"
+                            class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
                             >{{getShortTitle($workspace['title']??"", 50)}}</a>
                     </div>
                 </li>
@@ -96,7 +96,7 @@
                 @foreach($workspace->modules as $module)
                     <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
                         <a
-                            href="#"
+                            href="{{route('modules.getArchivedModule', ['workspace_slug' => $workspace->slug, 'module_slug' => $module->slug])}}"
                             class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                             {{$module->title}}
                         </a>
@@ -181,7 +181,14 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-                window.location.href = '{{ route("adminland.archivedworkspaces") }}';
+                toastify.success(data.message);
+                const worspaceData = data.data;
+				const workspace_slug = worspaceData.slug;
+
+				setTimeout(() => { 
+					window.location.href = "{{ route('modules.modules', ['workspace_slug' => ':workspace_slug']) }}"
+						.replace(':workspace_slug', workspace_slug);
+				}, 1000);
 			} else {
 				toastify.error(data.message);
 			}

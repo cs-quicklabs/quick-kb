@@ -132,9 +132,9 @@ class ModuleController extends BaseController
     public function updateModuleStatus(Request $request, $module_id)
     {
         try {
-            $workspace = $this->moduleRepository->updateModuleStatus($request->all(), $module_id);
+            $module = $this->moduleRepository->updateModuleStatus($request->all(), $module_id);
 
-            return $this->sendSuccessResponse([], config('response_messages.module_status_updated'), config('statuscodes.OK'));
+            return $this->sendSuccessResponse($module, config('response_messages.module_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_module_status'), config('statuscodes.BAD_REQUEST'));
         }

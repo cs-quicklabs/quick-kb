@@ -185,20 +185,43 @@ class ModuleRepository
 
 
 
+    /**
+     * Update the status of an existing module.
+     *
+     * @param array $data The module status data containing 'status'
+     * @param int $module_id The ID of the module to be updated
+     * @return boolean True if the update was successful, false if not
+     * @throws \Exception If the update fails
+     */
     public function updateModuleStatus(array $data, $module_id)
     {
         DB::beginTransaction();
         try {
             $module = Module::find($module_id);
+            
+            if(!$module) {
+                throw new \Exception(config('response_messages.module_not_found'));
+            }
+
+            if($data['status'] == 1){
+                if($module->workspace && $module->workspace->status == 0){
+                    throw new \Exception(config('response_messages.restore_workspace_first'));
+                }
+            }
+
             $module->status = $data['status'];
             $module->updated_by = Auth::id();
             $module->save();
 
             if($module){
-                $module->articles()->update(['status' => $data['status']]);
+                $module->articles()->update([
+                    'status' => $data['status'],
+                    'updated_by' => Auth::id()
+                ]);
+                
             }
             DB::commit();
-            return true;
+            return $module;
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception($e->getMessage());
@@ -242,7 +265,10 @@ class ModuleRepository
      */
     public function getArchivedModule($workspaceSlug, $moduleSlug)
     {   
-        $module = Module::with('workspace:id,title,slug','articles:id,slug,module_id','updatedBy:id,name')
+        $module = Module::with('workspace:id,title,slug','updatedBy:id,name')
+                        ->with(['articles' => function($q) {
+                                $q->where('status', 0);
+                            }])
                         ->whereHas('workspace', function ($q) use ($workspaceSlug) {
                             $q->where('slug', $workspaceSlug);
                         })

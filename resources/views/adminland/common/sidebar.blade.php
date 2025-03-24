@@ -86,8 +86,8 @@
 			<span class="truncate ml-2"> Archived Modules </span>
 		</a>
 		<a
-			href="{{route('adminland.archivedarticle')}}"
-			class="{{ request()->routeIs('adminland.archivedarticle') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
+			href="{{route('adminland.archivedarticles')}}"
+			class="{{ request()->routeIs('adminland.archivedarticles') ? 'bg-gray-200 hover:bg-gray-200' : 'hover:bg-gray-50' }} rounded px-3 py-2 flex items-center text-sm font-medium">
 			<!-- Heroicon name: outline/user-circle -->
 			<svg
 				class="w-6 h-6 text-gray-800 dark:text-white"
