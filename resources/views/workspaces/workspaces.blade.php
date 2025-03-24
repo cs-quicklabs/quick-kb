@@ -45,7 +45,7 @@
 
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
-                            <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-2">
+                            <p id="workspacedescription-{{$workspace['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3">
                                 {{$workspace['description']}}
                             </p>
                         </div>

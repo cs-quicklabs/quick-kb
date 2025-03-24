@@ -100,7 +100,7 @@
                             class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
                             {{$module->title}}
                         </a>
-                        <p class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                        <p class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3">
                             {{$module->description}}
                         </p>
                     </div>
