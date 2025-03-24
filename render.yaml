@@ -1,26 +1,23 @@
 services:
-  - type: web
-    name: Quick-KB
-    runtime: php
+  - name: Quick-KB
+    type: web
+    env: docker
     plan: free
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_ENV
         value: production
+      - key: APP_KEY
+        generateValue: true
       - key: DB_CONNECTION
         value: sqlite
       - key: DB_DATABASE
         value: /database/database.sqlite
     startCommand: |
-      composer install --no-dev --optimize-autoloader
-      npm install && npm run build
-      cp .env.example .env
-      php artisan key:generate
       php artisan migrate --force
-      php artisan config:cache
-      php artisan route:cache
-      php artisan storage:link
+      chmod -R 777 /database/database.sqlite
       mkdir -p /storage/search
       chmod -R 777 /storage/search
-      chmod -R 777 /database/database.sqlite
+      chmod -R 777 /bootstrap/cache
       php artisan scout:import "App\Models\Article"
-      php artisan serve --host 0.0.0.0 --port 10000
+
