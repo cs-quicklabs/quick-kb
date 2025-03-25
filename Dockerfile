@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     sqlite3 \
     libsqlite3-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
