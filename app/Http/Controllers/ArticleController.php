@@ -34,11 +34,8 @@ class ArticleController extends BaseController
         if(!$articlesData) {
             return redirect()->route('workspaces.workspaces')->with('error', config('response_messages.workspace_not_found'));
         } else {
-            return view('articles.articles', [
-                'workspace' => $articlesData['workspace'],
-                'module' => $articlesData['module'],
-                'articles' => $articlesData['articles']
-            ]);
+            extract($articlesData);
+            return view('articles.articles', compact('workspace', 'module', 'articles'));
         }
         
     }
