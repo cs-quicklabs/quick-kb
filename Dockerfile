@@ -1,4 +1,4 @@
-# Use official PHP image with FPM
+# Use official PHP 8.4 FPM image
 FROM php:8.4-fpm
 
 # Install system dependencies
@@ -9,12 +9,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     sqlite3 \
     libsqlite3-dev \
-    php8.4-mbstring \
-    php8.4-xml \
-    php8.4-curl \
-    php8.4-tokenizer \
-    php8.4-bcmath \
-    php8.4-zip
+    && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
 WORKDIR /var/www/html
@@ -22,8 +17,10 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . .
 
-# Install PHP dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 RUN npm run build
