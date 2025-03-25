@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www/html/quick-kb
 
 # Copy application files
 COPY . .
