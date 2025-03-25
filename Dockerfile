@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     nodejs \
     npm \
+    supervisor \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
@@ -43,8 +44,17 @@ RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN php artisan scout:import "App\Models\Article"
 RUN php artisan config:cache
-# Expose Laravel's default port
-EXPOSE 10000
 
-# Start Laravel
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+
+# Copy Nginx config
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/quick-kb.conf /etc/nginx/sites-available/quick-kb
+
+# Ensure the default site is enabled
+RUN ln -s /etc/nginx/sites-available/quick-kb /etc/nginx/sites-enabled/quick-kb
+
+# Expose Laravel's default port
+EXPOSE 80
+
+# Start services
+CMD ["/bin/sh", "-c", "php artisan config:cache && supervisord -c /etc/supervisor/supervisord.conf"]
