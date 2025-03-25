@@ -35,9 +35,15 @@ RUN php artisan key:generate
 
 # Optimize Laravel performance
 RUN php artisan config:cache
-RUN php artisan route:cache
 RUN php artisan storage:link
 
+RUN php artisan migrate --force
+RUN chmod -R 777 /database/database.sqlite
+RUN mkdir -p /storage/search
+RUN chmod -R 777 /storage/search
+RUN chmod -R 777 /bootstrap/cache
+RUN php artisan scout:import "App\Models\Article"
+RUN php artisan config:cache
 # Expose Laravel's default port
 EXPOSE 10000
 

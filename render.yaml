@@ -13,11 +13,4 @@ services:
         value: sqlite
       - key: DB_DATABASE
         value: /database/database.sqlite
-    startCommand: |
-      php artisan migrate --force
-      chmod -R 777 /database/database.sqlite
-      mkdir -p /storage/search
-      chmod -R 777 /storage/search
-      chmod -R 777 /bootstrap/cache
-      php artisan scout:import "App\Models\Article"
 
