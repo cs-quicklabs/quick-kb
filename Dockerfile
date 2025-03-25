@@ -56,5 +56,5 @@ RUN ln -s /etc/nginx/sites-available/quick-kb /etc/nginx/sites-enabled/quick-kb
 # Expose Laravel's default port
 EXPOSE 80
 
-# Start services
-CMD ["/bin/sh", "-c", "php artisan config:cache && supervisord -c /etc/supervisor/supervisord.conf"]
+# Start Supervisor to manage Nginx and PHP-FPM
+CMD ["sh", "-c", "service php8.4-fpm start && nginx -g 'daemon off;'"]

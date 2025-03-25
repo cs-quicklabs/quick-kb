@@ -15,3 +15,5 @@ services:
         value: database/database.sqlite
       - key: SCOUT_DRIVER
         value: tntsearch
+      - key: PORT
+        value: "80"
