@@ -37,8 +37,6 @@ RUN php artisan config:cache
 RUN php artisan storage:link
 
 
-RUN npm run build
-
 # Set permissions
 # RUN chown -R www-data:www-data /var/www/html \
 #     && chmod -R 755 /var/www/html/storage
@@ -50,6 +48,8 @@ RUN mkdir -p storage/search
 RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
+RUN chmod -R 777 storage/framework/sessions
+
 RUN php artisan scout:import "App\Models\Article"
 
 
