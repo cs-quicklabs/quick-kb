@@ -44,8 +44,15 @@ RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN php artisan scout:import "App\Models\Article"
-RUN php artisan config:cache
+
 RUN npm run build
+
+# Clear and cache config, routes, and views
+RUN php artisan cache:clear \
+    && php artisan config:clear \
+    && php artisan config:cache \
+    && php artisan route:clear \
+    && php artisan view:clear
 
 # Copy Nginx config
  COPY docker/nginx.conf /etc/nginx/nginx.conf
