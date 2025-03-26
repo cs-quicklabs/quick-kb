@@ -30,7 +30,7 @@ RUN npm install
 
 # Set up environment
 RUN cp .env.example .env
-# RUN php artisan key:generate
+RUN php artisan key:generate
 
 
 # Optimize Laravel performance
