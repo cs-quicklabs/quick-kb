@@ -40,6 +40,7 @@ RUN php artisan storage:link
 RUN php artisan migrate --force
 RUN chmod -R 777 database/database.sqlite
 RUN mkdir -p storage/search
+RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN php artisan scout:import "App\Models\Article"
