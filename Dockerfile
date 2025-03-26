@@ -26,7 +26,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
-RUN npm run build
+
 
 # Set up environment
 RUN cp .env.example .env
@@ -45,7 +45,7 @@ RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN php artisan scout:import "App\Models\Article"
 RUN php artisan config:cache
-
+RUN npm run build
 
 # Copy Nginx config
  COPY docker/nginx.conf /etc/nginx/nginx.conf
