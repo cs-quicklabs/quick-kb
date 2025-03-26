@@ -48,6 +48,8 @@ RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN chmod -R 777 storage/framework/sessions
+RUN chmod -R 777 storage/framework/cache
+RUN chmod -R 777 storage/framework/views
 
 RUN php artisan scout:import "App\Models\Article"
 
