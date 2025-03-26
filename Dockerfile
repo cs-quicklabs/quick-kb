@@ -74,6 +74,7 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 EXPOSE 80
 
 # Start PHP-FPM and Nginx when the container starts
-CMD service php-fpm start && nginx -g "daemon off;"
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+
 
 
