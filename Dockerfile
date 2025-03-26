@@ -1,21 +1,21 @@
-# Use official PHP 8.4 FPM image
+# Use official PHP image with necessary extensions
 FROM php:8.4-fpm
 
-# Install system dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     nginx \
-    git \
-    unzip \
-    curl \
     sqlite3 \
+    supervisor \
+    unzip \
+    git \
+    curl \
     libsqlite3-dev \
     nodejs \
     npm \
-    supervisor \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
-WORKDIR /var/www/html/quick-kb
+WORKDIR /var/www/html
 
 # Copy application files
 COPY . .
@@ -27,7 +27,6 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 
-
 # Set up environment
 RUN cp .env.example .env
 RUN php artisan key:generate
@@ -37,6 +36,14 @@ RUN php artisan key:generate
 RUN php artisan config:cache
 RUN php artisan storage:link
 
+
+RUN npm run build
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
+
+
 RUN php artisan migrate --force
 RUN chmod -R 777 database/database.sqlite
 RUN mkdir -p storage/search
@@ -44,6 +51,7 @@ RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 bootstrap/cache
 RUN php artisan scout:import "App\Models\Article"
+
 
 RUN npm run build
 
@@ -55,17 +63,13 @@ RUN php artisan cache:clear \
     && php artisan view:clear
 
 # Copy Nginx config
- COPY docker/nginx.conf /etc/nginx/nginx.conf
- COPY docker/quick-kb.conf /etc/nginx/sites-available/quick-kb
+COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-# Ensure the default site is enabled
- RUN ln -s /etc/nginx/sites-available/quick-kb /etc/nginx/sites-enabled/quick-kb
+# Copy Supervisor config
+COPY docker/supervisord.conf /etc/supervisord.conf
 
-# Expose Laravel's default port
+# Expose port 80
 EXPOSE 80
 
-# Start Supervisor to manage Nginx and PHP-FPM
-# CMD ["sh", "-c", "service php8.4-fpm start && nginx -g 'daemon off;'"]
-# CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
-
+# Start services
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
