@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     supervisor \
-    php8.4-fpm \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
@@ -60,4 +59,5 @@ EXPOSE 80
 # Start Supervisor to manage Nginx and PHP-FPM
 # CMD ["sh", "-c", "service php8.4-fpm start && nginx -g 'daemon off;'"]
 # CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
-CMD service php8.4-fpm start && nginx -g "daemon off;"
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+
