@@ -41,7 +41,7 @@ RUN php artisan storage:link
 # RUN chown -R www-data:www-data /var/www/html \
 #     && chmod -R 755 /var/www/html/storage
 
-
+RUN php artisan session:table
 RUN php artisan migrate --force
 RUN chmod -R 777 database/database.sqlite
 RUN mkdir -p storage/search
