@@ -40,8 +40,8 @@ RUN php artisan storage:link
 RUN npm run build
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# RUN chown -R www-data:www-data /var/www/html \
+#     && chmod -R 755 /var/www/html/storage
 
 
 RUN php artisan migrate --force
@@ -68,8 +68,12 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 # Copy Supervisor config
 COPY docker/supervisord.conf /etc/supervisord.conf
 
+
+
 # Expose port 80
 EXPOSE 80
 
-# Start services
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# Start PHP-FPM and Nginx when the container starts
+CMD service php8.4-fpm start && nginx -g "daemon off;"
+
+
