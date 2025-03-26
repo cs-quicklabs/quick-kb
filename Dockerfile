@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     supervisor \
+    php8.4-fpm \
     && docker-php-ext-install pdo pdo_sqlite bcmath
 
 # Set working directory
@@ -47,15 +48,16 @@ RUN php artisan config:cache
 
 
 # Copy Nginx config
-# COPY docker/nginx.conf /etc/nginx/nginx.conf
-# COPY docker/quick-kb.conf /etc/nginx/sites-available/quick-kb
+ COPY docker/nginx.conf /etc/nginx/nginx.conf
+ COPY docker/quick-kb.conf /etc/nginx/sites-available/quick-kb
 
 # Ensure the default site is enabled
-# RUN ln -s /etc/nginx/sites-available/quick-kb /etc/nginx/sites-enabled/quick-kb
+ RUN ln -s /etc/nginx/sites-available/quick-kb /etc/nginx/sites-enabled/quick-kb
 
 # Expose Laravel's default port
-EXPOSE 10000
+EXPOSE 80
 
 # Start Supervisor to manage Nginx and PHP-FPM
 # CMD ["sh", "-c", "service php8.4-fpm start && nginx -g 'daemon off;'"]
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+# CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+CMD service php8.4-fpm start && nginx -g "daemon off;"
