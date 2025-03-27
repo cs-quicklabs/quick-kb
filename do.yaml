@@ -4,7 +4,7 @@ services:
   - name: Quick-KB
     github:
       branch: feature/one-click-deployment
-      repo: https://github.com/cs-quicklabs/quick-kb/tree/feature/one-click-deployment
+      repo: https://github.com/cs-quicklabs/quick-kb/tree/one-click-deployment
     dockerfile_path: ./Dockerfile  # Use your existing Dockerfile
     instance_count: 1
     instance_size_slug: basic-xxs
