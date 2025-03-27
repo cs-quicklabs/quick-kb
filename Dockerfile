@@ -68,7 +68,7 @@ RUN php artisan cache:clear \
 COPY docker/nginx.conf /etc/nginx/nginx.conf  
 
 
-RUN chmod -R 777 /database
+RUN chmod -R 777 database
 RUN chmod -R 777 database/database.sqlite
 
 RUN chmod -R 777 storage/search
@@ -76,6 +76,8 @@ RUN chmod -R 777 storage/search
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
 RUN chmod -R 777 storage/framework/views
+
+RUN php artisan config:cache
 
 
 
