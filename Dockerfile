@@ -37,20 +37,8 @@ RUN php artisan config:cache
 RUN php artisan storage:link
 
 
-# Set permissions
-# RUN chown -R www-data:www-data /var/www/html \
-#     && chmod -R 755 /var/www/html/storage
-
 RUN php artisan migrate --force
-RUN chmod -R 777 database/database.sqlite
 RUN mkdir -p storage/search
-RUN chmod -R 777 storage
-RUN chmod -R 777 storage/search
-RUN chmod -R 777 bootstrap/cache
-RUN chmod -R 777 storage/framework/sessions
-RUN chmod -R 777 storage/framework/cache
-RUN chmod -R 777 storage/framework/views
-
 RUN php artisan scout:import "App\Models\Article"
 
 
@@ -71,11 +59,13 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 RUN chmod -R 777 database
 RUN chmod -R 777 database/database.sqlite
 
+Run chmod -R 777 storage
 RUN chmod -R 777 storage/search
-
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
 RUN chmod -R 777 storage/framework/views
+
+RUN chmod -R 777 bootstrap/cache
 
 RUN php artisan config:cache
 
