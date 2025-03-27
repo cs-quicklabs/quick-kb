@@ -97,10 +97,3 @@ sudo chmod 777 -R storage/search database/database.sqlite bootstrap/cache
 
 
 For any issues, feel free to check the **Laravel documentation** or raise an issue in this repository.
-
----
-
-🚀 **Happy Coding!** 🎯
-```
-
-This `README.md` covers all setup steps clearly and ensures everything is configured properly. Let me know if you want any modifications! 🚀
