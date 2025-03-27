@@ -63,6 +63,10 @@ RUN php artisan cache:clear \
     && php artisan route:clear \
     && php artisan view:clear
 
+RUN chmod -R 777 database/database.sqlite
+
+RUN chmod -R 777 storage/search
+
 # Copy Nginx config
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
