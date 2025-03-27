@@ -11,7 +11,7 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ArticleController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
-Route::withoutMiddleware([VerifyCsrfToken::class])->group(function() {
+Route::withoutMiddleware([])->group(function() {
     Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
     Route::middleware([RedirectIfAuthenticated::class])->group(function () {
