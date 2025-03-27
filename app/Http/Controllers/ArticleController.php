@@ -97,7 +97,6 @@ class ArticleController extends BaseController
 
             return $this->sendSuccessResponse($workspace, config('response_messages.article_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
-            //dd($e->getMessage());
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_article_status'), config('statuscodes.BAD_REQUEST'));
         }
     }

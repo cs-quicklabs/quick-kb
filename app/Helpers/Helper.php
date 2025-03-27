@@ -99,7 +99,7 @@
     if(!function_exists('getCleanContent')){ 
         function getCleanContent($content = "") {
             // Remove Base64-encoded images
-            $content = preg_replace('/<img[^>]+src="data:image\/[^;]+;base64,[^"]+"[^>]*>/i', '', $content);
+            // $content = preg_replace('/<img[^>]+src="data:image\/[^;]+;base64,[^"]+"[^>]*>/i', '', $content);
             // Remove all HTML tags
             return strip_tags($content);
         }
