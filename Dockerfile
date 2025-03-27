@@ -63,6 +63,12 @@ RUN php artisan cache:clear \
     && php artisan route:clear \
     && php artisan view:clear
 
+
+# Copy Nginx config
+COPY docker/nginx.conf /etc/nginx/nginx.conf  
+
+
+
 RUN chmod -R 777 database/database.sqlite
 
 RUN chmod -R 777 storage/search
@@ -70,12 +76,6 @@ RUN chmod -R 777 storage/search
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
 RUN chmod -R 777 storage/framework/views
-
-# Copy Nginx config
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-# Copy Supervisor config
-COPY docker/supervisord.conf /etc/supervisord.conf
 
 
 
