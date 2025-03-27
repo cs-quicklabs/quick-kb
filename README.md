@@ -90,7 +90,7 @@ sudo chmod 777 -R storage/search database/database.sqlite bootstrap/cache
 
 | Platform | Deploy Button |
 |----------|--------------|
-|Deploy to Render| [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/cs-quicklabs/quick-kb/tree/feature/feature/one-click-deployment)|
+|Deploy to Render| [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/cs-quicklabs/quick-kb/tree/feature/feature/quick-kb)|
 
 
 
