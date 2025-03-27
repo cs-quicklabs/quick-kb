@@ -59,7 +59,7 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 RUN chmod -R 777 database
 RUN chmod -R 777 database/database.sqlite
 
-Run chmod -R 777 storage
+RUN chmod -R 777 storage
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
