@@ -95,7 +95,7 @@
                             <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
                             <a
                                 href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
-                                class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+                                class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
                                 {{$module['shortTitle']}}
                             </a>
                         </div>

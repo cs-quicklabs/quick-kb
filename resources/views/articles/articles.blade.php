@@ -37,7 +37,7 @@
 						<a
 							href="{{route('modules.modules', ['workspace_slug' => $workspace['slug']])}}"
 							class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">
-							{{$workspace->title}}
+							{{getShortTitle($workspace->title??"", 50)}}
 						</a>
 					</div>
 				</li>
@@ -59,7 +59,7 @@
 						<a
 							href="#"
 							class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
-							>{{$module->title}}</a>
+							>{{getShortTitle($module->title??"", 50)}}</a>
 					</div>
 				</li>
 			</ol>
@@ -95,7 +95,7 @@
 						<div class="flex items-center justify-between gap-2">
 							<div class="flex-1">
 								<input type="hidden" id="articletitle-{{$article['id']}}" value="{{$article['title']}}">
-								<a href="{{route('articles.articleDetails', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug'], 'article_slug' => $article['slug']])}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+								<a href="{{route('articles.articleDetails', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug'], 'article_slug' => $article['slug']])}}" class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
 									{{$article['title']}}
 								</a>
 							</div>
