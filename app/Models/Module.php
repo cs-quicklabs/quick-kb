@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class Module extends Model
 {
-    use Searchable;
+    //use Searchable;
     
     protected $table = 'modules';
     protected $appends = ['formatted_data', 'archived_at'];
@@ -48,14 +48,14 @@ class Module extends Model
         return $this->hasMany(Article::class);
     }
 
-    public function toSearchableArray()
-    {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-        ];
-    }
+    // public function toSearchableArray()
+    // {
+    //     return [
+    //         'id' => $this->id,
+    //         'title' => $this->title,
+    //         'description' => $this->description,
+    //     ];
+    // }
 
 
     /**
@@ -66,16 +66,16 @@ class Module extends Model
      * @param string $search The search string to search for.
      * @return \Illuminate\Support\Collection The list of modules which match the query.
      */
-    public static function searchModules($search)
-    {
-        return self::search($search)
-            ->query(function ($query) {
-                $query->with('workspace:id,title,slug')
-                    ->where('status', 1)
-                    ->orderBy('order', 'asc');
-            })
-            ->get();
-    }
+    // public static function searchModules($search)
+    // {
+    //     return self::search($search)
+    //         ->query(function ($query) {
+    //             $query->with('workspace:id,title,slug')
+    //                 ->where('status', 1)
+    //                 ->orderBy('order', 'asc');
+    //         })
+    //         ->get();
+    // }
 
 
     public function getFormattedDataAttribute()

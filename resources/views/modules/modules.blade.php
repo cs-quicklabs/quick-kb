@@ -36,8 +36,8 @@
                             d="m1 9 4-4-4-4" />
                     </svg>
                     <a
-                        href="{{route('workspaces.workspaces')}}"
-                        class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
+                        href="#"
+                        class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
                         >{{$workspace['shortTitle']??""}}</a>
                 </div>
             </li>
@@ -103,7 +103,7 @@
 
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex-1">
-                            <p id="module-description-{{$module['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                            <p id="module-description-{{$module['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3">
                                 {{$module['description']}}
                             </p>
                         </div>
@@ -479,7 +479,7 @@
         const formData = new FormData();
         formData.append('status', '0');
         
-        fetch('{{route("modules.update", ["module_id" => ":module_id"])}}'.replace(':module_id', moduleId), {
+        fetch('{{route("modules.updateModuleStatus", ["module_id" => ":module_id"])}}'.replace(':module_id', moduleId), {
             method: 'post',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',

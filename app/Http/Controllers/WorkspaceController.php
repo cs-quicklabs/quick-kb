@@ -84,7 +84,7 @@ class WorkspaceController extends BaseController
         try {
             $workspace = $this->workspaceRepository->updateWorkspaceStatus($request->all(), $workspace_id);
 
-            return $this->sendSuccessResponse([], config('response_messages.workspace_status_updated'), config('statuscodes.OK'));
+            return $this->sendSuccessResponse($workspace, config('response_messages.workspace_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_workspace_status'), config('statuscodes.BAD_REQUEST'));
         }

@@ -34,8 +34,13 @@
                                         <div class="flex items-center">
                                             <div class="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">
                                                 <div><a href="{{route('modules.getArchivedModule', ['workspace_slug' => $module['workspace_slug'], 'module_slug' => $module['slug']])}}" class="truncate hover:text-gray-600 hover:underline">
-                                                        <div class="flex text-sm font-medium text-gray-600 truncate">
-                                                            <p>{{$module['title']}}</p>
+                                                        <div class="flex text-sm font-medium text-gray-600 w-80">
+                                                            <p data-tooltip-target="tooltip-title-{{$module['id']}}" class="truncate">{{$module['title']}}</p>
+
+															<div id="tooltip-title-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+																{{$module['title']}}
+																<div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+															</div>
                                                         </div>
                                                     </a>
                                                     <div class="flex-1 w-full mt-2">
@@ -157,7 +162,16 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-                window.location.reload();
+				toastify.success(data.message);
+				const moduleData = data.data;
+				const workspace_slug = moduleData.workspace.slug;
+				const module_slug = moduleData.slug;
+
+				setTimeout(() => { 
+					window.location.href = "{{ route('articles.articles', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug']) }}"
+						.replace(':workspace_slug', workspace_slug)
+						.replace(':module_slug', module_slug);
+				}, 1000);
 			} else {
 				toastify.error(data.message);
 			}

@@ -37,10 +37,10 @@ class BaseController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    protected function sendErrorResponse($data = [], $errors = "Failed", $statuscode = 500) {
+    protected function sendErrorResponse($message = [], $errors = "Failed", $statuscode = 500) {
         $response = [
             'success' => false,
-            'data' => $data,
+            'message' => $message,
             'errors' => $errors,
             'statuscode' => $statuscode
         ];

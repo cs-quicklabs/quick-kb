@@ -6,14 +6,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateAccountSettingsRequest extends FormRequest
+class StoreArticleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true; // Since we'll handle authorization through middleware
+        return true; // Authorization will be handled by middleware
     }
 
     /**
@@ -24,9 +24,9 @@ class UpdateAccountSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'knowledge_base_name' => ['required', 'string', 'max:20'],
-            'theme_color' => ['required', 'string', 'in:red,blue,green,yellow,teal,orange'], // adjust colors as needed
-            'theme_spacing' => ['required', 'string', 'in:default,compact'],
+            'title' => ['required', 'string', 'max:255'],
+            'content' => ['required', 'string'],
+            'module_id' => ['required', 'integer', 'exists:modules,id'],
         ];
     }
 

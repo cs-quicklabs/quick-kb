@@ -155,7 +155,7 @@
 
 
         function fetchData(query, type) {
-        
+            type = 'articles'; //We are only searching articles for now...
             fetch('{{route("search.content")}}', {
                 method: 'POST',
                 headers: {

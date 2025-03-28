@@ -93,6 +93,7 @@ class WorkspaceRepository
             if(isset($data['title'])){
                 $data['slug'] = Str::slug($data['title']).'-'.uniqid();
             }
+            $data['updated_by'] = Auth::id();
             $workspace = Workspace::find($workspace_id);
             $workspace->update($data);
 
@@ -126,9 +127,17 @@ class WorkspaceRepository
                     'status' => $data['status'],
                     'updated_by' => Auth::user()->id
                 ]);
+
+                $workspace->modules->each(function($module) use ($data) {
+                    $module->articles()->update([
+                        'status' => $data['status'],
+                        'updated_by' => Auth::user()->id
+                    ]);
+                });
+                
             }
             DB::commit();
-            return true;
+            return $workspace;
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception($e->getMessage());
@@ -149,6 +158,7 @@ class WorkspaceRepository
             foreach ($data['orders'] as $order) {
                 $workspace = Workspace::find($order['id']);  
                 $workspace->order = $order['order'] + 1;
+                $workspace->updated_by = Auth::id();
                 $workspace->save();
             }
             DB::commit();
@@ -206,6 +216,9 @@ class WorkspaceRepository
             case 'modules':
                 $searchResults = Module::searchModules($search)->pluck('formatted_data');
                 break;
+            case 'articles':
+                $searchResults = Article::searchArticles($search)->pluck('formatted_data');
+                break;
         }
         
         return $searchResults;
@@ -260,6 +273,7 @@ class WorkspaceRepository
         if(!empty($workspace)){
             $workspace->archived_at = Carbon::parse($workspace->updated_at)->format('F d, Y');
         }
+        
         return $workspace;
     }
 } 
