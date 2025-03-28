@@ -80,7 +80,7 @@
                         </svg>
                         <a
                             href="{{route('workspaces.getArchivedWorkspace', ['workspace_slug' => $module->workspace->slug])}}"
-                            class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
+                            class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline truncate"
                             >{{getShortTitle($module->workspace->title??"", 50)}}</a>
                     </div>
                 </li>
@@ -120,10 +120,10 @@
                     <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
                         <a
                             href="#"
-                            class="text-lg font-semibold text-gray-900 dark:text-white hover:underline">
+                            class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
                             {{$article->title}}
                         </a>
-                        <p class="line-clamp-3 mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                        <p class="line-clamp-3 mt-1 text-base font-normal text-gray-500 dark:text-gray-400 ">
                             {{$article->clean_content}}
                         </p>
                     </div>

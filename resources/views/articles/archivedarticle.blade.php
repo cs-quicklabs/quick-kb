@@ -39,13 +39,13 @@
                             <div class="flex items-center">
                                 <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$articleData->module->workspace->title??''}}</a>
+                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->workspace->title??'', 50)}}</a>
                             </div>
                         </li>
                         <li class="inline-flex items-center">
                             <div class="flex items-center"><svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$articleData->module->title??''}}</a></div>
+                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->title??'', 50)}}</a></div>
                         </li>
                     </ol>
                 </nav>
