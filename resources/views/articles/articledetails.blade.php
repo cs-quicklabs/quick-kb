@@ -288,7 +288,31 @@
                 console.error('Error:', error);
             });
         }
-         
+
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("appendOGTags called");
+            let ogTags = [
+                { property: "og:url", content: "{{ url()->current() }}" },
+                { property: "og:type", content: "article" },
+                { property: "og:title", content: "{{ $articleData->title }}" },
+                { property: "og:description", content: "{{ Str::limit(strip_tags($articleData->content), 150) }}" }
+            ];
+
+            ogTags.forEach((tagData, i) => {
+                console.log(i);
+                let metaTag = document.createElement("meta");
+                
+                if (tagData.property) {
+                    metaTag.setAttribute("property", tagData.property);
+                }
+                if (tagData.name) {
+                    metaTag.setAttribute("name", tagData.name);
+                }
+                metaTag.setAttribute("content", tagData.content);
+                console.log(metaTag);
+                document.head.appendChild(metaTag);
+            });
+        });
     </script>
 
 @endsection
