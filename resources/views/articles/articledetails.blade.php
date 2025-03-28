@@ -4,6 +4,7 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{$articleData->title?? ''}}">
     <meta property="og:description" content="{{getShortTitle(getCleanContent($articleData->content?? ''), 100)}}">
+    <meta property="og:site_name" content="{{getKnowledgeBase()}}">
 
 
     <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8">
