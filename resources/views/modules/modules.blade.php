@@ -82,108 +82,159 @@
         @endauth
         
     </div>
-
-    <div id="draggable-list" 
-        class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-md">
-        
         @if($moduleCount > 0)
-            @foreach($modules as $module)
-                <div data-module-id="{{ $module['id'] }}" class="draggable-item {{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
-                    
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex-1">
-                            <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
-                            <a
-                                href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
-                                class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
-                                {{$module['shortTitle']}}
-                            </a>
-                        </div>
-                    </div>
+            @if(getThemeValues()['theme_spacing'] == 'default')
+                <div id="draggable-list" class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-md">
+                    @foreach($modules as $module)
+                        <div data-module-id="{{ $module['id'] }}" class="draggable-item {{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
+                            
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex-1">
+                                    <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
+                                    <a
+                                        href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
+                                        class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
+                                        {{$module['shortTitle']}}
+                                    </a>
+                                </div>
+                            </div>
 
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex-1">
-                            <p id="module-description-{{$module['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3">
-                                {{$module['description']}}
-                            </p>
-                        </div>
-                        @auth
-                            <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <circle cx="9" cy="6" r="2"/>
-                                    <circle cx="9" cy="12" r="2"/>
-                                    <circle cx="9" cy="18" r="2"/>
-                                    <circle cx="15" cy="6" r="2"/>
-                                    <circle cx="15" cy="12" r="2"/>
-                                    <circle cx="15" cy="18" r="2"/>
-                                </svg>
-                            </span>
-                            <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
-                                Drag to reorder 
-                                <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex-1">
+                                    <input type="hidden" id="module-description-{{$module['id']}}" value="{{$module['description']}}">
+                                    <p id="moduledescription-{{$module['id']}}" class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3">
+                                        {{$module['description']}}
+                                    </p>
+                                </div>
+                                @auth
+                                    <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <circle cx="9" cy="6" r="2"/>
+                                            <circle cx="9" cy="12" r="2"/>
+                                            <circle cx="9" cy="18" r="2"/>
+                                            <circle cx="15" cy="6" r="2"/>
+                                            <circle cx="15" cy="12" r="2"/>
+                                            <circle cx="15" cy="18" r="2"/>
+                                        </svg>
+                                    </span>
+                                    <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                        Drag to reorder 
+                                        <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                    </div>
+                                @endauth
                             </div>
-                        @endauth
-                    </div>
 
-                    @auth
-                        <div class="sm:flex sm:items-center sm:justify-right mt-2">
-                            <button
-                                data-tooltip-target="tooltip-edit-{{$module['id']}}"
-                                data-modal-target="editWorkspaceModal"
-                                data-modal-toggle="editWorkspaceModal"
-                                onclick="editModuleModal({{$module['id']}})"
-                                type="button"
-                                class="text-black bg-gray-300 hover:bg-blue-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                ><svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="size-3"
-                                    ><path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                                    ></path
-                                    ></svg> <span class="sr-only">Icon description</span>
-                            </button>
-                            <div id="tooltip-edit-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
-                                Edit Module 
-                                <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
-                            </div>
-                            <button onclick="archiveModuleModal({{$module['id']}})" type="button" data-tooltip-target="tooltip-archive-{{$module['id']}}" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-black bg-gray-300 hover:bg-red-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="size-3">
-                                    <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z">
-                                    </path>
-                                </svg> 
-                                <span class="sr-only">Icon description</span>
-                            </button>
-                            <div id="tooltip-archive-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
-                                Archive Module 
-                                <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
-                            </div>
+                            @auth
+                                <div class="sm:flex sm:items-center sm:justify-right mt-2">
+                                    <button
+                                        data-tooltip-target="tooltip-edit-{{$module['id']}}"
+                                        data-modal-target="editWorkspaceModal"
+                                        data-modal-toggle="editWorkspaceModal"
+                                        onclick="editModuleModal({{$module['id']}})"
+                                        type="button"
+                                        class="text-black bg-gray-300 hover:bg-blue-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        ><svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="size-3"
+                                            ><path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                                            ></path
+                                            ></svg> <span class="sr-only">Icon description</span>
+                                    </button>
+                                    <div id="tooltip-edit-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                        Edit Module 
+                                        <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                    </div>
+                                    <button onclick="archiveModuleModal({{$module['id']}})" type="button" data-tooltip-target="tooltip-archive-{{$module['id']}}" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="text-black bg-gray-300 hover:bg-red-800 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="size-3">
+                                            <path
+                                                stroke="currentColor"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z">
+                                            </path>
+                                        </svg> 
+                                        <span class="sr-only">Icon description</span>
+                                    </button>
+                                    <div id="tooltip-archive-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                        Archive Module 
+                                        <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                    </div>
+                                </div>
+                            @endauth
                         </div>
-                    @endauth
+                    @endforeach
                 </div>
-            @endforeach
+            @else 
+                <div id="draggable-list" class="max-w-3xl mt-4 flex flex-col">
+                    @foreach($modules as $module)
+                        <div data-module-id="{{ $module['id'] }}" class="draggable-item ">
+                            <div class="flex items-center">
+                                <div class="flex items-center justify-between gap-2">
+                                    <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
+                                    <input type="hidden" id="module-description-{{$module['id']}}" value="{{$module['description']}}">
+                                    <a href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}" class=" text-gray-900 dark:text-white hover:underline">
+                                        {{$module['shortTitle']}}
+                                    </a> 
+                                </div>
+                                @auth
+                                    <div class="flex items-center justify-between gap-2">
+                                        <svg onclick="editModuleModal({{$module['id']}})" data-tooltip-target="tooltip-edit-{{$module['id']}}" data-modal-target="editWorkspaceModal" data-modal-toggle="editWorkspaceModal" class="w-4 h-4 ml-4 text-blue-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.779 17.779 4.36 19.918 6.5 13.5m4.279 4.279 8.364-8.643a3.027 3.027 0 0 0-2.14-5.165 3.03 3.03 0 0 0-2.14.886L6.5 13.5m4.279 4.279L6.499 13.5m2.14 2.14 6.213-6.504M12.75 7.04 17 11.28"></path>
+                                        </svg> 
+                                        <div id="tooltip-edit-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                            Edit Module 
+                                            <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                        </div>
+
+                                        <svg onclick="archiveModuleModal({{$module['id']}})" data-tooltip-target="tooltip-archive-{{$module['id']}}" data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="ml-1 w-4 h-4 text-red-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"></path>
+                                        </svg>
+                                        <div id="tooltip-archive-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                            Archive Module 
+                                            <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                        </div>
+
+                                        <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <circle cx="9" cy="6" r="2"/>
+                                                <circle cx="9" cy="12" r="2"/>
+                                                <circle cx="9" cy="18" r="2"/>
+                                                <circle cx="15" cy="6" r="2"/>
+                                                <circle cx="15" cy="12" r="2"/>
+                                                <circle cx="15" cy="18" r="2"/>
+                                            </svg>
+                                        </span>
+                                        <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                            Drag to reorder 
+                                            <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                        </div>
+                                    </div>
+                                @endauth
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif    
         @else
-            <p class="text-gray-500 dark:text-gray-400">No Modules found</p>
+            <div id="draggable-list" class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-md">
+                <p class="text-gray-500 dark:text-gray-400">No Modules found</p>
+            </div>
         @endif
 
-        
-    </div>
 </div>
 
 
@@ -504,8 +555,7 @@
 
     function editModuleModal(id) {
         document.getElementById('editModule-title').value = document.getElementById('module-title-'+id).value.trim();
-        document.getElementById('editModule-description').value = document.getElementById('module-description-'+id).textContent.trim();
-        document.getElementById('editModule-description').textContent = document.getElementById('module-description-'+id).textContent.trim();
+        document.getElementById('editModule-description').textContent = document.getElementById('module-description-'+id).value.trim();
         document.getElementById('editModule-id').value = id;
         document.getElementById('error-title').textContent = '';
         document.getElementById('error-description').textContent = '';
