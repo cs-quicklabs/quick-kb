@@ -302,6 +302,14 @@ class ArticleRepository
     }
 
 
+    /**
+     * Retrieves an archived article.
+     *
+     * @param string $workspaceSlug The slug of the workspace containing the module and article.
+     * @param string $moduleSlug The slug of the module containing the article.
+     * @param string $articleSlug The slug of the article to be retrieved.
+     * @return \App\Models\Article|false The archived article if found, otherwise false.
+     */
     public function getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug)
     {
         $article = Article::with('module', 'module.workspace', 'createdBy')

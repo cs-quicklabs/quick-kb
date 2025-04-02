@@ -202,6 +202,14 @@ class ArticleController extends BaseController
 
 
 
+    /**
+     * Retrieve a specific archived article by workspace, module, and article slugs.
+     *
+     * @param string $workspaceSlug The slug of the workspace.
+     * @param string $moduleSlug The slug of the module.
+     * @param string $articleSlug The slug of the article.
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse The view containing the archived article or a redirect response if not found.
+     */
     public function getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug)
     {
         $articleData = $this->articleRepository->getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug);

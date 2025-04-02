@@ -98,7 +98,7 @@
 
 
                 <button onclick="submitForm(2)" id="draft-btn" type="button" class="fixed bottom-4 left-4 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:bg-gray-500">
-                    Draft
+                    Save as Draft
                 </button>
 
             </div>
