@@ -24,7 +24,8 @@ class ArticleRepository
     {
         
         $workspace = Workspace::whereHas('modules', function($q) use ($module_slug) {
-                    $q->where('slug', $module_slug);
+                    $q->where('slug', $module_slug)
+                        ->where('status', 1);
                 })
                 ->with(
                 [
@@ -38,7 +39,8 @@ class ArticleRepository
                         $query->where('status' , '!=' , 0)->orderBy('order', 'asc');
                     }
                 ])
-                ->where('slug', $workspace_slug);
+                ->where('slug', $workspace_slug)
+                ->where('status', 1);
         
         
                 

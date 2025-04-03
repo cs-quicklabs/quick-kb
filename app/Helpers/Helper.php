@@ -2,6 +2,7 @@
     use App\Models\KnowledgeBase;
     use Illuminate\Support\Facades\Auth;
     use App\Models\Theme;
+    use Illuminate\Support\Facades\Log;
 
     /**
      * Truncates a string to a specified length and appends a suffix if needed
@@ -124,12 +125,25 @@
      */
     if(!function_exists('getThemeValues')){ 
         function getThemeValues() {
-            $themeData = Theme::first();
-            if(empty($themeData)){
-                $themeData = getDefaultThemeValues();
+            $defaultThemeData = getDefaultThemeValues();
+
+            // Get theme values from session
+            $themeData = session('themeData', []);
+            if(!empty($themeData)){
+                return $themeData;
+            }  else {
+                // Get theme values from DB
+                $themeData = Theme::first();
+                if(empty($themeData)){
+                    $themeData = $defaultThemeData;
+                }
+                
+                $themeData = $themeData->theme;
+
+                // Store in session
+                session(['themeData' => $themeData]);
+
+                return $themeData;
             }
-            
-            $themeData = $themeData->theme;
-            return $themeData;
         }
     }

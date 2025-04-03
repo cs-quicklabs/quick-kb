@@ -113,28 +113,44 @@
             <h2 class="text-xl font-extrabold text-gray-900 dark:text-white">Articles @if(!empty($module)) ({{count($module->articles)}}) @else (0) @endif</h2>
         </div>
 
-        <div
-            class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+        
             @if(!empty($module) && count($module->articles) > 0)
-                @foreach($module->articles as $article)
-                    <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
-                        <a
-                            href="#"
-                            class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
-                            {{$article->title}}
-                        </a>
-                        <p class="line-clamp-3 mt-1 text-base font-normal text-gray-500 dark:text-gray-400 ">
-                            {{$article->clean_content}}
-                        </p>
+                @if(getThemeValues()['theme_spacing'] == 'default')
+                    <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+                        @foreach($module->articles as $article)
+                            <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
+                                <a
+                                    href="#"
+                                    class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
+                                    {{$article->title}}
+                                </a>
+                                <p class="line-clamp-3 mt-1 text-base font-normal text-gray-500 dark:text-gray-400 ">
+                                    {{$article->clean_content}}
+                                </p>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                @else 
+                    <div class="max-w-3xl mt-4 flex flex-col">
+                        @foreach($module->articles as $article)
+                            <div class="">
+                                <a
+                                    href="{{route('articles.getArchivedArticle', ['workspace_slug' => $module->workspace['slug'], 'module_slug' => $module->slug, 'article_slug' => $article['slug']])}}"
+                                    class="text-gray-900 dark:text-white hover:underline">
+                                    {{$article->title}}
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
             @else
-                <div class="text-center">
-                    <p class="text-gray-500 dark:text-gray-400">No article found in this module.</p>
+                <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
+                    <div class="text-center">
+                        <p class="text-gray-500 dark:text-gray-400">No article found in this module.</p>
+                    </div>
                 </div>
             @endif
-
-        </div>
     </div>
 
     <div id="restoreModuleModal" data-modal-backdrop="static" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

@@ -50,6 +50,8 @@ class SettingRepository
                 ]
             );
 
+            session(['themeData' => $themeData]);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
