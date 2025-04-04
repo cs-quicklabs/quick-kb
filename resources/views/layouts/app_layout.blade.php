@@ -13,10 +13,11 @@
 
 </head>
 
-<body data-sveltekit-preload-data="hover">
+<body data-sveltekit-preload-dataaa="hover">
     <div style="display: contents"><!--[--><!--[--><!----><!---->
         <section class="bg-white dark:bg-gray-900">
-            <div class="w-full h-56 bg-blue-100 px-4 mx-auto lg:px-6 shadow-sm">
+            <div class="w-full h-56 bg-{{$color}}-100 px-4 mx-auto lg:px-6 shadow-sm">
+                
                 @include('layouts.banner')
 
                 

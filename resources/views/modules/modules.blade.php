@@ -1,4 +1,7 @@
-
+@php
+    $color = getThemeValues()['color'];
+    $spacing = getThemeValues()['theme_spacing'];
+@endphp
 @extends('layouts.app_layout')
 @section('content')
 <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
@@ -7,7 +10,7 @@
             <li class="inline-flex items-center">
                 <a
                     href="/"
-                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline">
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-{{$color}}-900 dark:text-gray-400 dark:hover:text-white hover:underline">
                     <svg
                         class="w-3 h-3 me-2.5"
                         aria-hidden="true"
@@ -37,7 +40,7 @@
                     </svg>
                     <a
                         href="#"
-                        class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
+                        class="cursor-not-allowed ms-1 text-sm font-medium text-gray-700 hover:text-{{$color}}-900 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline"
                         >{{$workspace['shortTitle']??""}}</a>
                 </div>
             </li>
@@ -52,7 +55,7 @@
                     data-modal-target="createModuleModal"
                     data-modal-toggle="createModuleModal"
                     data-tooltip-target="tooltip-add"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    class="text-white bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800">
                     <svg
                         class="w-4 h-4 dark:text-white"
                         aria-hidden="true"
@@ -93,7 +96,7 @@
                                     <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
                                     <a
                                         href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
-                                        class="text-lg font-semibold text-gray-900 dark:text-white hover:underline line-clamp-2">
+                                        class="text-lg font-semibold text-gray-900 dark:text-white hover:underline hover:text-{{$color}}-900 line-clamp-2">
                                         {{$module['shortTitle']}}
                                     </a>
                                 </div>
@@ -184,9 +187,27 @@
                         <div data-module-id="{{ $module['id'] }}" class="draggable-item ">
                             <div class="flex items-center">
                                 <div class="flex items-center justify-between gap-2">
+
+                                    @auth
+                                        <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <circle cx="9" cy="6" r="2"/>
+                                                <circle cx="9" cy="12" r="2"/>
+                                                <circle cx="9" cy="18" r="2"/>
+                                                <circle cx="15" cy="6" r="2"/>
+                                                <circle cx="15" cy="12" r="2"/>
+                                                <circle cx="15" cy="18" r="2"/>
+                                            </svg>
+                                        </span>
+                                        <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
+                                            Drag to reorder 
+                                            <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
+                                        </div>
+                                    @endauth
+
                                     <input type="hidden" id="module-title-{{$module['id']}}" value="{{$module['title']}}">
                                     <input type="hidden" id="module-description-{{$module['id']}}" value="{{$module['description']}}">
-                                    <a href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}" class=" text-gray-900 dark:text-white hover:underline">
+                                    <a href="{{route('articles.articles', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}" class=" text-gray-900 dark:text-white hover:underline hover:text-{{$color}}-900">
                                         {{$module['shortTitle']}}
                                     </a> 
                                 </div>
@@ -208,20 +229,6 @@
                                             <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
                                         </div>
 
-                                        <span data-tooltip-target="tooltip-drag-{{$module['id']}}" class="drag-handle text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-move">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                                <circle cx="9" cy="6" r="2"/>
-                                                <circle cx="9" cy="12" r="2"/>
-                                                <circle cx="9" cy="18" r="2"/>
-                                                <circle cx="15" cy="6" r="2"/>
-                                                <circle cx="15" cy="12" r="2"/>
-                                                <circle cx="15" cy="18" r="2"/>
-                                            </svg>
-                                        </span>
-                                        <div id="tooltip-drag-{{$module['id']}}" role="tooltip" class="absolute z-10 inline-block px-2 py-1 text-md text-xs font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-sm shadow-xs tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(1207px, 332px);" data-popper-placement="bottom">
-                                            Drag to reorder 
-                                            <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
-                                        </div>
                                     </div>
                                 @endauth
                             </div>
@@ -255,7 +262,7 @@
 				<button
 					type="button"
                     onclick="clearAddModuleForm()"
-					class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-sm text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+					class="text-gray-400 bg-transparent hover:bg-{{$color}}-200 hover:text-gray-900 rounded-sm text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
 					data-modal-toggle="createModuleModal">
 					<svg
 						aria-hidden="true"
@@ -282,7 +289,7 @@
 							type="text"
 							name="title"
 							id="title"
-							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-{{$color}}-500 focus:border-{{$color}}-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
 							placeholder="Add title here"
 							required="" />
                             <span class="text-red-500 text-xs error-title"></span>
@@ -297,7 +304,7 @@
 							id="description"
 							name="description"
 							rows="4"
-							class="block p-1.5 w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+							class="block p-1.5 w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-{{$color}}-500 focus:border-{{$color}}-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
 							placeholder="Write description..."></textarea>
                             <span class="text-red-500 text-xs error-description"></span>
 					</div>
@@ -305,7 +312,7 @@
 				<div class="flex items-center space-x-4">
 					<button
 						type="submit"
-						class="text-white inline-flex items-center justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						class="text-white inline-flex items-center justify-center bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800">
 						Add Module
 						<span class="sr-only">Add Module</span>
 					</button>
@@ -313,7 +320,7 @@
 						data-modal-toggle="createModuleModal"
                         onclick="clearAddModuleForm()"
 						type="button"
-						class="inline-flex justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+						class="inline-flex justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
 						Discard
 					</button>
 				</div>
@@ -337,7 +344,7 @@
 				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Edit workspace</h3>
 				<button
 					type="button"
-					class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-sm text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+					class="text-gray-400 bg-transparent hover:bg-{{$color}}-200 hover:text-gray-900 rounded-sm text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
 					data-modal-toggle="editWorkspaceModal">
 					<svg
 						aria-hidden="true"
@@ -364,7 +371,7 @@
 							type="text"
 							name="title"
 							id="editModule-title"
-							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-{{$color}}-500 focus:border-{{$color}}-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
 							value=""
 							required="" />
                             <span id="error-title" class="text-red-500 text-xs error-title"></span>
@@ -379,7 +386,7 @@
 							id="editModule-description"
 							rows="4"
                             name="description"
-							class="block p-1.5 w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+							class="block p-1.5 w-full text-sm text-gray-900 bg-gray-50 rounded-sm border border-gray-300 focus:ring-{{$color}}-500 focus:border-{{$color}}-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
 							value=""></textarea>
                             <span id="error-description" class="text-red-500 text-xs error-description"></span>
 					</div>
@@ -387,14 +394,14 @@
 				<div class="flex items-center space-x-4">
 					<button
 						type="submit"
-						class="text-white inline-flex items-center justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+						class="text-white inline-flex items-center justify-center bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded text-sm px-5 py-2.5 text-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800">
 						Edit Module
 						<span class="sr-only">Edit Module</span>
 					</button>
 					<button
 						data-modal-toggle="editWorkspaceModal"
 						type="button"
-						class="inline-flex justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+						class="inline-flex justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 rounded border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
 						Discard
 					</button>
 				</div>
@@ -412,7 +419,7 @@
 		<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 			<button
 				type="button"
-				class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+				class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-{{$color}}-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
 				data-modal-hide="popup-modal">
 				<svg
 					class="w-3 h-3"
@@ -461,7 +468,7 @@
 				<button
 					data-modal-hide="popup-modal"
 					type="button"
-					class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+					class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-{{$color}}-100 dark:focus:ring-{{$color}}-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
 					>No, cancel</button>
 			</div>
 		</div>
