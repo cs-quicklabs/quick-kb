@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Workspace;
 use App\Models\Module;
 use App\Models\Article;
+use App\Models\ArticleRating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -215,7 +216,7 @@ class ArticleRepository
                 })
                 ->where('slug', $article_slug)
                 ->first();
-
+        
         if(!$article) {
             return false;
         }
@@ -370,5 +371,20 @@ class ArticleRepository
         }
 
         return $content;
+    }
+
+
+    /**
+     * Save an article rating (like).
+     *
+     * @param array $params The associative array containing article_id and rating.
+     * @return bool True if the rating was successfully saved, otherwise false.
+     */
+    public function articleLike($params){
+        ArticleRating::create([
+            'article_id' => $params['article_id'],
+            'rating' => $params['rating']
+        ]);
+        return true;
     }
 } 

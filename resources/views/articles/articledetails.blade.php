@@ -131,22 +131,25 @@
                 Did this article help you in any way?
             </p> 
             <div class="flex justify-center items-center my-6">
-                <div class="flex items-center">
-                    <svg class="w-8 h-8 ms-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                <div class="flex items-center" id="like-article">
+                    <svg onclick="likeArticle(1)" class="w-8 h-8 ms-3 @if($articleData->average_rating >= 1) text-yellow-300 @else text-gray-300 @endif" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
                     </svg> 
-                    <svg class="w-8 h-8 ms-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <svg onclick="likeArticle(2)" class="w-8 h-8 ms-3 @if($articleData->average_rating >= 2) text-yellow-300 @else text-gray-300 @endif" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
                     </svg> 
-                    <svg class="w-8 h-8 ms-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <svg onclick="likeArticle(3)" class="w-8 h-8 ms-3 @if($articleData->average_rating >= 3) text-yellow-300 @else text-gray-300 @endif" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
                     </svg> 
-                    <svg class="w-8 h-8 ms-3 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <svg onclick="likeArticle(4)" class="w-8 h-8 ms-3 @if($articleData->average_rating >= 4) text-yellow-300 @else text-gray-300 @endif" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
                     </svg> 
-                    <svg class="w-8 h-8 ms-3 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                    <svg onclick="likeArticle(5)" class="w-8 h-8 ms-3 @if($articleData->average_rating >= 5) text-yellow-300 @else text-gray-300 @endif dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                         <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
                     </svg>
+
+                    <p class="ms-3 mt-1 text-md font-medium text-gray-500 dark:text-gray-400">( {{$articleData->average_rating}} out of 5)</p>
+
                 </div>
             </div>
         </div>
@@ -288,6 +291,49 @@
                     } else {
                         console.log(data);
                     }
+                }
+            })
+            .catch(error => {
+                toastify.error("Something went wrong.");
+                console.error('Error:', error);
+            });
+        }
+
+
+
+        function likeArticle(rating){
+            const articleId = document.getElementById("article-id").value;
+            const stars = document.querySelectorAll('#like-article svg');
+        
+            stars.forEach((star, index) => {
+                console.log(index, rating);
+                if (index < rating) {
+                    star.classList.remove('text-gray-300', 'dark:text-gray-500');
+                    star.classList.add('text-yellow-300');
+                } else {
+                    star.classList.remove('text-yellow-300');
+                    star.classList.add('text-gray-300', 'dark:text-gray-500');
+                }
+            });
+
+            const formData = new FormData();
+            formData.append('rating', rating);
+            formData.append('article_id', articleId);
+
+            fetch("{{route('articles.like')}}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    toastify.success(data.message);
+                } else {
+                    toastify.error(data.errors);
                 }
             })
             .catch(error => {

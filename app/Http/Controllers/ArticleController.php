@@ -221,4 +221,24 @@ class ArticleController extends BaseController
         }
         
     }
+
+
+    /**
+     * Handle the request to like an article.
+     *
+     * @param \Illuminate\Http\Request $request The request object containing the article ID and rating data.
+     * @return \Illuminate\Http\JsonResponse The JSON response indicating success or failure of the like operation.
+     */
+    public function articleLike(Request $request)
+    {
+        try {
+            $this->articleRepository->articleLike($request->all());
+
+            return $this->sendSuccessResponse([], config('response_messages.article_liked'), config('statuscodes.OK'));
+        } catch (\Exception $e) {
+
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_like_article'), config('statuscodes.BAD_REQUEST'));
+        }
+
+    }
 } 

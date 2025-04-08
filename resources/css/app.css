@@ -215,7 +215,7 @@
   }
   
   .quill .ql-container .ql-editor {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     font:
       400 16px/28px 'Open Sans',
       sans-serif;
@@ -324,7 +324,7 @@
       max-width: 85%;
     }
     .quill .ql-container .ql-editor {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     font:
       400 16px/28px 'Open Sans',
       sans-serif;

@@ -35,6 +35,7 @@ Route::get('/modules/{workspace_slug}', [ModuleController::class, 'modules'])->n
 Route::get('/articles/{workspace_slug}/{module_slug}', [ArticleController::class, 'articles'])->name('articles.articles');
 Route::get('/articles/{workspace_slug}/{module_slug}/add', [ArticleController::class, 'addArticle'])->name('articles.addArticle')->middleware(Authenticate::class);
 Route::get('/articles/{workspace_slug}/{module_slug}/{article_slug}', [ArticleController::class, 'articleDetails'])->name('articles.articleDetails');
+Route::post('/articles/like', [ArticleController::class, 'articleLike'])->name('articles.like');
 Route::post('search-content', [WorkspaceController::class, 'searchContent'])->name('search.content');
 
 // Protected routes
