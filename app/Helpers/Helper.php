@@ -3,6 +3,7 @@
     use Illuminate\Support\Facades\Auth;
     use App\Models\Theme;
     use Illuminate\Support\Facades\Log;
+    use Illuminate\Support\Facades\Cookie;
 
     /**
      * Truncates a string to a specified length and appends a suffix if needed
@@ -127,9 +128,11 @@
         function getThemeValues() {
             $defaultThemeData = getDefaultThemeValues();
 
-            // Get theme values from session
-            $themeData = session('themeData', []);
+            // Get theme values from cookies
+            $themeData = json_decode(Cookie::get('themeData'), true);
+
             if(!empty($themeData)){
+                //dd($themeData);
                 return $themeData;
             }  else {
                 // Get theme values from DB
@@ -140,9 +143,8 @@
                 
                 $themeData = $themeData->theme;
 
-                // Store in session
-                session(['themeData' => $themeData]);
-
+                // Store in cookies
+                Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
                 return $themeData;
             }
         }

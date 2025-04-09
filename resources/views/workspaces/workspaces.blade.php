@@ -5,7 +5,7 @@
 @extends('layouts.app_layout')
 @section('content')
 
-<div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
+<div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
     <nav class="flex" aria-label="Breadcrumb">
         <ol class="inline-flex justify-self-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="inline-flex items-center"><a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-{{$color}}-900 dark:text-gray-400 dark:hover:text-white hover:underline"><svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -104,7 +104,7 @@
                     @endforeach
                 </div>
             @else
-                <div id="draggable-list" class="max-w-3xl mt-4 flex flex-col">
+                <div id="draggable-list" class="max-w-3xl mt-4 flex flex-col" style="--link-color: {{ $color }};">
                     @foreach ($workspaces['workspaces'] as $i => $workspace)
                         <div id="workspacediv-{{$workspace['id']}}" 
                                     class="draggable-item "

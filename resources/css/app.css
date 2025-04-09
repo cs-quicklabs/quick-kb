@@ -180,6 +180,18 @@
 /* Drag and Drop Css End */
 
 
+.breadcrumb-link:hover {
+  color: var(--breadcrumb-color) !important;
+}
+
+a:hover {
+  color: var(--link-color) !important;
+}
+
+a .archived:hover {
+  color: var(--link-color) !important;
+}
+
 /* quill editor */
 .ql-editor {
     min-height: 200px;
@@ -197,9 +209,18 @@
   .ql-snow.ql-toolbar button.custom-quill-button {
     padding: 0 !important;
   }
+
+  .ql-snow.ql-toolbar button.custom-quill-button:hover {
+    padding: 0 !important;
+    color: var(--link-color) !important;
+  }
   
   .ql-snow.ql-toolbar button:focus {
     color: #000000 !important;
+  }
+
+  .ql-snow.ql-toolbar button:hover {
+    color: var(--link-color) !important;
   }
   
   #toolbar:not(.ql-toolbar.ql-snow) .ql-image {
@@ -250,10 +271,11 @@
     margin-top: 0px;
   }
   .quill .ql-container .ql-editor a {
-    color: #1c64f2;
+    color: var(--link-color);
+    cursor: pointer;
   }
   .quill .ql-container .ql-editor a:hover {
-    text-decoration-color: #1c64f2;
+    text-decoration-color: var(--link-color);
     text-decoration-line: underline;
   }
   .quill .ql-container .ql-editor strong {

@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cookie;
 
 class SettingRepository
 {
@@ -50,7 +51,8 @@ class SettingRepository
                 ]
             );
 
-            session(['themeData' => $themeData]);
+            // Store in cookies
+            Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
 
             DB::commit();
             return true;

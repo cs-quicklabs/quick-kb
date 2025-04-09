@@ -11,9 +11,9 @@ export default {
     ],
 	safelist: [
 		{
-		  pattern: /(^|\s)(bg|hover:bg|focus:ring|dark:bg|dark:hover:bg|dark:focus:ring)-(red|blue|teal|green|yellow|orange)-(50|100|200|300|400|500|600|700|800|900)(\s|$)/,
+		  pattern: /(^|\s)(bg|hover:bg|focus:ring|focus:border|dark:bg|dark:hover:bg|dark:focus:ring|text|hover:text|dark:text|dark:hover:text)-(red|blue|teal|green|yellow|orange)-(50|100|200|300|400|500|600|700|800|900)(\s|$)/,
 		},
-	  ],
+	],
 	  
 	  
     theme: {

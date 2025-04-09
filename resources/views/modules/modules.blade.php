@@ -4,7 +4,7 @@
 @endphp
 @extends('layouts.app_layout')
 @section('content')
-<div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
+<div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
     <nav class="flex" aria-label="Breadcrumb">
         <ol class="inline-flex justify-self-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="inline-flex items-center">

@@ -1,7 +1,10 @@
-
+@php
+    $color = getThemeValues()['color'];
+    $spacing = getThemeValues()['theme_spacing'];
+@endphp
 @extends('layouts.app_layout')
 @section('content')
-    <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
+    <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
         @if(!empty($module))
             <div
                 id="alert-additional-content-2"

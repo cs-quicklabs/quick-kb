@@ -1,7 +1,10 @@
-
+@php
+    $color = getThemeValues()['color'];
+    $spacing = getThemeValues()['theme_spacing'];
+@endphp
 @extends('layouts.app_layout')
 @section('content')
-    <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8">
+    <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
         @if(!empty($workspace))
             <div
                 id="alert-additional-content-2"
@@ -45,7 +48,7 @@
                 </div>
             </div>
         @endif
-        <nav class="flex" aria-label="Breadcrumb">
+        <nav class="flex" aria-label="Breadcrumb" style="--link-color: {{ $color }};">
             <ol class="inline-flex justify-self-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li class="inline-flex items-center">
                     <a
@@ -108,7 +111,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="max-w-3xl mt-4 flex flex-col">
+                    <div class="max-w-3xl mt-4 flex flex-col" style="--link-color: {{ $color }};">
                         @foreach($workspace->modules as $module)
                             <div class="">
                                 <a

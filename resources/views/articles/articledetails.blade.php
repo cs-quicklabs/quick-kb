@@ -1,3 +1,7 @@
+@php
+    $color = getThemeValues()['color'];
+    $spacing = getThemeValues()['theme_spacing'];
+@endphp
 @extends('layouts.article_layout')
 @section('content')
     <meta property="og:url" content="{{url()->current()}}">
@@ -7,14 +11,14 @@
     <meta property="og:site_name" content="{{getKnowledgeBase()}}">
 
 
-    <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8">
+    <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8" style="--breadcrumb-color: {{ $color }};">
         <div class="-mt-4">
 
             <div class="flex justify-center px-4 pb-4 pt-5 sm:px-6 lg:px-8">
                 <nav class="flex justify-self-center flex-wrap" aria-label="Breadcrumb">
                     <ol class="inline-flex justify-self-center flex-wrap align-center justify-center rtl:space-x-reverse">
                         <li class="inline-flex items-center">
-                            <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline">
+                            <a href="/" class="breadcrumb-link inline-flex items-center text-sm font-medium text-gray-700  dark:text-gray-400 dark:hover:text-white hover:underline">
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
                                 </svg> Home
@@ -24,13 +28,13 @@
                             <div class="flex items-center">
                                 <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->workspace->title??"", 50)}}</a>
+                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->workspace->title??"", 50)}}</a>
                             </div>
                         </li>
                         <li class="inline-flex items-center">
                             <div class="flex items-center"><svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->title??'', 50)}}</a></div>
+                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->title??'', 50)}}</a></div>
                         </li>
                     </ol>
                 </nav>
@@ -50,7 +54,7 @@
                         class="mt-1 ml-1 text-center text-sm text-gray-500 truncate sm:flex sm:items-center sm:justify-center">
                         {{$articleData->createdBy->name}} added this article on {{$articleData->created_at}}
                     </p>
-                    <div class="quillHeader flex flex-col h-full mx-4">
+                    <div class="quillHeader flex flex-col h-full mx-4" style="--link-color: {{ $color }};">
                         @auth    
                             <div class="mx-auto my-4 px-4 sticky top-12 z-10 flex flex-col md:flex-row rounded-full md:h-11 md:w-max items-center gap-1 py-3 md:py-0 bg-zinc-200 md:w-min ql-toolbar ql-snow" id="toolbar">
                             
@@ -65,7 +69,7 @@
 
                                         <label for="toggle" class="inline-flex items-center cursor-pointer" aria-label="Toggle editing mode">
                                             <input id="toggle" class="sr-only peer" type="checkbox" onchange="toggleEditorMode()">
-                                            <div class="relative w-11 h-6 bg-gray-400 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#3070b9]"></div>
+                                            <div id="toggle-div" class="relative w-11 h-6 bg-gray-400 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-{{$color}}-700"></div>
                                         </label>
 
                                         <button onclick="editMode()" type="button" class="custom-quill-button">
@@ -104,7 +108,7 @@
                            
                             </div>
                         @endauth
-                        <div class="grow relative">
+                        <div class="grow relative" style="--link-color: {{ $color }};">
                             <div class="quill h-full mb-12" style="line-height: 2rem;">
                                 <div id ="editor" ></div>
                             </div>
@@ -194,13 +198,16 @@
 
             if(checkbox.checked){
                 document.querySelector('#toolbar').classList.remove('bg-zinc-200', 'md:w-min');
-                document.querySelector('#toolbar').classList.add('bg-blue-100');
+                document.querySelector('#toolbar').classList.add('bg-{{$color}}-100');
 
                 document.querySelector('#toolbar-div').classList.remove('hidden');
                 document.querySelector('#toolbar-div').classList.add('flex');
 
                 document.getElementById("submit-btn").classList.remove('hidden');
                 document.getElementById("draft-btn").classList.remove('hidden');
+
+                document.querySelector('#toggle-div').classList.remove('bg-gray-400');
+                document.querySelector('#toggle-div').classList.add('bg-{{$color}}-700');
             }else{
                 document.querySelector('#toolbar').classList.remove('bg-blue-100');
                 document.querySelector('#toolbar').classList.add('bg-zinc-200', 'md:w-min');
@@ -210,6 +217,9 @@
 
                 document.getElementById("submit-btn").classList.add('hidden');
                 document.getElementById("draft-btn").classList.add('hidden');
+
+                document.querySelector('#toggle-div').classList.remove('bg-{{$color}}-700');
+                document.querySelector('#toggle-div').classList.add('bg-gray-400');
             }
             
             document.getElementById("article-title").readOnly = !checkbox.checked;
@@ -228,6 +238,7 @@
             document.getElementById("toggle").checked = true;
             toggleEditorMode();
         }
+
 
         document.getElementById('article-form').addEventListener("submit", function (event) {
             event.preventDefault(); // Prevent default form submission
