@@ -7,7 +7,6 @@ spec:
         repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
       build_command: echo "Build completed"
       run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
-      stack: container
       dockerfile_path: ./Dockerfile
       envs:
         - key: APP_ENV
