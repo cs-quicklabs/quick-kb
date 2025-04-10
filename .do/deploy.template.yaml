@@ -8,9 +8,7 @@ spec:
       build_command: echo "Build completed"
       run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
       stack: container
-      dockerfile_path: Dockerfile
-      dockerfile_context: .
-      dockerfile_context_path: .
+      dockerfile_path: ./Dockerfile
       features:
         runtime-env-vars: true
       env:
