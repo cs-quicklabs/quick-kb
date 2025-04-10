@@ -9,8 +9,6 @@ spec:
       run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
       stack: container
       dockerfile_path: ./Dockerfile
-      features:
-        runtime-env-vars: true
       envs:
         - key: APP_ENV
           value: production
