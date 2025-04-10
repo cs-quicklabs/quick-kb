@@ -1,3 +1,7 @@
+@php
+    $color = getThemeValues()['color'];
+    $spacing = getThemeValues()['theme_spacing'];
+@endphp
 @extends('layouts.article_layout')
 @section('content')
     <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8">
@@ -25,11 +29,11 @@
 
 
 
-            <div class="flex justify-center px-4 pb-4 pt-5 sm:px-6 lg:px-8">
+            <div class="flex justify-center px-4 pb-4 pt-5 sm:px-6 lg:px-8" style="--breadcrumb-color: {{ $color }};">
                 <nav class="flex justify-self-center flex-wrap" aria-label="Breadcrumb">
                     <ol class="inline-flex justify-self-center flex-wrap align-center justify-center rtl:space-x-reverse">
                         <li class="inline-flex items-center">
-                            <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline">
+                            <a href="/" class="breadcrumb-link inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white hover:underline">
                                 <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"></path>
                                 </svg> Home
@@ -39,13 +43,13 @@
                             <div class="flex items-center">
                                 <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$articleData->module->workspace->title??''}}</a>
+                                </svg> <a href="{{route('modules.modules', ['workspace_slug' => $articleData->module->workspace->slug])}}" class="breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->workspace->title??'', 50)}}</a>
                             </div>
                         </li>
                         <li class="inline-flex items-center">
                             <div class="flex items-center"><svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$articleData->module->title??''}}</a></div>
+                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $articleData->module->workspace->slug, 'module_slug' => $articleData->module->slug])}}" class="breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{getShortTitle($articleData->module->title??'', 50)}}</a></div>
                         </li>
                     </ol>
                 </nav>
@@ -65,7 +69,7 @@
                         {{$articleData->createdBy->name}} added this article on {{$articleData->created_at}}
                     </p>
                     <div class="quillHeader flex flex-col h-full mx-4">
-                        <div class="grow relative">
+                        <div class="grow relative" style="--link-color: {{ $color }};">
                             <div class="quill h-full mb-12" style="line-height: 2rem;">
                                 <div class="ql-container ql-snow ql-disabled">
                                     <div class="ql-editor" data-gramm="false" contenteditable="false" data-placeholder="Write something...">

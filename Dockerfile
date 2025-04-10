@@ -37,7 +37,6 @@ RUN php artisan config:cache
 RUN php artisan storage:link
 
 
-RUN [ ! -f database/database.sqlite ] && touch database/database.sqlite || echo "Database already exists"
 RUN php artisan migrate --force
 RUN mkdir -p storage/search
 RUN php artisan scout:import "App\Models\Article"
@@ -77,6 +76,3 @@ EXPOSE 80
 
 # Start PHP-FPM and Nginx when the container starts
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
-
-
-
