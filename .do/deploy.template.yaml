@@ -1,0 +1,34 @@
+name: Quick KB
+description: A Knowledge Base application built with Laravel and SQLite.
+services:
+  -name: quick-kb
+  github:
+      repo: cs-quicklabs/quick-kb
+      branch: one-click-deployment
+  build_command: echo "Build completed"
+  run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
+  stack: container
+  dockerfile_path: Dockerfile
+  dockerfile_context: .
+  dockerfile_context_path: .
+  features:
+    runtime-env-vars: true
+  env:
+    - key: APP_ENV
+      value: production
+    - key: APP_KEY
+      generateValue: true
+    - key: DB_CONNECTION
+      value: sqlite
+    - key: DB_DATABASE
+      value: database/database.sqlite
+    - key: SCOUT_DRIVER
+      value: tntsearch
+    - key: PORT
+      value: "80"
+    - key: SESSION_DRIVER
+      value: database
+    - key: SESSION_DOMAIN
+      value: null
+    - key: SESSION_SECURE_COOKIE
+      value: "true" 
