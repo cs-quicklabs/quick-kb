@@ -76,6 +76,3 @@ EXPOSE 80
 
 # Start PHP-FPM and Nginx when the container starts
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
-
-
-

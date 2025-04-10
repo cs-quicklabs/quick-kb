@@ -72,4 +72,7 @@
 
         'account_settings_updated' => 'Account settings updated successfully',
         'account_settings_not_updated' => 'Failed to update account settings',
+
+        'article_liked' => 'Article liked successfully',
+        'failed_to_like_article' => 'Failed to like article',
     ];

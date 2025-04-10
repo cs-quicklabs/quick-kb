@@ -2,6 +2,8 @@
     use App\Models\KnowledgeBase;
     use Illuminate\Support\Facades\Auth;
     use App\Models\Theme;
+    use Illuminate\Support\Facades\Log;
+    use Illuminate\Support\Facades\Cookie;
 
     /**
      * Truncates a string to a specified length and appends a suffix if needed
@@ -99,7 +101,7 @@
     if(!function_exists('getCleanContent')){ 
         function getCleanContent($content = "") {
             // Remove Base64-encoded images
-            $content = preg_replace('/<img[^>]+src="data:image\/[^;]+;base64,[^"]+"[^>]*>/i', '', $content);
+            // $content = preg_replace('/<img[^>]+src="data:image\/[^;]+;base64,[^"]+"[^>]*>/i', '', $content);
             // Remove all HTML tags
             return strip_tags($content);
         }
@@ -124,12 +126,26 @@
      */
     if(!function_exists('getThemeValues')){ 
         function getThemeValues() {
-            $themeData = Theme::first();
-            if(empty($themeData)){
-                $themeData = getDefaultThemeValues();
+            $defaultThemeData = getDefaultThemeValues();
+
+            // Get theme values from cookies
+            $themeData = json_decode(Cookie::get('themeData'), true);
+
+            if(!empty($themeData)){
+                //dd($themeData);
+                return $themeData;
+            }  else {
+                // Get theme values from DB
+                $themeData = Theme::first();
+                if(empty($themeData)){
+                    $themeData = $defaultThemeData;
+                }
+                
+                $themeData = $themeData->theme;
+
+                // Store in cookies
+                Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
+                return $themeData;
             }
-            
-            $themeData = $themeData->theme;
-            return $themeData;
         }
     }

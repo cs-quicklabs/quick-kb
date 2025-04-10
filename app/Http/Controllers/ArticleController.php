@@ -34,11 +34,8 @@ class ArticleController extends BaseController
         if(!$articlesData) {
             return redirect()->route('workspaces.workspaces')->with('error', config('response_messages.workspace_not_found'));
         } else {
-            return view('articles.articles', [
-                'workspace' => $articlesData['workspace'],
-                'module' => $articlesData['module'],
-                'articles' => $articlesData['articles']
-            ]);
+            extract($articlesData);
+            return view('articles.articles', compact('workspace', 'module', 'articles'));
         }
         
     }
@@ -100,7 +97,6 @@ class ArticleController extends BaseController
 
             return $this->sendSuccessResponse($workspace, config('response_messages.article_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
-            //dd($e->getMessage());
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_article_status'), config('statuscodes.BAD_REQUEST'));
         }
     }
@@ -206,6 +202,14 @@ class ArticleController extends BaseController
 
 
 
+    /**
+     * Retrieve a specific archived article by workspace, module, and article slugs.
+     *
+     * @param string $workspaceSlug The slug of the workspace.
+     * @param string $moduleSlug The slug of the module.
+     * @param string $articleSlug The slug of the article.
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse The view containing the archived article or a redirect response if not found.
+     */
     public function getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug)
     {
         $articleData = $this->articleRepository->getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug);
@@ -216,5 +220,25 @@ class ArticleController extends BaseController
             return redirect()->route('adminland.archivedarticles')->with('error', config('response_messages.article_not_found'));
         }
         
+    }
+
+
+    /**
+     * Handle the request to like an article.
+     *
+     * @param \Illuminate\Http\Request $request The request object containing the article ID and rating data.
+     * @return \Illuminate\Http\JsonResponse The JSON response indicating success or failure of the like operation.
+     */
+    public function articleLike(Request $request)
+    {
+        try {
+            $article = $this->articleRepository->articleLike($request->all());
+
+            return $this->sendSuccessResponse($article, config('response_messages.article_liked'), config('statuscodes.OK'));
+        } catch (\Exception $e) {
+
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_like_article'), config('statuscodes.BAD_REQUEST'));
+        }
+
     }
 } 

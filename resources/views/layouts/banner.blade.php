@@ -1,3 +1,7 @@
+@php
+                $color = getThemeValues()['color'];
+                $spacing = getThemeValues()['theme_spacing'];
+            @endphp
 <div class="fixed top-4 right-4">
     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         @if(Auth::check())

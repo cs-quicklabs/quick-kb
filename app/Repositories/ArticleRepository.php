@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Workspace;
 use App\Models\Module;
 use App\Models\Article;
+use App\Models\ArticleRating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,8 @@ class ArticleRepository
     {
         
         $workspace = Workspace::whereHas('modules', function($q) use ($module_slug) {
-                    $q->where('slug', $module_slug);
+                    $q->where('slug', $module_slug)
+                        ->where('status', 1);
                 })
                 ->with(
                 [
@@ -38,7 +40,8 @@ class ArticleRepository
                         $query->where('status' , '!=' , 0)->orderBy('order', 'asc');
                     }
                 ])
-                ->where('slug', $workspace_slug);
+                ->where('slug', $workspace_slug)
+                ->where('status', 1);
         
         
                 
@@ -213,7 +216,7 @@ class ArticleRepository
                 })
                 ->where('slug', $article_slug)
                 ->first();
-
+        
         if(!$article) {
             return false;
         }
@@ -302,6 +305,14 @@ class ArticleRepository
     }
 
 
+    /**
+     * Retrieves an archived article.
+     *
+     * @param string $workspaceSlug The slug of the workspace containing the module and article.
+     * @param string $moduleSlug The slug of the module containing the article.
+     * @param string $articleSlug The slug of the article to be retrieved.
+     * @return \App\Models\Article|false The archived article if found, otherwise false.
+     */
     public function getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug)
     {
         $article = Article::with('module', 'module.workspace', 'createdBy')
@@ -360,5 +371,26 @@ class ArticleRepository
         }
 
         return $content;
+    }
+
+
+    /**
+     * Save an article rating (like).
+     *
+     * @param array $params The associative array containing article_id and rating.
+     * @return bool True if the rating was successfully saved, otherwise false.
+     */
+    public function articleLike($params){
+        try{
+            ArticleRating::create([
+                'article_id' => $params['article_id'],
+                'rating' => $params['rating']
+            ]);
+
+            $article = Article::find($params['article_id']);
+        return $article;
+        } catch(\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 } 

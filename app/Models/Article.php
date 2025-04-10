@@ -12,7 +12,7 @@ class Article extends Model
     
     protected $table = 'articles';
 
-    protected $appends = ['formatted_data', 'archived_at', 'created_at', 'clean_content'];
+    protected $appends = ['formatted_data', 'archived_at', 'created_at', 'clean_content', 'average_rating'];
 
     protected $fillable = [
         'id',
@@ -98,6 +98,17 @@ class Article extends Model
     public function getCleanContentAttribute()
     {
         return getCleanContent($this->attributes['content']);
+    }
+
+
+    public function articleRating()
+    {
+        return $this->hasMany(ArticleRating::class, 'article_id', 'id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return round($this->articleRating->avg('rating')?? 0, 2);
     }
     
 }
