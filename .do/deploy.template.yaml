@@ -15,7 +15,7 @@ spec:
         - key: APP_ENV
           value: production
         - key: APP_KEY
-          generateValue: true
+          generate_value: true
         - key: DB_CONNECTION
           value: sqlite
         - key: DB_DATABASE
