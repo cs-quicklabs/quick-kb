@@ -11,7 +11,7 @@ spec:
       dockerfile_path: ./Dockerfile
       features:
         runtime-env-vars: true
-      env:
+      envs:
         - key: APP_ENV
           value: production
         - key: APP_KEY
