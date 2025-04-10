@@ -232,9 +232,9 @@ class ArticleController extends BaseController
     public function articleLike(Request $request)
     {
         try {
-            $this->articleRepository->articleLike($request->all());
+            $article = $this->articleRepository->articleLike($request->all());
 
-            return $this->sendSuccessResponse([], config('response_messages.article_liked'), config('statuscodes.OK'));
+            return $this->sendSuccessResponse($article, config('response_messages.article_liked'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_like_article'), config('statuscodes.BAD_REQUEST'));

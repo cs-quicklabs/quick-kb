@@ -381,10 +381,16 @@ class ArticleRepository
      * @return bool True if the rating was successfully saved, otherwise false.
      */
     public function articleLike($params){
-        ArticleRating::create([
-            'article_id' => $params['article_id'],
-            'rating' => $params['rating']
-        ]);
-        return true;
+        try{
+            ArticleRating::create([
+                'article_id' => $params['article_id'],
+                'rating' => $params['rating']
+            ]);
+
+            $article = Article::find($params['article_id']);
+        return $article;
+        } catch(\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 } 
