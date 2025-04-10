@@ -1,5 +1,4 @@
 name: Quick KB
-description: A Knowledge Base application built with Laravel and SQLite.
 services:
   -name: quick-kb
   github:
