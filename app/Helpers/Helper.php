@@ -139,8 +139,9 @@
 
             // For SQLite: check if the DB file exists
             if (config('database.default') === 'sqlite') {
-                $sqlitePath = database_path(config('database.connections.sqlite.database'));
-
+                $sqlitePath = config('database.connections.sqlite.database');
+                $sqlitePath = database_path(basename($sqlitePath));
+                
                 if (!file_exists($sqlitePath)) {
                     $themeData = $defaultThemeData;
                     // Store in cookies
