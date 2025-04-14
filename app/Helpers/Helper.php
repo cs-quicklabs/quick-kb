@@ -134,23 +134,37 @@
 
             if(!empty($themeData)){
                 return $themeData;
-            }  else {
-                if(Schema::hasTable('themes')){
-                    // Check if the theme table exists
-                    $themeData = Theme::first();
-                    if(empty($themeData)){
-                        $themeData = $defaultThemeData;
-                    } else {
-                        $themeData = $themeData->theme;
-                    }
-                } else {
-                    // If the theme table does not exist, use default theme data
-                    $themeData = $defaultThemeData;
-                }
-
-                // Store in cookies
-                Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
-                return $themeData;
             }
+
+
+            // For SQLite: check if the DB file exists
+            if (config('database.default') === 'sqlite') {
+                $sqlitePath = database_path(config('database.connections.sqlite.database'));
+
+                if (!file_exists($sqlitePath)) {
+                    $themeData = $defaultThemeData;
+                    // Store in cookies
+                    Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
+                    return $themeData;
+                }
+            }
+
+
+            if(Schema::hasTable('themes')){
+                // Check if the theme table exists
+                $themeData = Theme::first();
+                if(empty($themeData)){
+                    $themeData = $defaultThemeData;
+                } else {
+                    $themeData = $themeData->theme;
+                }
+            } else {
+                // If the theme table does not exist, use default theme data
+                $themeData = $defaultThemeData;
+            }
+
+            // Store in cookies
+            Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
+            return $themeData;
         }
     }
