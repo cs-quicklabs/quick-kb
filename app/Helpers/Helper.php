@@ -4,6 +4,7 @@
     use App\Models\Theme;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Cookie;
+    use Illuminate\Support\Facades\Schema;
 
     /**
      * Truncates a string to a specified length and appends a suffix if needed
@@ -134,13 +135,18 @@
             if(!empty($themeData)){
                 return $themeData;
             }  else {
-                // Get theme values from DB
-                $themeData = Theme::first();
-                if(empty($themeData)){
+                if(Schema::hasTable('themes')){
+                    // Check if the theme table exists
+                    $themeData = Theme::first();
+                    if(empty($themeData)){
+                        $themeData = $defaultThemeData;
+                    } else {
+                        $themeData = $themeData->theme;
+                    }
+                } else {
+                    // If the theme table does not exist, use default theme data
                     $themeData = $defaultThemeData;
                 }
-                
-                $themeData = $themeData->theme;
 
                 // Store in cookies
                 Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
