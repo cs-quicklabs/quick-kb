@@ -5,11 +5,14 @@ namespace App\Repositories;
 use App\Models\Workspace;
 use App\Models\Module;
 use App\Models\Article;
+use App\Models\ArticleRating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+
+
 
 class ArticleRepository
 {
@@ -24,7 +27,8 @@ class ArticleRepository
     {
         
         $workspace = Workspace::whereHas('modules', function($q) use ($module_slug) {
-                    $q->where('slug', $module_slug);
+                    $q->where('slug', $module_slug)
+                        ->where('status', config('constants.MODULE_ACTIVE_STATUS'));
                 })
                 ->with(
                 [
@@ -33,12 +37,13 @@ class ArticleRepository
                     },
                     'modules.articles' => function($query) {
                         if(!Auth::check()){
-                            $query = $query->where('status', 1);
+                            $query = $query->where('status', config('constants.ARTICLE_ACTIVE_STATUS'));
                         }
-                        $query->where('status' , '!=' , 0)->orderBy('order', 'asc');
+                        $query->where('status' , '!=' , config('constants.ARTICLE_ARCHIVED_STATUS'))->orderBy('order', 'asc');
                     }
                 ])
-                ->where('slug', $workspace_slug);
+                ->where('slug', $workspace_slug)
+                ->where('status', config('constants.WORKSPACE_ACTIVE_STATUS'));
         
         
                 
@@ -86,12 +91,8 @@ class ArticleRepository
                 ->whereHas('workspace', function($q) use ($workspace_slug){
                     $q->where('slug', $workspace_slug);
                 })->first();
-        
-
-        if(!$module) {
-            return false;
-        }   
-        return $module;
+          
+        return $module??false;
     }
 
 
@@ -122,7 +123,7 @@ class ArticleRepository
                 'created_by' => Auth::user()->id,
                 'slug' => Str::slug($data['title']).'-'.uniqid(),
                 'order' => $maxOrder + 1,
-                'status' =>  $data['status']??1,// Active by default
+                'status' =>  $data['status']?? config('constants.ARTICLE_ACTIVE_STATUS'),// Active by default
             ];
             $article = Article::create($articleData);
             return true;
@@ -150,8 +151,8 @@ class ArticleRepository
                 throw new \Exception(config('response_messages.article_not_found'));
             }
             
-            if($data['status'] == 1) {
-                if($article->module->workspace->status == 0 || $article->module->status == 0) {
+            if($data['status'] == config('constants.ARTICLE_ACTIVE_STATUS')) {
+                if($article->module->workspace->status == config('constants.WORKSPACE_ARCHIVED_STATUS') || $article->module->status == config('constants.MODULE_ARCHIVED_STATUS')) {
                     throw new \Exception(config('response_messages.restore_module_first'));
                 }
             }
@@ -213,12 +214,8 @@ class ArticleRepository
                 })
                 ->where('slug', $article_slug)
                 ->first();
-
-        if(!$article) {
-            return false;
-        }
         
-        return $article;
+        return $article??false;
     }
 
 
@@ -262,7 +259,7 @@ class ArticleRepository
     {
         $search = $params['search']??"";
         $articles = Article::with('updatedBy', 'module', 'module.workspace')
-            ->where('status', 0)
+            ->where('status', config('constants.ARTICLE_ARCHIVED_STATUS'))
             ->where(function ($query) use($search) {
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('content', 'LIKE', '%'.$search.'%');
@@ -279,7 +276,7 @@ class ArticleRepository
                     'updated_at' => Carbon::parse($article->updated_at)->format('F d, Y')
                 ];
             });
-        //dd($articles);
+
         return $articles;
     }
 
@@ -302,6 +299,14 @@ class ArticleRepository
     }
 
 
+    /**
+     * Retrieves an archived article.
+     *
+     * @param string $workspaceSlug The slug of the workspace containing the module and article.
+     * @param string $moduleSlug The slug of the module containing the article.
+     * @param string $articleSlug The slug of the article to be retrieved.
+     * @return \App\Models\Article|false The archived article if found, otherwise false.
+     */
     public function getArchivedArticle($workspaceSlug, $moduleSlug, $articleSlug)
     {
         $article = Article::with('module', 'module.workspace', 'createdBy')
@@ -312,13 +317,10 @@ class ArticleRepository
                 $q->where('slug', $workspaceSlug);
             })
             ->where('slug', $articleSlug)
-            ->where('status', 0) //For archived articles
+            ->where('status', config('constants.ARTICLE_ARCHIVED_STATUS')) //For archived articles
             ->first();
         
-        if(!$article) {
-            return false;
-        }
-        return $article;
+        return $article ?? false;
     }
     
 
@@ -360,5 +362,26 @@ class ArticleRepository
         }
 
         return $content;
+    }
+
+
+    /**
+     * Save an article rating (like).
+     *
+     * @param array $params The associative array containing article_id and rating.
+     * @return bool True if the rating was successfully saved, otherwise false.
+     */
+    public function articleLike($params){
+        try{
+            ArticleRating::create([
+                'article_id' => $params['article_id'],
+                'rating' => $params['rating']
+            ]);
+
+            $article = Article::find($params['article_id']);
+            return $article;
+        } catch(\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 } 

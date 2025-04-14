@@ -1,7 +1,7 @@
 @extends('layouts.firstrun_layout')
 @section('content')  
 <div
-                class="w-full p-6 bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+                class="w-full p-6 bg-white rounded-sm shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8" style="--link-color: {{ $color }};">
                 <h2
                     class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     Forgot Password?
@@ -17,7 +17,7 @@
                             name="recovery_code"
                             id="recovery_code"
                             value="{{ old('recovery_code') }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-{{$color}}-600 focus:border-{{$color}}-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
                             placeholder="Enter recovery code"
                             required />
                         @error('recovery_code')
@@ -27,12 +27,12 @@
 
                     <button
                         type="submit"
-                        class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                        class="w-full text-white bg-{{$color}}-600 hover:bg-{{$color}}-700 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded-sm text-sm px-5 py-2 text-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800"
                         >Confirm recovery code and reset password</button>
                     <p class="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
                         <a
                             href="/login"
-                            class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                            class="font-medium text-{{$color}}-600 hover:underline dark:text-{{$color}}-500"
                             >Return Back to Login</a>
                     </p>
                 </form>
