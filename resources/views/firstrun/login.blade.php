@@ -26,7 +26,7 @@
                                 name="email"
                                 id="email"
                                 value="{{ old('email') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-{{$color}}-600 focus:border-{{$color}}-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-{{$color}}-500 focus:border-{{$color}}-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
                                 placeholder="name@company.com"
                                 required="" />
                             @error('email')
@@ -42,7 +42,7 @@
                                 name="password"
                                 id="password"
                                 placeholder="••••••••"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-{{$color}}-600 focus:border-{{$color}}-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm focus:ring-{{$color}}-500 focus:border-{{$color}}-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
                                 required="" />
                             @error('password')
                                 <p class="text-sm text-red-600">{{ $message }}</p>
