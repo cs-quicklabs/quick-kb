@@ -16,6 +16,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
+        "puppeteer": "^24.6.1",
         "quill": "^2.0.3",
         "sortablejs": "^1.15.6",
         "toastify-js": "^1.12.0"

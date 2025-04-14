@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Browsershot\Browsershot;
 
 
 
@@ -223,6 +224,18 @@ class ArticleRepository
             return false;
         }
 
+
+        $title = "Test Title"; // Replace with the actual title
+        $filename = Str::slug($title) . '.png';
+        $path = storage_path("app/public/og/{$filename}");
+
+        $html = view('og-template', compact('title'))->render();
+
+        $og_image_path = Browsershot::html($html)
+            ->windowSize(1200, 630)
+            ->waitUntilNetworkIdle()
+            ->save($path);
+        dd($og_image_path);
         
         return $article;
     }
