@@ -8,6 +8,7 @@ spec:
       build_command: echo "Build completed"
       run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
       dockerfile_path: ./Dockerfile
+      http_port: 80
       envs:
         - key: APP_ENV
           value: production
