@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.article_layout')
 @section('content')
     <meta property="og:url" content="{{url()->current()}}">

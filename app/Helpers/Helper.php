@@ -132,7 +132,6 @@
             $themeData = json_decode(Cookie::get('themeData'), true);
 
             if(!empty($themeData)){
-                //dd($themeData);
                 return $themeData;
             }  else {
                 // Get theme values from DB

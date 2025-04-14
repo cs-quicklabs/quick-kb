@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.app_layout')
 @section('content')
     <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
@@ -118,7 +114,7 @@
 
         
             @if(!empty($module) && count($module->articles) > 0)
-                @if(getThemeValues()['theme_spacing'] == 'default')
+                @if($spacing == 'default')
                     <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
                         @foreach($module->articles as $article)
                             <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">

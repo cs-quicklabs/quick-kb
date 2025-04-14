@@ -28,7 +28,7 @@ class ArticleRepository
         
         $workspace = Workspace::whereHas('modules', function($q) use ($module_slug) {
                     $q->where('slug', $module_slug)
-                        ->where('status', 1);
+                        ->where('status', config('constants.MODULE_ACTIVE_STATUS'));
                 })
                 ->with(
                 [
@@ -37,13 +37,13 @@ class ArticleRepository
                     },
                     'modules.articles' => function($query) {
                         if(!Auth::check()){
-                            $query = $query->where('status', 1);
+                            $query = $query->where('status', config('constants.ARTICLE_ACTIVE_STATUS'));
                         }
-                        $query->where('status' , '!=' , 0)->orderBy('order', 'asc');
+                        $query->where('status' , '!=' , config('constants.ARTICLE_ARCHIVED_STATUS'))->orderBy('order', 'asc');
                     }
                 ])
                 ->where('slug', $workspace_slug)
-                ->where('status', 1);
+                ->where('status', config('constants.WORKSPACE_ACTIVE_STATUS'));
         
         
                 
@@ -91,12 +91,8 @@ class ArticleRepository
                 ->whereHas('workspace', function($q) use ($workspace_slug){
                     $q->where('slug', $workspace_slug);
                 })->first();
-        
-
-        if(!$module) {
-            return false;
-        }   
-        return $module;
+          
+        return $module??false;
     }
 
 
@@ -127,7 +123,7 @@ class ArticleRepository
                 'created_by' => Auth::user()->id,
                 'slug' => Str::slug($data['title']).'-'.uniqid(),
                 'order' => $maxOrder + 1,
-                'status' =>  $data['status']??1,// Active by default
+                'status' =>  $data['status']?? config('constants.ARTICLE_ACTIVE_STATUS'),// Active by default
             ];
             $article = Article::create($articleData);
             return true;
@@ -155,8 +151,8 @@ class ArticleRepository
                 throw new \Exception(config('response_messages.article_not_found'));
             }
             
-            if($data['status'] == 1) {
-                if($article->module->workspace->status == 0 || $article->module->status == 0) {
+            if($data['status'] == config('constants.ARTICLE_ACTIVE_STATUS')) {
+                if($article->module->workspace->status == config('constants.WORKSPACE_ARCHIVED_STATUS') || $article->module->status == config('constants.MODULE_ARCHIVED_STATUS')) {
                     throw new \Exception(config('response_messages.restore_module_first'));
                 }
             }
@@ -219,12 +215,7 @@ class ArticleRepository
                 ->where('slug', $article_slug)
                 ->first();
         
-        if(!$article) {
-            return false;
-        }
-
-        
-        return $article;
+        return $article??false;
     }
 
 
@@ -268,7 +259,7 @@ class ArticleRepository
     {
         $search = $params['search']??"";
         $articles = Article::with('updatedBy', 'module', 'module.workspace')
-            ->where('status', 0)
+            ->where('status', config('constants.ARTICLE_ARCHIVED_STATUS'))
             ->where(function ($query) use($search) {
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('content', 'LIKE', '%'.$search.'%');
@@ -285,7 +276,7 @@ class ArticleRepository
                     'updated_at' => Carbon::parse($article->updated_at)->format('F d, Y')
                 ];
             });
-        //dd($articles);
+
         return $articles;
     }
 
@@ -326,13 +317,10 @@ class ArticleRepository
                 $q->where('slug', $workspaceSlug);
             })
             ->where('slug', $articleSlug)
-            ->where('status', 0) //For archived articles
+            ->where('status', config('constants.ARTICLE_ARCHIVED_STATUS')) //For archived articles
             ->first();
         
-        if(!$article) {
-            return false;
-        }
-        return $article;
+        return $article ?? false;
     }
     
 
@@ -391,7 +379,7 @@ class ArticleRepository
             ]);
 
             $article = Article::find($params['article_id']);
-        return $article;
+            return $article;
         } catch(\Exception $e) {
             throw new \Exception($e->getMessage());
         }

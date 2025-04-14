@@ -37,7 +37,7 @@ class ModuleRepository
             $workspace->shortTitle = getShortTitle($workspace->title, 20, '...');
         }
         
-        $modules = Module::where('modules.status', 1)
+        $modules = Module::where('modules.status', config('constants.MODULE_ACTIVE_STATUS'))
                 ->where('modules.workspace_id', $workspace->id??0)
                 ->where(function($query) use ($search) {
                     $query->where('modules.title', 'like', '%'.$search.'%')
@@ -87,7 +87,7 @@ class ModuleRepository
                 'description' => $params['description'],
                 'slug' => Str::slug($params['title']).'-'.uniqid(),
                 'order' => $maxOrder + 1,
-                'status' => 1, // Active by default
+                'status' => config('constants.MODULE_ACTIVE_STATUS'), // Active by default
                 'workspace_id' => $params['workspace_id'],
                 'created_by' => Auth::id()
             ];
@@ -162,7 +162,7 @@ class ModuleRepository
     {  
         $search = $params['search']??"";
         $modules = Module::with('workspace', 'updatedBy')
-            ->where('status', 0)
+            ->where('status', config('constants.MODULE_ARCHIVED_STATUS'))
             ->where(function ($query) use($search) {
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
@@ -203,8 +203,8 @@ class ModuleRepository
                 throw new \Exception(config('response_messages.module_not_found'));
             }
 
-            if($data['status'] == 1){
-                if($module->workspace && $module->workspace->status == 0){
+            if($data['status'] == config('constants.MODULE_ACTIVE_STATUS')){
+                if($module->workspace && $module->workspace->status == config('constants.WORKSPACE_ARCHIVED_STATUS')){
                     throw new \Exception(config('response_messages.restore_workspace_first'));
                 }
             }
@@ -267,12 +267,12 @@ class ModuleRepository
     {   
         $module = Module::with('workspace:id,title,slug','updatedBy:id,name')
                         ->with(['articles' => function($q) {
-                                $q->where('status', 0);
+                                $q->where('status', config('constants.ARTICLE_ARCHIVED_STATUS'));
                             }])
                         ->whereHas('workspace', function ($q) use ($workspaceSlug) {
                             $q->where('slug', $workspaceSlug);
                         })
-                        ->where('status', 0)
+                        ->where('status', config('constants.MODULE_ARCHIVED_STATUS'))
                         ->where('slug', $moduleSlug)
                         ->first();
         
