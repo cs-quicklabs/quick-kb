@@ -22,7 +22,7 @@ spec:
         - key: SCOUT_DRIVER
           value: tntsearch
         - key: PORT
-          value: "80"
+          value: "8080"
         - key: SESSION_DRIVER
           value: database
         - key: SESSION_DOMAIN
