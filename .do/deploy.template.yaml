@@ -1,14 +1,13 @@
 spec:
   name: Quick KB
   services:
-    - name: quick-kb  # Added space here between dash and name
+    - dockerfile_path: Dockerfile
       git:
         branch: one-click-deployment
         repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
       build_command: echo "Build completed"
-      run_command: sh -c "php-fpm -D && nginx -g 'daemon off;'"
-      dockerfile_path: ./Dockerfile
-      http_port: 80
+      source_dir: /
+      http_port: 8001
       envs:
         - key: APP_ENV
           value: production
