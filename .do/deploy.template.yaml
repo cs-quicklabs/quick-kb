@@ -6,8 +6,6 @@ spec:
       git:
         branch: one-click-deployment
         repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
-      build_command: echo "Build completed"
-      run_command: ""
       http_port: "8001"
       envs:
         - key: APP_ENV
