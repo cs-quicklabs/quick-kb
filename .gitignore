@@ -28,3 +28,10 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+/.vite
+
+public/.htaccess
+/storage/search/*
+
+database/database.*
+.vscode/*

@@ -1,0 +1,392 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn-primary {
+        @apply cursor-pointer items-center justify-center px-4 py-2 text-sm font-medium text-white rounded bg-primary-700 hover:bg-primary-800 focus:ring-2 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800;
+    }
+
+    .btn-secondary {
+        @apply cursor-pointer inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+    }
+
+    .btn-blue {
+        @apply cursor-pointer rounded bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+    }
+
+    .btn-red {
+        @apply border-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:order-1 sm:ml-3 cursor-pointer;
+    }
+
+    .btn-normal {
+        @apply bg-white py-2 px-4 inline-flex border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer;
+    }
+
+    .btn-inline-edit {
+        @apply text-sm text-gray-400 hover:text-blue-600 cursor-pointer
+    }
+
+    .btn-inline-delete {
+        @apply text-sm text-gray-400 hover:text-red-600 cursor-pointer
+    }
+
+    .form-text-input {
+        @apply appearance-none block w-full px-2 py-2 border border-gray-300 text-gray-900 bg-gray-50 rounded shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm;
+    }
+
+    .form-text-field {
+
+        @apply appearance-none block bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-sm  focus:border-primary-600 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+    }
+
+    .nav-selected {
+        @apply bg-gray-500 text-white hover:bg-gray-500 hover:text-white px-3 py-2 rounded text-sm font-medium
+    }
+
+    .nav-unselected {
+        @apply text-gray-300 hover:bg-gray-500 hover:text-white px-3 py-2 rounded text-sm font-medium
+    }
+
+    .svg-icon {
+        @apply text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6
+    }
+
+    .selected {
+        @apply bg-gray-200 text-gray-900 hover:bg-gray-200 rounded px-3 py-2 flex items-center text-sm font-medium;
+    }
+
+    .unselected {
+        @apply text-gray-900 hover:text-gray-900 hover:bg-gray-50 rounded px-3 py-2 flex items-center text-sm font-medium;
+    }
+
+    .table-head {
+        @apply px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase whitespace-nowrap
+    }
+
+    .table-cell {
+        @apply px-6 py-4 overflow-auto text-sm text-gray-700 max-w-full;
+    }
+
+    .table {
+        @apply min-w-full divide-y divide-gray-200
+    }
+
+    .table-body {
+        @apply bg-white divide-y divide-gray-200
+    }
+
+    .unselected-nav {
+        @apply text-gray-300 hover:bg-gray-500 hover:text-white rounded-sm px-3 py-2 text-sm font-medium;
+    }
+
+    .selected-nav {
+        @apply bg-gray-500 text-white hover:bg-gray-500 hover:text-white rounded-sm px-3 py-2 text-sm font-medium;
+    }
+
+    .selected-tab {
+        @apply block py-3 px-4 border-b-2 text-primary-600 hover:text-primary-600 border-primary-600;
+    }
+
+    .unselected-tab {
+        @apply block py-3 px-4 text-gray-500 dark:text-gray-400 hover:text-primary-600 hover:border-b-2 hover:border-primary-600;
+    }
+}
+
+.line-clamp {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--read-more-line-clamp, 3);
+}
+
+.toastify {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Keeps close button on the right */
+    width: 300px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    background: #ffffff !important; /* White background */
+    color: #000000 !important; /* Black text */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border-left: 5px solid #22c55e !important; /* Green left border */
+    gap: 8px; /* Space between text and close button */
+    white-space: nowrap; /* Prevents text wrapping */
+    position: relative; /* Needed for close button positioning */
+}
+
+.toastify .toast-close {
+    color: #666; /* Gray color */
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: auto; /* Pushes close button to the right */
+    padding-left: 10px;
+}
+
+/* For success messages */
+.toastify-success {
+    border-left-color: #22c55e !important; /* Green border */
+}
+
+/* For error messages */
+.toastify-error {
+    border-left-color: #ef4444 !important; /* Red border */
+}
+
+
+/* Drag and Drop Css Start */
+.draggable-ghost {
+    background-color: #f3f4f6;
+    border: 2px dashed #4f46e5;
+    opacity: 0.5;
+}
+
+.dark .draggable-ghost {
+    background-color: #374151;
+    border-color: #6366f1;
+}
+
+.draggable-chosen {
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark .draggable-chosen {
+    background-color: #1f2937;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.draggable-drag {
+    opacity: 0.8;
+}
+
+.drag-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;   
+}
+
+/* Optional: Hover effect for drag handle */
+.drag-handle:hover {
+    color: #4f46e5;
+}
+
+.dark .drag-handle:hover {
+    color: #6366f1;
+}
+/* Drag and Drop Css End */
+
+
+.breadcrumb-link:hover {
+  color: var(--breadcrumb-color) !important;
+}
+
+a:hover {
+  color: var(--link-color) !important;
+}
+
+a .archived:hover {
+  color: var(--link-color) !important;
+}
+
+/* quill editor */
+.ql-editor {
+    min-height: 200px;
+}
+
+.ql-code-block-container {
+    color: #000 !important;
+    background-color: #ccc !important;
+}
+
+.ql-snow.ql-toolbar {
+    padding: 8px 16px !important;
+  }
+  
+  .ql-snow.ql-toolbar button.custom-quill-button {
+    padding: 0 !important;
+  }
+
+  .ql-snow.ql-toolbar button.custom-quill-button:hover {
+    padding: 0 !important;
+    color: var(--link-color) !important;
+  }
+  
+  .ql-snow.ql-toolbar button:focus {
+    color: #000000 !important;
+  }
+
+  .ql-snow.ql-toolbar button:hover {
+    color: var(--link-color) !important;
+  }
+  
+  #toolbar:not(.ql-toolbar.ql-snow) .ql-image {
+    display: none !important;
+  }
+  
+  .quill .ql-container {
+    border: none !important;
+  }
+  
+  .quill .ql-container:focus {
+    border: 1px red solid !important;
+  }
+  
+  .quill .ql-container .ql-editor {
+    /* min-height: 100vh; */
+    font:
+      400 16px/28px 'Open Sans',
+      sans-serif;
+    line-height: 2rem !important;
+    max-width: 100%;
+  }
+  
+  .quill .ql-container .ql-editor:focus {
+    outline: solid;
+    outline-width: 1px;
+    outline-color: #1c64f2;
+  }
+  
+  .quill .ql-container .ql-syntax {
+    background-color: #dedede !important;
+    color: #000000 !important;
+    margin: 1rem auto;
+    font-size: 14px;
+    padding: 1rem 2rem;
+    line-height: 1.5;
+    letter-spacing: normal;
+    max-width: 85%;
+  }
+  
+  
+  
+  .quill .ql-container .ql-editor a,
+  .quill .ql-container .ql-editor p {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0px;
+  }
+  .quill .ql-container .ql-editor a {
+    color: var(--link-color);
+    cursor: pointer;
+  }
+  .quill .ql-container .ql-editor a:hover {
+    text-decoration-color: var(--link-color);
+    text-decoration-line: underline;
+  }
+  .quill .ql-container .ql-editor strong {
+    font-weight: 600;
+  }
+  .quill .ql-container .ql-editor h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  .quill .ql-container .ql-editor h2 {
+    font-size: 1.75rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  .ql-snow .ql-editor blockquote {
+    border-left: 4px solid #ccc;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-left: 16px;
+    background-color: #eee;
+    margin: 1rem auto;
+  }
+  
+  .ql-snow .ql-editor .ql-code-block-container{
+    background-color: #ccc;
+    color:black
+  }
+  
+  
+  .quill .ql-container ul,
+  .quill .ql-container ol {
+    padding-left: 2.5rem;
+    padding-right: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+  .quill .ql-container ul {
+    list-style-type: disc;
+  }
+  .quill .ql-container ol {
+    list-style-type: decimal;
+  }
+  .quill .ql-container img {
+    margin: 1rem auto;
+  }
+  .ql-clipboard {
+    position: fixed !important;
+    display: none !important;
+  
+    left: 50% !important;
+    top: 50% !important;
+  }
+
+
+  @media screen and (max-width: 640px) {
+    .quill .ql-container .ql-syntax {
+      background-color: #dedede !important;
+      color: #000000 !important;
+      margin: 1rem auto;
+      font-size: 12px;
+      padding: 1rem 2rem;
+      line-height: 1.5;
+      letter-spacing: normal;
+      max-width: 85%;
+    }
+    .quill .ql-container .ql-editor {
+    /* min-height: 100vh; */
+    font:
+      400 16px/28px 'Open Sans',
+      sans-serif;
+    line-height: 2rem !important;
+    max-width: 100%;
+    padding-left: 0%;
+    padding-right: 0;
+  }
+  
+    .quill .ql-container .ql-editor a,
+    .quill .ql-container .ql-editor p {
+      font-size: 1rem;
+      line-height: 1.5rem;
+      margin-bottom: 0.5rem;
+      margin-top: 0px;
+    }
+  
+    .quill .ql-container .ql-editor h1 {
+      font-size: 2rem;
+      line-height: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+  
+    .quill .ql-container .ql-editor h2 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+  
+    .quill .ql-container ul,
+    .quill .ql-container ol {
+      padding-left: 2.5rem;
+      padding-right: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+  
+    [class^='ql-indent-']:not(.ql-indent-1):not(.ql-indent-2):not(.ql-indent-3) {
+      white-space: nowrap;
+    }
+  }
