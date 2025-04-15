@@ -11,7 +11,12 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Browsershot\Browsershot;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Geometry\Rectangles\Rectangle;
+use Intervention\Image\Typography\FontFactory;
+
+
 
 
 
@@ -224,20 +229,72 @@ class ArticleRepository
             return false;
         }
 
-
-        $title = "Test Title"; // Replace with the actual title
-        $filename = Str::slug($title) . '.png';
-        $path = storage_path("app/public/og/{$filename}");
-
-        $html = view('og-template', compact('title'))->render();
-
-        $og_image_path = Browsershot::html($html)
-            ->windowSize(1200, 630)
-            ->waitUntilNetworkIdle()
-            ->save($path);
-        dd($og_image_path);
-        
+        $path = $this->getOgImage();
         return $article;
+    }
+
+
+    function getOgImage() {
+        $title = 'Article Title';
+        $author = 'Author Name';
+        $description = 'Description goes here';
+        // Create base image
+        $img = Image::create(1200, 630)->fill('#ffffff');
+        
+        // // Load company logo (ensure this path exists)
+        // $logo = Image::read(public_path('images/logo.png'));
+        // // Resize logo if needed
+        // $logo->resize(250, null, function ($constraint) {
+        //     $constraint->aspectRatio();
+        // });
+        // // Place logo in top left
+        // $img->place($logo, 'top-left', 80, 80);
+        
+        // // Add colored rectangle on left side
+        // $img->drawRectangle(function (Rectangle $rectangle) {
+        //     $rectangle->position(0, 0)
+        //         ->size(20, 630)
+        //         ->background('#FF3366');
+        // });
+        
+        // Title with better positioning and styling
+        $img->text($title, 80, 260, function ($font) {
+            $font->size(1000);
+            $font->color('#192655'); // Dark blue like in the template
+            $font->align('left');
+            $font->valign('top');
+            $font->wrap(1000);
+            $font->lineHeight(1.2);
+        });
+        
+        // Author with better styling
+        $img->text($author, 80, 520, function ($font) {
+            $font->size(32);
+            $font->color('#555555');
+            $font->align('left');
+            $font->valign('top');
+        });
+        
+        // Add "CROWNSTACK" text below logo
+        $img->text('Building Sustainable Solutions', 80, 180, function ($font) {
+            $font->size(24);
+            $font->color('#666666');
+            $font->align('left');
+            $font->valign('top');
+        });
+        
+        // Save encoded image to file
+        $encoded = $img->encode(new JpegEncoder(quality: 85));
+        $filename = Str::slug($title) . '.jpg';
+        $path = public_path('storage/open-graph/' . $filename);
+        
+        // Ensure folder exists
+        if (!file_exists(dirname($path))) {
+            mkdir(dirname($path), 0755, true);
+        }
+        
+        file_put_contents($path, (string) $encoded);
+        return true;
     }
 
 
