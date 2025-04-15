@@ -8,12 +8,12 @@ spec:
         repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
       build_command: echo "Build completed"
       run_command: ""
-      http_port: 8001
+      http_port: "8001"
       envs:
         - key: APP_ENV
           value: production
         - key: APP_PORT
-          value: 8001
+          value: "8001"
         - key: APP_KEY
           value: ${APP_KEY}
           type: GENERAL
@@ -25,7 +25,7 @@ spec:
         - key: SCOUT_DRIVER
           value: tntsearch
         - key: PORT
-          value: "8080"
+          value: "8001"
         - key: SESSION_DRIVER
           value: database
         - key: SESSION_DOMAIN
