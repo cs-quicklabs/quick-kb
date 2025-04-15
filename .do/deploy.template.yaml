@@ -1,5 +1,5 @@
 spec:
-  name: Quick KB
+  name: quick-kb
   services:
     - name: quick-kb  # Added space here between dash and name
       dockerfile_path: ./DODockerfile
