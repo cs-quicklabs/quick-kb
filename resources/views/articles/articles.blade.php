@@ -212,7 +212,9 @@
 												<div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(61px, 0px);"></div>
 											</div>
 
-											
+											@if($article['status'] == 2)
+												<span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">Draft</span>
+											@endif
 										</div>
 									@endauth
 								</div>
