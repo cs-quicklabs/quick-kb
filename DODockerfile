@@ -41,6 +41,7 @@ COPY docker/do-nginx.conf /etc/nginx/nginx.tpl.conf
 # Expose port 8001
 EXPOSE 8001
 
+
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

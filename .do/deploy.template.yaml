@@ -32,8 +32,3 @@ spec:
           value: "true"
       routes:
         - path: /
-      volumes:
-        - path: /data 
-          mount_path: /data
-          type: DOCKER_VOLUME
-          name: quick-kb-data
