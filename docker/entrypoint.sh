@@ -9,12 +9,14 @@ mkdir -p /data
 # Set up environment
 echo "Copying environment variables and generating app key..."
 cp .env.example .env
-php artisan key:generate
 
-# Verify the app key is set
-
-echo "Checking app key..."
-cat .env | grep APP_KEY
+# If APP_KEY is not already set, generate one
+if ! grep -q "APP_KEY=" .env; then
+  echo "Generating app key..."
+  php artisan key:generate
+else
+  echo "APP_KEY is already set."
+fi
 
 # Move existing DB file if not already present
 if [ ! -f /data/database.sqlite ]; then
