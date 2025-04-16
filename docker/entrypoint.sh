@@ -7,6 +7,7 @@ envsubst '$PORT' < /etc/nginx/nginx.tpl.conf > /etc/nginx/nginx.conf
 mkdir -p /data
 
 # Set up environment
+echo "Copying environment variables and generating app key..."
 cp .env.example .env
 php artisan key:generate
 
