@@ -19,7 +19,7 @@ spec:
         - key: DB_CONNECTION
           value: sqlite
         - key: DB_DATABASE
-          value: /data/database.sqlite
+          value: database/database.sqlite
         - key: SCOUT_DRIVER
           value: tntsearch
         - key: PORT
