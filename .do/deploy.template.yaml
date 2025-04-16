@@ -4,7 +4,7 @@ spec:
     - name: quick-kb  # Added space here between dash and name
       dockerfile_path: ./DODockerfile
       git:
-        branch: one-click-deployment
+        branch: feature/quick-kb
         repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
       http_port: "8001"
       envs:
