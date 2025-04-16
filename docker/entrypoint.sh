@@ -6,6 +6,10 @@ envsubst '$PORT' < /etc/nginx/nginx.tpl.conf > /etc/nginx/nginx.conf
 # Ensure /data volume and DB path exist
 mkdir -p /data
 
+# Set up environment
+cp .env.example .env
+php artisan key:generate
+
 # Move existing DB file if not already present
 if [ ! -f /data/database.sqlite ]; then
   echo "Setting up persistent database..."

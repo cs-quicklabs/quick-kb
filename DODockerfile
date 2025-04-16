@@ -28,11 +28,6 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 
-# Set up environment
-RUN cp .env.example .env
-RUN php artisan key:generate
-
-
 # Copy Nginx config
 COPY docker/do-nginx.conf /etc/nginx/nginx.tpl.conf  
 
