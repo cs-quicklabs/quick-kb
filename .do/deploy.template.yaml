@@ -1,44 +1,32 @@
-name: Quick-KB
-
-services:
-  - name: web
-    environment_slug: php
-    github:
-      branch: development  # Change this if you're deploying from a different branch
-      deploy_on_push: false  # Auto-deploy on push
-    build_command: |
-      apt-get update && apt-get install -y nginx php8.4-fpm sqlite3 unzip curl git \
-      php8.4-mbstring php8.4-xml php8.4-curl php8.4-zip php8.4-bcmath \
-      php8.4-intl php8.4-gd php8.4-sqlite3 php8.4-common php8.4-cli php8.4-opcache
-      composer install --no-dev --optimize-autoloader
-      npm install
-      npm run build
-    run_command: |
-      cp .env.example .env
-      php artisan key:generate
-      php artisan storage:link
-      php artisan migrate --force
-      mkdir -p /storage/search
-      chmod -R 777 /storage/search
-      php artisan scout:import "App\Models\Article"
-      php artisan config:cache
-    http_port: 8080
-    envs:
-      - key: APP_ENV
-        value: production
-      - key: APP_DEBUG
-        value: false
-      - key: APP_KEY
-        value: ""
-        scope: RUN_TIME
-      - key: DB_CONNECTION
-        value: sqlite
-      - key: DB_DATABASE
-        value: /database/database.sqlite
-
-# static_sites:
-#   - name: storage
-#     source_dir: public
-#     routes:
-#       - path: "/"
-#     environment_slug: static
+spec:
+  name: quick-kb
+  services:
+    - name: quick-kb  # Added space here between dash and name
+      dockerfile_path: ./DODockerfile
+      git:
+        branch: development
+        repo_clone_url: https://github.com/cs-quicklabs/quick-kb.git
+      http_port: "8001"
+      envs:
+        - key: APP_ENV
+          value: production
+        - key: APP_PORT
+          value: "8001"
+        - key: APP_KEY
+          value: ${APP_KEY}
+          type: GENERAL
+          scope: RUN_AND_BUILD_TIME
+        - key: DB_CONNECTION
+          value: sqlite
+        - key: DB_DATABASE
+          value: database/database.sqlite
+        - key: SCOUT_DRIVER
+          value: tntsearch
+        - key: PORT
+          value: "8001"
+        - key: SESSION_DRIVER
+          value: database
+        - key: SESSION_DOMAIN
+          value: null
+        - key: SESSION_SECURE_COOKIE
+          value: "true"
