@@ -11,6 +11,11 @@ echo "Copying environment variables and generating app key..."
 cp .env.example .env
 php artisan key:generate
 
+# Verify the app key is set
+
+echo "Checking app key..."
+cat .env | grep APP_KEY
+
 # Move existing DB file if not already present
 if [ ! -f /data/database.sqlite ]; then
   echo "Setting up persistent database..."
@@ -31,7 +36,7 @@ chmod -R 777 database
 chmod -R 777 storage
 
 
-# ✅ Run Laravel migrations
+# Run Laravel migrations
 php artisan migrate --force
 
 # Laravel cache clear and rebuild
