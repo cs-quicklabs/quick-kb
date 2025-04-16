@@ -29,6 +29,10 @@ chmod -R 777 /data/database.sqlite
 chmod -R 777 database
 chmod -R 777 storage
 
+
+# ✅ Run Laravel migrations
+php artisan migrate --force
+
 # Laravel cache clear and rebuild
 php artisan cache:clear
 php artisan config:clear
@@ -37,8 +41,6 @@ php artisan route:clear
 php artisan view:clear
 php artisan storage:link
 
-# ✅ Run Laravel migrations
-php artisan migrate --force
 
 
 mkdir -p storage/search
