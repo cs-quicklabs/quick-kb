@@ -19,7 +19,7 @@ spec:
         - key: DB_CONNECTION
           value: sqlite
         - key: DB_DATABASE
-          value: /app/database/database.sqlite
+          value: /var/www/html/storage/app/database.sqlite
         - key: SCOUT_DRIVER
           value: tntsearch
         - key: PORT
@@ -32,7 +32,3 @@ spec:
           value: "true"
       routes:
         - path: /
-      filesystem:
-        - name: quick-kb-data
-          mount_path: /app/database
-          size_gb: 1

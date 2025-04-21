@@ -33,7 +33,7 @@ RUN cp .env.example .env
 RUN php artisan key:generate
 
 # Create directories
-RUN mkdir -p /app/database
+RUN mkdir -p storage/app
 RUN mkdir -p storage/search
 
 # Optimize Laravel performance
@@ -56,6 +56,7 @@ RUN php artisan cache:clear \
 RUN chmod -R 777 /app/database
 
 RUN chmod -R 777 storage
+RUN chmod -R 777 storage/app
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
