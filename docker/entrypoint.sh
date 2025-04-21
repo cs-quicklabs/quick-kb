@@ -1,9 +1,9 @@
 #!/bin/sh
 # Check if database exists, if not create it
-if [ ! -f /mnt/data/database.sqlite ]; then
+if [ ! -f /app/database/database.sqlite ]; then
     echo "Creating new SQLite database..."
-    touch /mnt/data/database.sqlite
-    chmod 777 /mnt/data/database.sqlite
+    touch /app/database/database.sqlite
+    chmod 777 /app/database/database.sqlite
     php artisan migrate --force
     php artisan scout:import "App\Models\Article"
 else
