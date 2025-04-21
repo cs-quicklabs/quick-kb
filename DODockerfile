@@ -1,6 +1,5 @@
 # Use official PHP image with necessary extensions
 FROM php:8.4-fpm
-
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     nginx \
@@ -14,63 +13,48 @@ RUN apt-get update && apt-get install -y \
     npm \
     gettext-base \
     && docker-php-ext-install pdo pdo_sqlite bcmath
-
 # Set working directory
 WORKDIR /var/www/html
-
 # Copy application files
 COPY . .
-
-
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
-
-# Set up environment
-RUN cp .env.example .env
-RUN sed -i "s|DB_DATABASE=database/database.sqlite|DB_DATABASE=/var/www/html/storage/app/database.sqlite|g" .env
-
-RUN php artisan key:generate
-
-# Create directories
+# Create custom environment file
+RUN echo "APP_NAME=QuickKB" > .env \
+    && echo "APP_ENV=production" >> .env \
+    && echo "APP_DEBUG=false" >> .env \
+    && echo "DB_CONNECTION=sqlite" >> .env \
+    && echo "DB_DATABASE=/var/www/html/storage/app/database.sqlite" >> .env \
+    && echo "SCOUT_DRIVER=tntsearch" >> .env \
+    && echo "SESSION_DRIVER=database" >> .env \
+    && echo "SESSION_SECURE_COOKIE=true" >> .env
+# Skip generating key in Dockerfile - we'll handle it in entrypoint
+# Create directory for persistent database
 RUN mkdir -p storage/app
+# Touch the database file so it exists during build
+RUN touch storage/app/database.sqlite
+RUN chmod 777 storage/app/database.sqlite
+# Create search directory
 RUN mkdir -p storage/search
-
-# Optimize Laravel performance
-RUN php artisan config:cache
-RUN php artisan storage:link
-
-
+# Set permissions
 RUN chmod -R 777 storage
 RUN chmod -R 777 storage/app
 RUN chmod -R 777 storage/search
 RUN chmod -R 777 storage/framework/sessions
 RUN chmod -R 777 storage/framework/cache
 RUN chmod -R 777 storage/framework/views
-
 RUN chmod -R 777 bootstrap/cache
-
-RUN php artisan config:cache
-
+# Build frontend assets
 RUN npm run build
-
 # Skip migrations during build - they'll run in entrypoint
-RUN echo "APP_ENV=production" >> .env
-# Only run commands that don't require database access during build
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+# Only run commands that don't require encryption key during build
 RUN php artisan storage:link
-
 # Copy Nginx config
-COPY docker/do-nginx.conf /etc/nginx/nginx.tpl.conf  
-
+COPY docker/do-nginx.conf /etc/nginx/nginx.tpl.conf
 # Expose port 8001
 EXPOSE 8001
-
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
