@@ -11,7 +11,7 @@
             <span class="sr-only">Open user menu</span>
             <img
                 class="w-8 h-8 rounded-full"
-                src="{{ asset('/images/2606517_5856.jpg') }}"
+                src="{{ asset('/images/profile_image.jpg') }}"
                 alt="user photo" />
         </button>
         <!-- Dropdown menu -->

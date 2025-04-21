@@ -75,4 +75,7 @@
 
         'article_liked' => 'Article liked successfully',
         'failed_to_like_article' => 'Failed to like article',
+
+        'article_rating_submitted' => 'Article rating submitted successfully',
+        'failed_to_submit_article_rating' => 'Failed to submit article rating',
     ];
