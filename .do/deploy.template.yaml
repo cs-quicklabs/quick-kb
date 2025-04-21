@@ -12,10 +12,6 @@ spec:
           value: production
         - key: APP_PORT
           value: "8001"
-        - key: APP_KEY
-          value: ${APP_KEY}
-          type: GENERAL
-          scope: RUN_AND_BUILD_TIME
         - key: DB_CONNECTION
           value: sqlite
         - key: DB_DATABASE

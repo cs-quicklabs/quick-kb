@@ -28,6 +28,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 
+# Remove any existing .env file
+RUN rm -f .env
+
 # Set up environment
 RUN cp .env.example .env
 RUN sed -i "s|DB_DATABASE=database/database.sqlite|DB_DATABASE=/var/www/html/storage/app/database.sqlite|g" .env

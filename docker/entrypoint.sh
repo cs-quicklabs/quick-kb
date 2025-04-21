@@ -1,4 +1,32 @@
 #!/bin/sh
+set -e
+
+echo "Current directory: $(pwd)"
+echo "Checking .env file existence..."
+if [ -f ".env" ]; then
+    echo ".env file exists"
+    echo "Contents of .env file:"
+    cat .env
+else
+    echo ".env file does not exist! Creating one..."
+    echo "APP_NAME=QuickKB" > .env
+    echo "APP_ENV=production" >> .env
+    echo "APP_DEBUG=true" >> .env
+    echo "DB_CONNECTION=sqlite" >> .env
+    echo "DB_DATABASE=/var/www/html/storage/app/database.sqlite" >> .env
+    echo "SCOUT_DRIVER=tntsearch" >> .env
+    echo "SESSION_DRIVER=database" >> .env
+    echo "SESSION_SECURE_COOKIE=true" >> .env
+fi
+
+# Generate a new key regardless of previous settings
+echo "Generating a fresh application key..."
+php artisan key:generate --force --show
+
+# Read the newly generated key
+APP_KEY=$(grep APP_KEY .env | cut -d '=' -f2)
+echo "Application key in .env: $APP_KEY"
+
 # Set database path
 DB_PATH="/var/www/html/storage/app/database.sqlite"
 
@@ -15,17 +43,17 @@ else
     php artisan migrate --force
 fi
 
-# Clear and cache config
+# Clear caches
+echo "Clearing Laravel caches..."
+php artisan cache:clear
 php artisan config:clear
-php artisan config:cache
 php artisan route:clear
-php artisan route:cache
 php artisan view:clear
-php artisan view:cache
 
 # Replace env vars in nginx.conf
 envsubst '$PORT' < /etc/nginx/nginx.tpl.conf > /etc/nginx/nginx.conf
 
 # Start services
+echo "Starting services..."
 php-fpm -D
 nginx -g "daemon off;"
