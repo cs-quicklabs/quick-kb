@@ -13,7 +13,7 @@ else
     echo "APP_ENV=production" >> .env
     echo "APP_DEBUG=true" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
-    echo "DB_DATABASE=/var/www/html/storage/app/database.sqlite" >> .env
+    echo "DB_DATABASE=/mnt/data/quick-kb-database.sqlite" >> .env
     echo "SCOUT_DRIVER=tntsearch" >> .env
     echo "SESSION_DRIVER=database" >> .env
     echo "SESSION_SECURE_COOKIE=true" >> .env
@@ -27,8 +27,13 @@ php artisan key:generate --force --show
 APP_KEY=$(grep APP_KEY .env | cut -d '=' -f2)
 echo "Application key in .env: $APP_KEY"
 
+# Make sure mounted directory exists and is writable
+echo "Setting up mounted data directory..."
+mkdir -p /mnt/data
+chmod 777 /mnt/data
+
 # Set database path
-DB_PATH="/var/www/html/storage/app/database.sqlite"
+DB_PATH="/mnt/data/database.sqlite"
 
 # Check if database exists, if not create it
 if [ ! -f "$DB_PATH" ] || [ ! -s "$DB_PATH" ]; then
@@ -42,6 +47,10 @@ else
     # Run migrations in case there are new ones
     php artisan migrate --force
 fi
+
+# Create a symbolic link for database search
+mkdir -p storage/search
+ln -sf /mnt/data/search storage/search || true
 
 # Clear caches
 echo "Clearing Laravel caches..."

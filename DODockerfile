@@ -33,12 +33,12 @@ RUN rm -f .env
 
 # Set up environment
 RUN cp .env.example .env
-RUN sed -i "s|DB_DATABASE=database/database.sqlite|DB_DATABASE=/var/www/html/storage/app/database.sqlite|g" .env
+RUN sed -i "s|DB_DATABASE=database/database.sqlite|DB_DATABASE=/mnt/data/database.sqlite|g" .env
 
 RUN php artisan key:generate
 
 # Create directories
-RUN mkdir -p storage/app
+RUN mkdir -p /mnt/data
 RUN mkdir -p storage/search
 
 # Optimize Laravel performance
@@ -46,6 +46,7 @@ RUN php artisan config:cache
 RUN php artisan storage:link
 
 
+RUN chmod -R 777 /mnt/data
 RUN chmod -R 777 storage
 RUN chmod -R 777 storage/app
 RUN chmod -R 777 storage/search
