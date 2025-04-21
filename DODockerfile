@@ -43,8 +43,6 @@ RUN php artisan config:cache
 RUN php artisan storage:link
 
 
-RUN chmod -R 777 /app/database
-
 RUN chmod -R 777 storage
 RUN chmod -R 777 storage/app
 RUN chmod -R 777 storage/search
