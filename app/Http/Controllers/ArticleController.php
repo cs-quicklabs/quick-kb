@@ -234,10 +234,10 @@ class ArticleController extends BaseController
         try {
             $article = $this->articleRepository->articleLike($request->all());
 
-            return $this->sendSuccessResponse($article, config('response_messages.article_liked'), config('statuscodes.OK'));
+            return $this->sendSuccessResponse($article, config('response_messages.article_rating_submitted'), config('statuscodes.OK'));
         } catch (\Exception $e) {
 
-            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_like_article'), config('statuscodes.BAD_REQUEST'));
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_submit_article_rating'), config('statuscodes.BAD_REQUEST'));
         }
 
     }
