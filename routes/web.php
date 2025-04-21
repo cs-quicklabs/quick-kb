@@ -77,7 +77,6 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::post('/modules/update-order', [ModuleController::class, 'updateModuleOrder'])->name('modules.updateModuleOrder');
     Route::get('/modules/archived/{workspace_slug}/{module_slug}', [ModuleController::class, 'getArchivedModule'])->name('modules.getArchivedModule');
 
-    
     Route::post('/articles/store', [ArticleController::class, 'storeArticle'])->name('articles.store');
     Route::post('/articles/update-status/{article_id}', [ArticleController::class, 'updateArticleStatus'])->name('articles.updateArticleStatus');
     Route::post('/articles/update-order', [ArticleController::class, 'updateArticleOrder'])->name('articles.updateArticleOrder');
