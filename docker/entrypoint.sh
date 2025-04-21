@@ -1,18 +1,4 @@
 #!/bin/sh
-
-# Check if APP_KEY is set in environment
-if [ -z "$APP_KEY" ] || [[ "$APP_KEY" != base64:* ]]; then
-    echo "Generating application key..."
-    php artisan key:generate --force
-    # Get the generated key from .env file
-    APP_KEY=$(grep APP_KEY .env | cut -d '=' -f2)
-    echo "Generated APP_KEY: $APP_KEY"
-else
-    echo "Using provided APP_KEY from environment"
-    # Make sure the APP_KEY is in the .env file
-    sed -i "s|APP_KEY=.*|APP_KEY=$APP_KEY|g" .env
-fi
-
 # Set database path
 DB_PATH="/var/www/html/storage/app/database.sqlite"
 
