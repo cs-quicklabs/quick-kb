@@ -92,6 +92,8 @@ sudo chmod 777 -R storage/search database/database.sqlite bootstrap/cache
 |----------|--------------|
 | Digital Ocean | [![Deploy to DigitalOcean](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/cs-quicklabs/quick-kb/tree/do-database-persistence&spec=.do/deploy.template.yaml) |
 |Deploy to Render| [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/cs-quicklabs/quick-kb/tree/feature/feature/one-click-deployment)|
+|Digital Ocean Droplet|[![Deploy to DigitalOcean Droplet](https://www.deploytodo.com/do-btn-blue-ghost.svg)](https://cloud.digitalocean.com/droplets/new?i=1&size=s-1vcpu-1gb&region=nyc3&image=ubuntu-22-04-x64&user_data_url=https://raw.githubusercontent.com/cs-quicklabs/quick-kb/do-database-persistence/scripts/init-droplet.sh)|
+
 
 
 
