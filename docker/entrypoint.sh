@@ -13,7 +13,7 @@ else
     echo "APP_ENV=production" >> .env
     echo "APP_DEBUG=true" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
-    echo "DB_DATABASE=/mnt/data/quick-kb-database.sqlite" >> .env
+    echo "DB_DATABASE=/mnt/data/database.sqlite" >> .env
     echo "SCOUT_DRIVER=tntsearch" >> .env
     echo "SESSION_DRIVER=database" >> .env
     echo "SESSION_SECURE_COOKIE=true" >> .env
