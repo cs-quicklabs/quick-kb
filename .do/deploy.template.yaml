@@ -28,6 +28,6 @@ spec:
           value: "true"
       routes:
         - path: /
-      volumes:
-        - name: quick-kb-data
-          mount_path: /mnt/data
+  volumes:
+    - name: quick-kb-data
+      mount_path: /mnt/data
