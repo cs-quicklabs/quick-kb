@@ -264,6 +264,7 @@ class ArticleRepository
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('content', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($article) {
                 return [
