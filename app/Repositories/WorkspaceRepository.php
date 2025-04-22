@@ -185,6 +185,7 @@ class WorkspaceRepository
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($workspace) {
                 return [
