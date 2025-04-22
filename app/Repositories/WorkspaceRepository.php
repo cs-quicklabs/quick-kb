@@ -125,16 +125,18 @@ class WorkspaceRepository
             if($workspace){
                 $workspace->modules()->update([
                     'status' => $data['status'],
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::user()->id,
+                    'updated_at' => now()
                 ]);
 
                 $workspace->modules->each(function($module) use ($data) {
                     $module->articles()->update([
                         'status' => $data['status'],
-                        'updated_by' => Auth::user()->id
+                        'updated_by' => Auth::user()->id,
+                        'updated_at' => now()
                     ]);
                 });
-                
+
             }
             DB::commit();
             return $workspace;
@@ -185,6 +187,7 @@ class WorkspaceRepository
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($workspace) {
                 return [
