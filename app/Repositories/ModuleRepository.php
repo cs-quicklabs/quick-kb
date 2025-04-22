@@ -167,6 +167,7 @@ class ModuleRepository
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($module) {
                 return [
@@ -179,7 +180,7 @@ class ModuleRepository
                     'updated_at' => Carbon::parse($module->updated_at)->format('F d, Y')
                 ];
             });
-        
+            
         return $modules;
     }
 
