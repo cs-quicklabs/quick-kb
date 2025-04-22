@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# --- Variables ---
+APP_DIR="/var/www/quick-kb"
+GIT_REPO="https://github.com/cs-quicklabs/quick-kb.git"
+BRANCH="do-database-persistence"
+
 # Update & install prerequisites
 sudo apt update && sudo apt install -y software-properties-common curl unzip git nginx sqlite3
 
@@ -13,9 +18,11 @@ sudo apt install -y php8.4 php8.4-cli php8.4-common php8.4-mbstring php8.4-xml p
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
-# Clone your repo from a specific branch
-git clone -b do-database-persistence https://github.com/cs-quicklabs/quick-kb.git
-cd quick-kb
+echo "📁 Cloning project..."
+rm -rf $APP_DIR
+git clone --branch $BRANCH $GIT_REPO $APP_DIR
+
+cd $APP_DIR
 
 # Set up Laravel
 composer install --no-dev --optimize-autoloader
@@ -40,6 +47,10 @@ fi
 
 # Run migrations
 php artisan migrate --force
+
+mkdir -p storage/search
+ln -sf /mnt/data/search storage/search || true
+php artisan scout:import "App\Models\Article"
 
 # Set permissions
 chmod -R 777 storage bootstrap/cache

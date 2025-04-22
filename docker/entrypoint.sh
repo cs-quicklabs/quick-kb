@@ -41,6 +41,11 @@ if [ ! -f "$DB_PATH" ] || [ ! -s "$DB_PATH" ]; then
     touch "$DB_PATH"
     chmod 777 "$DB_PATH"
     php artisan migrate --force
+
+    # Create a symbolic link for database search
+    mkdir -p storage/search
+    ln -sf /mnt/data/search storage/search || true
+
     php artisan scout:import "App\Models\Article"
 else
     echo "Using existing SQLite database..."
@@ -48,9 +53,7 @@ else
     php artisan migrate --force
 fi
 
-# Create a symbolic link for database search
-mkdir -p storage/search
-ln -sf /mnt/data/search storage/search || true
+
 
 # Clear caches
 echo "Clearing Laravel caches..."
