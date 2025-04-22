@@ -125,15 +125,13 @@ class WorkspaceRepository
             if($workspace){
                 $workspace->modules()->update([
                     'status' => $data['status'],
-                    'updated_by' => Auth::user()->id,
-                    'updated_at' => now()
+                    'updated_by' => Auth::user()->id
                 ]);
 
                 $workspace->modules->each(function($module) use ($data) {
                     $module->articles()->update([
                         'status' => $data['status'],
-                        'updated_by' => Auth::user()->id,
-                        'updated_at' => now()
+                        'updated_by' => Auth::user()->id
                     ]);
                 });
 
