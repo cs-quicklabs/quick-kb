@@ -7,7 +7,7 @@ GIT_REPO="https://github.com/cs-quicklabs/quick-kb.git"
 BRANCH="do-database-persistence"
 
 # Update & install prerequisites
-sudo apt update && sudo apt install -y software-properties-common curl unzip git nginx sqlite3
+sudo apt update && sudo apt install -y software-properties-common curl unzip git nginx sqlite3 nodejs npm
 
 # Add PHP 8.4 repo and install
 sudo add-apt-repository ppa:ondrej/php -y
@@ -25,10 +25,20 @@ git clone --branch $BRANCH $GIT_REPO $APP_DIR
 cd $APP_DIR
 
 # Set up Laravel
+if ! command -v composer &> /dev/null; then
+  echo "Composer is not installed correctly."
+  exit 1
+fi
+
 composer install --no-dev --optimize-autoloader
 cp .env.example .env
 
 # Set SQLite DB path in .env
+if [ ! -f .env ]; then
+  echo ".env file not found!"
+  exit 1
+fi
+
 sed -i "s|DB_DATABASE=.*|DB_DATABASE=/mnt/data/database.sqlite|g" .env
 
 # Generate app key
