@@ -167,6 +167,7 @@ class ModuleRepository
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($module) {
                 return [
