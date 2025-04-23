@@ -30,3 +30,5 @@ spec:
           value: null
         - key: SESSION_SECURE_COOKIE
           value: "true"
+      routes:
+        - path: /
