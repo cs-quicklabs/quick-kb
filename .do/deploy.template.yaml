@@ -19,7 +19,7 @@ spec:
         - key: DB_CONNECTION
           value: sqlite
         - key: DB_DATABASE
-          value: database/database.sqlite
+          value: /mnt/data/database.sqlite
         - key: SCOUT_DRIVER
           value: tntsearch
         - key: PORT
@@ -30,3 +30,5 @@ spec:
           value: null
         - key: SESSION_SECURE_COOKIE
           value: "true"
+      routes:
+        - path: /
