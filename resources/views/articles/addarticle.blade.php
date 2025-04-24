@@ -22,7 +22,7 @@
                         <li class="inline-flex items-center">
                             <div class="flex items-center"><svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
-                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $module->workspace->slug, 'module_slug' => $module->slug])}}" class="breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700  md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$module->title??''}}</a></div>
+                                </svg> <a href="{{route('articles.articles', ['workspace_slug' => $module->workspace->slug, 'module_slug' => $module->slug])}}" class=" breadcrumb-link truncate max-w-xs ms-1 text-sm font-medium text-gray-700  md:ms-2 dark:text-gray-400 dark:hover:text-white hover:underline">{{$module->title??''}}</a></div>
                         </li>
                     </ol>
                 </nav>
