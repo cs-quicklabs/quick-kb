@@ -67,8 +67,8 @@
         'failed_to_get_article' => 'Failed to get article', 
         'failed_to_get_articles' => 'Failed to get articles', 
 
-        'restore_module_first' => 'Please restore its parent module first',
-        'restore_workspace_first' => 'Please restore its parent workspace first',
+        'restore_module_first' => 'Please restore its :parent_module first',
+        'restore_workspace_first' => 'Please restore its :parent_workspace first',
 
         'account_settings_updated' => 'Account settings updated successfully',
         'account_settings_not_updated' => 'Failed to update account settings',

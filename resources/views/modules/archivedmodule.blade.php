@@ -235,7 +235,10 @@
 						.replace(':module_slug', module_slug);
 				}, 1000);
 			} else {
-				toastify.error(data.message);
+				//toastify.error(data.message);
+				const link = `<a href="{{ route('adminland.archivedworkspaces') }}" style="color: {{$color}}; text-decoration: underline;">parent workspace</a>`;
+				let htmlMessage = data.message.replace(":parent_workspace", link);
+				toastify.errorWithRedirection(htmlMessage);
 			}
 		})
 		.catch(error => {

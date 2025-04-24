@@ -190,8 +190,10 @@
 						.replace(':module_slug', module_slug)
 						.replace(':article_slug', article_slug);
 			} else {
-				toastify.error(data.message);
-				console.log(data.message);
+				//toastify.error(data.message);
+				const link = `<a href="{{ route('adminland.archivedmodules') }}" style="color: {{$color}}; text-decoration: underline;">parent module</a>`;
+				const htmlMessage = data.message.replace(":parent_module", link);
+				toastify.errorWithRedirection(htmlMessage);
 			}   
 		})
 		.catch(error => {
