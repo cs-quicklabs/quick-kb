@@ -24,23 +24,31 @@
                     to users but can be restored at any time.
                 </div>
                 <div class="flex">
-                    <button
-                        type="button"
-                        onclick="restoreModuleModal({{$module->id}})"
-                        data-modal-target="restoreModuleModal" 
-                        data-modal-toggle="restoreModuleModal"
-                        class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                        Restore Module
-                    </button>
-                    <button
-                        type="button"
-                        onclick="deleteModuleModal({{$module->id}})"
-                        class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
-                        data-modal-target="deleteModuleModal" 
-                        data-modal-toggle="deleteModuleModal" 
-                        aria-label="Close">
-                        Delete Permanently
-                    </button>
+                    <div class="flex-1">
+                        <button
+                            type="button"
+                            onclick="restoreModuleModal({{$module->id}})"
+                            data-modal-target="restoreModuleModal" 
+                            data-modal-toggle="restoreModuleModal"
+                            class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                            Restore Module
+                        </button>
+                        <button
+                            type="button"
+                            onclick="deleteModuleModal({{$module->id}})"
+                            class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
+                            data-modal-target="deleteModuleModal" 
+                            data-modal-toggle="deleteModuleModal" 
+                            aria-label="Close">
+                            Delete Permanently
+                        </button>
+                    </div>
+
+                    <a
+                        href="{{route('adminland.archivedmodules')}}"
+                        class="button-link text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
+                        Back
+                    </a>
                 </div>
             </div>
         @endif

@@ -71,7 +71,7 @@
 					href="{{route('articles.addArticle', ['workspace_slug' => $workspace['slug'], 'module_slug' => $module['slug']])}}"
 					type="button"
 					data-tooltip-target="tooltip-add"
-					class="text-white bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800">
+					class="button-link text-white bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800">
 					<svg class="w-4 h-4 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
 						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 12h14m-7 7V5" />
 					</svg>
