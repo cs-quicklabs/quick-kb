@@ -1,6 +1,6 @@
 @extends('adminland.common.layout')
 @section('content')
-<main class="max-w-xl px-4 pb-12 lg:col-span-8">
+<main class="max-w-xl px-4 pb-12 lg:col-span-8" style="--link-color: {{ $color }};">
 	<div class="overflow-hidden bg-white">
 		<div class="pb-4 ml-4">
 			<div>
@@ -190,8 +190,10 @@
 						.replace(':module_slug', module_slug)
 						.replace(':article_slug', article_slug);
 			} else {
-				toastify.error(data.message);
-				console.log(data.message);
+				//toastify.error(data.message);
+				const link = `<a href="{{ route('adminland.archivedmodules') }}" style="color: #007bff; text-decoration: underline;">parent module</a>`;
+				const htmlMessage = data.message.replace(":parent_module", link);
+				toastify.errorWithRedirection(htmlMessage);
 			}   
 		})
 		.catch(error => {

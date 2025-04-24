@@ -31,6 +31,25 @@ const toastify = {
                 color: "#000000", // Black text
             }
         }).showToast();
+    },
+    errorWithRedirection: function (messageHtml) {
+        // Create a wrapper div
+        const customHtml = document.createElement('div');
+        customHtml.innerHTML = messageHtml;
+
+        Toastify({
+            node: customHtml, // ✅ This is the key: inject custom DOM node
+            duration: 400000,
+            close: false,
+            gravity: "top",
+            position: "center",
+            stopOnFocus: true,
+            className: "toastify toastify-error",
+            style: {
+                background: "#ffffff",
+                color: "#000000",
+            },
+        }).showToast();
     }
 };
 
