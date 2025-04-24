@@ -39,7 +39,7 @@ const toastify = {
 
         Toastify({
             node: customHtml, // ✅ This is the key: inject custom DOM node
-            duration: 400000,
+            duration: 4000,
             close: false,
             gravity: "top",
             position: "center",

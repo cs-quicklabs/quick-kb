@@ -174,7 +174,7 @@
 				}, 1000);
 			} else {
 				//toastify.error(data.message);
-				const link = `<a href="{{ route('adminland.archivedworkspaces') }}" style="color: #007bff; text-decoration: underline;">parent workspace</a>`;
+				const link = `<a href="{{ route('adminland.archivedworkspaces') }}" style="color: {{$color}}; text-decoration: underline;">parent workspace</a>`;
 				const htmlMessage = data.message.replace(":parent_workspace", link);
 				toastify.errorWithRedirection(htmlMessage);
 			}
