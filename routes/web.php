@@ -9,6 +9,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\OgImageController;
 Route::get('/', [AuthController::class, 'checkInitialRedirect']);
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
@@ -84,4 +85,11 @@ Route::middleware([Authenticate::class])->group(function () {
 
 
 });
+
+Route::get('/ogimage', function () {
+    return view('ogimage.ogimage');
+});
+
+Route::get('/article/{post:slug}/ogimage', [OgImageController::class, 'ogImageGenerate'])->name('articles.ogimage');
+
 

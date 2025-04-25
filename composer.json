@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "chrome-php/chrome": "^1.13",
         "intervention/image": "^3.11",
         "intervention/image-laravel": "^1.5",
         "laravel/framework": "^12.0",
