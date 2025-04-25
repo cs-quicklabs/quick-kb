@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.app_layout')
 @section('content')
     <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
@@ -28,23 +24,30 @@
                     to users but can be restored at any time.
                 </div>
                 <div class="flex">
-                    <button
-                        type="button"
-                        onclick="restoreWorkspaceModal({{$workspace->id}})"
-                        data-modal-target="restoreWorkspaceModal" 
-                        data-modal-toggle="restoreWorkspaceModal"
-                        class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                        Restore Workspace
-                    </button>
-                    <button
-                        type="button"
-                        onclick="deleteWorkspaceModal({{$workspace->id}})"
-                        class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
-                        data-modal-target="deleteWorkspaceModal" 
-                        data-modal-toggle="deleteWorkspaceModal" 
-                        aria-label="Close">
-                        Delete Permanently
-                    </button>
+                    <div class="flex-1">
+                        <button
+                            type="button"
+                            onclick="restoreWorkspaceModal({{$workspace->id}})"
+                            data-modal-target="restoreWorkspaceModal" 
+                            data-modal-toggle="restoreWorkspaceModal"
+                            class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                            Restore Workspace
+                        </button>
+                        <button
+                            type="button"
+                            onclick="deleteWorkspaceModal({{$workspace->id}})"
+                            class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
+                            data-modal-target="deleteWorkspaceModal" 
+                            data-modal-toggle="deleteWorkspaceModal" 
+                            aria-label="Close">
+                            Delete Permanently
+                        </button>
+                    </div>
+                    <a
+                        href="{{route('adminland.archivedworkspaces')}}"
+                        class="button-link text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
+                        Back
+                    </a>
                 </div>
             </div>
         @endif
@@ -95,7 +98,7 @@
 
         
             @if(!empty($workspace) && count($workspace->modules) > 0)
-                @if(getThemeValues()['theme_spacing'] == 'default')
+                @if($spacing == 'default')
                     <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
                         @foreach($workspace->modules as $module)
                             <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">

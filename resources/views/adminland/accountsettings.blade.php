@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('adminland.common.layout')
 @section('content')
 <main class="max-w-xl pb-12 px-4 lg:col-span-6">

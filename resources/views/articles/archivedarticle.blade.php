@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.article_layout')
 @section('content')
     <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8">
@@ -20,8 +16,18 @@
                             This article has been archived by {{$articleData->createdBy->name}} on {{$articleData->archived_at}}. This is no longer visible to users but can be restored at any time.
                         </div> 
                         <div class="flex">
-                            <button onclick="restoreArticleModal({{$articleData['id']}})" data-modal-target="restoreArticleModal" data-modal-toggle="restoreArticleModal" type="button" class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Restore Article</button> 
-                            <button onclick="deleteArticleModal({{$articleData['id']}})" data-modal-target="articleDeleteModal" data-modal-toggle="articleDeleteModal" type="button" class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800" data-dismiss-target="#alert-additional-content-2" aria-label="Close">Delete Permanently</button>
+                            <div class="flex-1">
+                                <button onclick="restoreArticleModal({{$articleData['id']}})" data-modal-target="restoreArticleModal" data-modal-toggle="restoreArticleModal" type="button" class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Restore Article</button> 
+                                <button onclick="deleteArticleModal({{$articleData['id']}})" data-modal-target="articleDeleteModal" data-modal-toggle="articleDeleteModal" type="button" class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800" aria-label="Close">Delete Permanently</button>
+                            
+                            </div>
+                            <div class="flex-2">
+                                <a
+                                    href="{{route('adminland.archivedarticles')}}"
+                                    class="button-link text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
+                                    Back
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,8 +182,10 @@
                             .replace(':module_slug', module_slug)
                             .replace(':article_slug', article_slug);
                 } else {
-                    toastify.error(data.message);
-                    console.log(data.message);
+                    //toastify.error(data.message);
+                    const link = `<a href="{{ route('adminland.archivedmodules') }}" style="color: {{$color}}; text-decoration: underline;">parent module</a>`;
+                    let htmlMessage = data.message.replace(":parent_module", link);
+                    toastify.errorWithRedirection(htmlMessage);
                 }   
             })
             .catch(error => {

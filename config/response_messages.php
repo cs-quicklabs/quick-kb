@@ -67,12 +67,15 @@
         'failed_to_get_article' => 'Failed to get article', 
         'failed_to_get_articles' => 'Failed to get articles', 
 
-        'restore_module_first' => 'Please restore its parent module first',
-        'restore_workspace_first' => 'Please restore its parent workspace first',
+        'restore_module_first' => 'Please restore its :parent_module first',
+        'restore_workspace_first' => 'Please restore its :parent_workspace first',
 
         'account_settings_updated' => 'Account settings updated successfully',
         'account_settings_not_updated' => 'Failed to update account settings',
 
         'article_liked' => 'Article liked successfully',
         'failed_to_like_article' => 'Failed to like article',
+
+        'article_rating_submitted' => 'Article rating submitted successfully',
+        'failed_to_submit_article_rating' => 'Failed to submit article rating',
     ];

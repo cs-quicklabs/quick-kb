@@ -4,6 +4,7 @@
     use App\Models\Theme;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Facades\Cookie;
+    use Illuminate\Support\Facades\Schema;
 
     /**
      * Truncates a string to a specified length and appends a suffix if needed
@@ -132,20 +133,39 @@
             $themeData = json_decode(Cookie::get('themeData'), true);
 
             if(!empty($themeData)){
-                //dd($themeData);
                 return $themeData;
-            }  else {
-                // Get theme values from DB
+            }
+
+
+            // For SQLite: check if the DB file exists
+            if (config('database.default') === 'sqlite') {
+                $sqlitePath = config('database.connections.sqlite.database');
+                $sqlitePath = database_path(basename($sqlitePath));
+                
+                if (!file_exists($sqlitePath)) {
+                    $themeData = $defaultThemeData;
+                    // Store in cookies
+                    Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
+                    return $themeData;
+                }
+            }
+
+
+            if(Schema::hasTable('themes')){
+                // Check if the theme table exists
                 $themeData = Theme::first();
                 if(empty($themeData)){
                     $themeData = $defaultThemeData;
+                } else {
+                    $themeData = $themeData->theme;
                 }
-                
-                $themeData = $themeData->theme;
-
-                // Store in cookies
-                Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
-                return $themeData;
+            } else {
+                // If the theme table does not exist, use default theme data
+                $themeData = $defaultThemeData;
             }
+
+            // Store in cookies
+            Cookie::queue('themeData', json_encode($themeData), 60 * 24 * 30);
+            return $themeData;
         }
     }

@@ -31,7 +31,7 @@ class WorkspaceRepository
                 'description' => $data['description'],
                 'slug' => Str::slug($data['title']).'-'.uniqid(),
                 'order' => $maxOrder + 1,
-                'status' => 1, // Active by default
+                'status' => config('constants.WORKSPACE_ACTIVE_STATUS'), // Active by default
                 'created_by' => Auth::id()
             ];
 
@@ -56,7 +56,7 @@ class WorkspaceRepository
      */
     public function getAllWorkspaces($params)
     {
-        $workspaces = Workspace::where('status', 1)
+        $workspaces = Workspace::where('status', config('constants.WORKSPACE_ACTIVE_STATUS'))
                 ->orderBy('order', 'asc')
                 ->get()
                 ->map(function($workspace) {
@@ -180,11 +180,12 @@ class WorkspaceRepository
     {  
         $search = $params['search']??"";
         $workspaces = Workspace::with('updatedBy')
-            ->where('status', 0)
+            ->where('status', config('constants.WORKSPACE_ARCHIVED_STATUS'))
             ->where(function ($query) use($search) {
                 $query->where('title', 'LIKE', '%'.$search.'%')
                     ->orWhere('description', 'LIKE', '%'.$search.'%');
             })
+            ->orderBy('updated_at', 'desc')
             ->get()
             ->map(function($workspace) {
                 return [
@@ -267,7 +268,7 @@ class WorkspaceRepository
     public function getArchivedWorkspace($workspaceSlug)
     {   
         $workspace = Workspace::with('modules', 'updatedBy')
-                        ->where('status', 0)
+                        ->where('status', config('constants.WORKSPACE_ARCHIVED_STATUS'))
                         ->where('slug', $workspaceSlug)
                         ->first();
         if(!empty($workspace)){

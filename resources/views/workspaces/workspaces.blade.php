@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.app_layout')
 @section('content')
 
@@ -34,7 +30,7 @@
     
         
         @if ($workspaces['workspaceCount'] > 0)
-            @if(getThemeValues()['theme_spacing'] == 'default')
+            @if($spacing == 'default')
                 <div id="draggable-list" class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
                     @foreach ($workspaces['workspaces'] as $i => $workspace)
                         <div id="workspacediv-{{$workspace['id']}}" 

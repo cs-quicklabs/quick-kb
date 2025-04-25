@@ -1,7 +1,3 @@
-@php
-                $color = getThemeValues()['color'];
-                $spacing = getThemeValues()['theme_spacing'];
-            @endphp
 <div class="fixed top-4 right-4">
     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         @if(Auth::check())
@@ -15,7 +11,7 @@
             <span class="sr-only">Open user menu</span>
             <img
                 class="w-8 h-8 rounded-full"
-                src="{{ asset('/images/2606517_5856.jpg') }}"
+                src="{{ asset('/images/profile_image.jpg') }}"
                 alt="user photo" />
         </button>
         <!-- Dropdown menu -->
@@ -59,7 +55,7 @@
                 <span class="sr-only">Open user menu</span>
                 <img
                     class="w-8 h-8 rounded-full"
-                    src="{{ asset('/images/2606517_5856.jpg') }}"
+                    src="{{ asset('/images/profile_image.jpg') }}"
                     alt="user photo" />
             </button>
         </a>

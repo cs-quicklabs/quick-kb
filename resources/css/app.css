@@ -184,6 +184,10 @@
   color: var(--breadcrumb-color) !important;
 }
 
+.button-link:hover {
+  color: white !important;
+}
+
 a:hover {
   color: var(--link-color) !important;
 }
@@ -191,6 +195,7 @@ a:hover {
 a .archived:hover {
   color: var(--link-color) !important;
 }
+
 
 /* quill editor */
 .ql-editor {

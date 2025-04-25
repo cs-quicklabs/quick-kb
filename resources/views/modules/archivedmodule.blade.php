@@ -1,7 +1,3 @@
-@php
-    $color = getThemeValues()['color'];
-    $spacing = getThemeValues()['theme_spacing'];
-@endphp
 @extends('layouts.app_layout')
 @section('content')
     <div class="max-w-3xl px-4 mb-16 mx-auto lg:px-6 sm:py-8 lg:py-8" style="--link-color: {{ $color }};">
@@ -28,23 +24,31 @@
                     to users but can be restored at any time.
                 </div>
                 <div class="flex">
-                    <button
-                        type="button"
-                        onclick="restoreModuleModal({{$module->id}})"
-                        data-modal-target="restoreModuleModal" 
-                        data-modal-toggle="restoreModuleModal"
-                        class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                        Restore Module
-                    </button>
-                    <button
-                        type="button"
-                        onclick="deleteModuleModal({{$module->id}})"
-                        class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
-                        data-modal-target="deleteModuleModal" 
-                        data-modal-toggle="deleteModuleModal" 
-                        aria-label="Close">
-                        Delete Permanently
-                    </button>
+                    <div class="flex-1">
+                        <button
+                            type="button"
+                            onclick="restoreModuleModal({{$module->id}})"
+                            data-modal-target="restoreModuleModal" 
+                            data-modal-toggle="restoreModuleModal"
+                            class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 me-2 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                            Restore Module
+                        </button>
+                        <button
+                            type="button"
+                            onclick="deleteModuleModal({{$module->id}})"
+                            class="text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
+                            data-modal-target="deleteModuleModal" 
+                            data-modal-toggle="deleteModuleModal" 
+                            aria-label="Close">
+                            Delete Permanently
+                        </button>
+                    </div>
+
+                    <a
+                        href="{{route('adminland.archivedmodules')}}"
+                        class="button-link text-red-800 bg-transparent border border-red-800 hover:bg-red-900 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-md text-xs px-3 py-1.5 text-center dark:hover:bg-red-600 dark:border-red-600 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
+                        Back
+                    </a>
                 </div>
             </div>
         @endif
@@ -118,7 +122,7 @@
 
         
             @if(!empty($module) && count($module->articles) > 0)
-                @if(getThemeValues()['theme_spacing'] == 'default')
+                @if($spacing == 'default')
                     <div class="max-w-3xl p-5 mx-auto mt-4 space-y-5 border border-gray-100 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 shadow-sm">
                         @foreach($module->articles as $article)
                             <div class="{{ $loop->last ? '' : 'border-b pb-5 ' }} border-gray-200 dark:border-gray-700">
@@ -239,7 +243,10 @@
 						.replace(':module_slug', module_slug);
 				}, 1000);
 			} else {
-				toastify.error(data.message);
+				//toastify.error(data.message);
+				const link = `<a href="{{ route('adminland.archivedworkspaces') }}" style="color: {{$color}}; text-decoration: underline;">parent workspace</a>`;
+				let htmlMessage = data.message.replace(":parent_workspace", link);
+				toastify.errorWithRedirection(htmlMessage);
 			}
 		})
 		.catch(error => {
