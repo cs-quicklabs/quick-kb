@@ -153,14 +153,15 @@ class ArticleRepository
             
             if($data['status'] == config('constants.ARTICLE_ACTIVE_STATUS')) {
                 if($article->module->workspace->status == config('constants.WORKSPACE_ARCHIVED_STATUS') || $article->module->status == config('constants.MODULE_ARCHIVED_STATUS')) {
-                    throw new \Exception(config('response_messages.restore_module_first'));
+                    $article->is_parent_archived = config('constants.PARENT_ARCHIVED');
+                    return $article;
                 }
             }
 
             $article->status = $data['status'];
             $article->updated_by = Auth::id();
             $article->save();
-
+            $article->is_parent_archived = config('constants.PARENT_NOT_ARCHIVED');
             return $article;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

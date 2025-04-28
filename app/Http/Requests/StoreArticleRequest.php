@@ -25,7 +25,7 @@ class StoreArticleRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
+            'content' => ['required_if:status,!2'],
             'module_id' => ['required', 'integer', 'exists:modules,id'],
         ];
     }
