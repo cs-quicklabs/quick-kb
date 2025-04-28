@@ -25,7 +25,7 @@ class UpdateArticleRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
+            'content' => ['required_if:status,!2'],
             'article_id' => ['required', 'integer', 'exists:articles,id'],
             'status' => ['required', 'integer', 'in:1,2'],
         ];

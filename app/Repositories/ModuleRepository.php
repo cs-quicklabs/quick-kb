@@ -206,7 +206,8 @@ class ModuleRepository
 
             if($data['status'] == config('constants.MODULE_ACTIVE_STATUS')){
                 if($module->workspace && $module->workspace->status == config('constants.WORKSPACE_ARCHIVED_STATUS')){
-                    throw new \Exception(config('response_messages.restore_workspace_first'));
+                    $module->is_parent_archived = config('constants.PARENT_ARCHIVED');
+                    return $module;
                 }
             }
 
@@ -222,6 +223,7 @@ class ModuleRepository
                 
             }
             DB::commit();
+            $module->is_parent_archived = config('constants.PARENT_NOT_ARCHIVED');
             return $module;
         } catch (\Exception $e) {
             DB::rollBack();

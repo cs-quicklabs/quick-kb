@@ -162,21 +162,30 @@
 		.then(response => response.json())
 		.then(data => {
 			if (data.success) {
-				toastify.success(data.message);
+				
 				const moduleData = data.data;
 				const workspace_slug = moduleData.workspace.slug;
 				const module_slug = moduleData.slug;
+				const is_parent_archived = moduleData.is_parent_archived;
+				if(is_parent_archived  == 1){
+					const url = "{{ route('workspaces.getArchivedWorkspace', ['workspace_slug' => ':workspace_slug']) }}"
+						.replace(':workspace_slug', workspace_slug);
+					
 
-				setTimeout(() => { 
-					window.location.href = "{{ route('articles.articles', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug']) }}"
-						.replace(':workspace_slug', workspace_slug)
-						.replace(':module_slug', module_slug);
-				}, 1000);
+					const link = `<a href="`+url+`" style="color: {{$color}}; text-decoration: underline;">parent workspace</a>`;
+					const htmlMessage = data.message.replace(":parent_workspace", link);
+					toastify.errorWithRedirection(htmlMessage);
+				} else {
+					toastify.success(data.message);
+					setTimeout(() => { 
+						window.location.href = "{{ route('articles.articles', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug']) }}"
+							.replace(':workspace_slug', workspace_slug)
+							.replace(':module_slug', module_slug);
+					}, 1000);
+				}
+				
 			} else {
-				//toastify.error(data.message);
-				const link = `<a href="{{ route('adminland.archivedworkspaces') }}" style="color: {{$color}}; text-decoration: underline;">parent workspace</a>`;
-				const htmlMessage = data.message.replace(":parent_workspace", link);
-				toastify.errorWithRedirection(htmlMessage);
+				toastify.error(data.message);
 			}
 		})
 		.catch(error => {

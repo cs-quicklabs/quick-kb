@@ -93,9 +93,14 @@ class ArticleController extends BaseController
     public function updateArticleStatus(Request $request, $article_id)
     {
         try {
-            $workspace = $this->articleRepository->updateArticleStatus($request->all(), $article_id);
+            $article = $this->articleRepository->updateArticleStatus($request->all(), $article_id);
+            
+            if($article->is_parent_archived == 1){
+                return $this->sendSuccessResponse($article , config('response_messages.restore_module_first'), config('statuscodes.OK'));
+                
+            }
 
-            return $this->sendSuccessResponse($workspace, config('response_messages.article_status_updated'), config('statuscodes.OK'));
+            return $this->sendSuccessResponse($article, config('response_messages.article_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_article_status'), config('statuscodes.BAD_REQUEST'));
         }

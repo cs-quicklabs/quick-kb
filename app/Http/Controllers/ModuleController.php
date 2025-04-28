@@ -134,6 +134,11 @@ class ModuleController extends BaseController
         try {
             $module = $this->moduleRepository->updateModuleStatus($request->all(), $module_id);
 
+            if($module->is_parent_archived == 1){
+                return $this->sendSuccessResponse($module , config('response_messages.restore_workspace_first'), config('statuscodes.OK'));
+                
+            }
+
             return $this->sendSuccessResponse($module, config('response_messages.module_status_updated'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_update_module_status'), config('statuscodes.BAD_REQUEST'));
