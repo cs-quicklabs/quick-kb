@@ -7,6 +7,7 @@ use App\Repositories\SettingRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
+use App\Http\Requests\ImportDatabaseRequest;
 class SettingController extends BaseController
 {
     protected $settingRepository;
@@ -44,14 +45,39 @@ class SettingController extends BaseController
     }
 
 
+    /**
+     * Display the manage database view page.
+     *
+     * @return \Illuminate\View\View
+     */
     public function manageDatabase()
     {
         return view('adminland.managedatabase');
     }
 
-    public function manageDatabasePost(Request $request)
+
+    /**
+     * Export the database.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportDatabase()
     {
-        $this->settingRepository->manageDatabase($request->all());
-        return redirect()->back()->with('success', config('response_messages.database_settings_updated'));
+        try {
+            $database = $this->settingRepository->exportDatabase();
+            return $this->sendSuccessResponse( $database, config('response_messages.database_exported'), config('statuscodes.OK'));
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_export_database'), config('statuscodes.BAD_REQUEST'));
+        }
+    }
+
+
+    public function importDatabase(ImportDatabaseRequest $request)  {
+        try {
+            $this->settingRepository->importDatabase($request->all());
+            return $this->sendSuccessResponse( [], config('response_messages.database_imported'), config('statuscodes.OK'));
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_import_database'), config('statuscodes.BAD_REQUEST'));        
+        }
     }
 } 

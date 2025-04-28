@@ -78,4 +78,13 @@
 
         'article_rating_submitted' => 'Article rating submitted successfully',
         'failed_to_submit_article_rating' => 'Failed to submit article rating',
+
+        'database_not_found' => 'Database not found',
+        'database_exported' => 'Database exported successfully',
+        'failed_to_export_database' => 'Failed to export database',
+
+        'invalid_database' => 'Invalid database',
+        'database_imported' => 'Database imported successfully',
+        'failed_to_import_database' => 'Failed to import database',
+        'missing_tables' => 'Required tables are missing from the database',
     ];
