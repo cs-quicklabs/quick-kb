@@ -246,7 +246,7 @@
 
             // Check if editor is empty (excluding HTML tags)
             const quillText = window.quill.getText().trim();
-            if (quillText === "") {
+            if (quillText === "" && status != 2) {
                 toastify.error("Please add some content.");
                 return;
             }
@@ -256,7 +256,10 @@
                 return;
             }
 
-            const quillContent = quill.root.innerHTML; // Get Quill editor content
+            let quillContent = quill.root.innerHTML; // Get Quill editor content
+            if(quillContent === "<p><br></p>") {
+                quillContent = ""; // Set to null if empty
+            }
 
             // Prepare form data
             const formData = new FormData();

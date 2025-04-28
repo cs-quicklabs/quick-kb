@@ -171,21 +171,31 @@
             .then(response => response.json())
             .then(data => { 
                 if (data.success) {
-                    toastify.success(data.message);
-                    
                     const articleData = data.data;
+                    const is_parent_archived = articleData.is_parent_archived;
                     const workspace_slug = articleData.module.workspace.slug;
                     const module_slug = articleData.module.slug;
                     const article_slug = articleData.slug;
-                    window.location.href = "{{ route('articles.articleDetails', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug', 'article_slug' => ':article_slug']) }}"
+                    
+                    if(is_parent_archived == 1){
+                        
+                        const url = "{{ route('modules.getArchivedModule', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug']) }}"
+                            .replace(':workspace_slug', workspace_slug)
+                            .replace(':module_slug', module_slug);
+                        
+
+                        const link = `<a href="`+url+`" style="color: {{$color}}; text-decoration: underline;">parent module</a>`;
+                        const htmlMessage = data.message.replace(":parent_module", link);
+                        toastify.errorWithRedirection(htmlMessage);
+                    } else {
+                        toastify.success(data.message);
+                        window.location.href = "{{ route('articles.articleDetails', ['workspace_slug' => ':workspace_slug', 'module_slug' => ':module_slug', 'article_slug' => ':article_slug']) }}"
                             .replace(':workspace_slug', workspace_slug)
                             .replace(':module_slug', module_slug)
                             .replace(':article_slug', article_slug);
+                    }
                 } else {
-                    //toastify.error(data.message);
-                    const link = `<a href="{{ route('adminland.archivedmodules') }}" style="color: {{$color}}; text-decoration: underline;">parent module</a>`;
-                    let htmlMessage = data.message.replace(":parent_module", link);
-                    toastify.errorWithRedirection(htmlMessage);
+                    toastify.error(data.message);
                 }   
             })
             .catch(error => {
