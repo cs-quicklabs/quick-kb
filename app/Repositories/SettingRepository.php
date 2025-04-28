@@ -73,4 +73,9 @@ class SettingRepository
         $userSettings = getLoggedInUser();
         return $userSettings;
     }
+
+
+    function manageDatabase($params) {
+        dd($params);
+    }
 } 

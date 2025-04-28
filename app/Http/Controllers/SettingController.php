@@ -42,4 +42,16 @@ class SettingController extends BaseController
         $userSettings = $this->settingRepository->settings();
         return view('adminland.accountsettings', compact('userSettings'));
     }
+
+
+    public function manageDatabase()
+    {
+        return view('adminland.managedatabase');
+    }
+
+    public function manageDatabasePost(Request $request)
+    {
+        $this->settingRepository->manageDatabase($request->all());
+        return redirect()->back()->with('success', config('response_messages.database_settings_updated'));
+    }
 } 
