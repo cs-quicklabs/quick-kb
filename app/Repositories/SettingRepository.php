@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingRepository
 {
@@ -72,5 +74,90 @@ class SettingRepository
     {   
         $userSettings = getLoggedInUser();
         return $userSettings;
+    }
+
+
+    /**
+     * Manage the database by exporting it as a SQLite file.
+     *
+     * @return array An associative array with keys 'status' and 'message'.
+     */
+    public function exportDatabase() {
+        try {
+            $sqlitePath = config('database.connections.sqlite.database');
+            $sqlitePath = database_path(basename($sqlitePath));
+            $exportPath = storage_path('app/public/exports');
+            $exportFileName = 'database.sqlite';
+            $exportFilePath = $exportPath . '/' . $exportFileName;
+            $resp = [];
+            if (!file_exists($sqlitePath)) {
+                $resp['status'] = false;
+                $resp['message'] = config('response_messages.database_not_found');
+                return $resp;
+            }
+            if (!file_exists($exportPath)) {
+                mkdir($exportPath, 0777, true);
+            }
+            copy($sqlitePath, $exportFilePath);
+
+            $path = asset('storage/exports/' . $exportFileName);
+
+            $resp['path'] = $path;
+            return $resp;
+        } catch (\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+    public function importDatabase($params)  {
+        try {
+            $file = $params['database_file'];
+            $filePath = $file->storeAs('imports', 'database.sqlite', 'public');
+
+            $tempDBPath = storage_path('app/public/' . $filePath);
+           
+
+            config([
+                'database.connections.temp_sqlite' => [
+                    'driver' => 'sqlite',
+                    'database' => $tempDBPath,
+                    'prefix' => '',
+                ],
+            ]);
+
+            $tables = DB::connection('temp_sqlite')
+                    ->select("SELECT name FROM sqlite_master WHERE type='table';");
+
+            $tableNames = collect($tables)->pluck('name')->toArray();
+            
+            $requiredTables = config('constants.REQUIRED_TABLES_FOR_IMPORT'); 
+
+            $missingTables = array_diff($requiredTables, $tableNames);
+            if ($missingTables) {
+                unlink($tempDBPath);
+                throw new \Exception(config('response_messages.missing_tables'));
+            }
+
+            $destinationPath = database_path('database.sqlite'); 
+
+            if (file_exists($destinationPath)) {  
+                unlink($destinationPath);
+            }
+            copy($tempDBPath, $destinationPath); 
+
+            chmod($destinationPath, 0777);
+
+            //Clean up temp file
+            unlink($tempDBPath);
+
+            // Clear old sqlite connection
+            DB::purge('sqlite');        
+            DB::reconnect('sqlite'); 
+
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 } 

@@ -61,6 +61,9 @@ Route::middleware([Authenticate::class])->group(function () {
         Route::get('/settings', [SettingController::class, 'settings'])->name('adminland.settings');
 
         Route::POST('/accountsettings', [SettingController::class, 'updateAccountSettings'])->name('adminland.updateAccountSettings'); 
+        Route::GET('/manage-database', [SettingController::class, 'manageDatabase'])->name('adminland.manageDatabase');
+        Route::GET('/export-database', [SettingController::class, 'exportDatabase'])->name('adminland.exportDatabase');
+        Route::POST('/import-database', [SettingController::class, 'importDatabase'])->name('adminland.importDatabase');
     });
 
     Route::post('/workspaces', [WorkspaceController::class, 'createWorkspace'])->name('workspaces.createWorkspace');

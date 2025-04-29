@@ -13,7 +13,7 @@ else
     echo "APP_ENV=production" >> .env
     echo "APP_DEBUG=true" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
-    echo "DB_DATABASE=/mnt/data/database.sqlite" >> .env
+    echo "DB_DATABASE=database/database.sqlite" >> .env
     echo "SCOUT_DRIVER=tntsearch" >> .env
     echo "SESSION_DRIVER=database" >> .env
     echo "SESSION_SECURE_COOKIE=true" >> .env
@@ -29,11 +29,11 @@ echo "Application key in .env: $APP_KEY"
 
 # Make sure mounted directory exists and is writable
 echo "Setting up mounted data directory..."
-mkdir -p /mnt/data
-chmod 777 /mnt/data
+# mkdir -p /mnt/data
+# chmod 777 /mnt/data
 
 # Set database path
-DB_PATH="/mnt/data/database.sqlite"
+DB_PATH="database/database.sqlite"
 
 # Check if database exists, if not create it
 if [ ! -f "$DB_PATH" ] || [ ! -s "$DB_PATH" ]; then
@@ -44,7 +44,7 @@ if [ ! -f "$DB_PATH" ] || [ ! -s "$DB_PATH" ]; then
 
     # Create a symbolic link for database search
     mkdir -p storage/search
-    ln -sf /mnt/data/search storage/search || true
+    # ln -sf /mnt/data/search storage/search || true
 
     php artisan scout:import "App\Models\Article"
 else
