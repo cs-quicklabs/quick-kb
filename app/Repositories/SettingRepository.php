@@ -114,7 +114,6 @@ class SettingRepository
         try {
             $file = $params['database_file'];
             $filePath = $file->storeAs('imports', 'database.sqlite', 'public');
-            //$importPath = storage_path('app/'.$filePath);
 
             $tempDBPath = storage_path('app/public/' . $filePath);
            
@@ -132,7 +131,7 @@ class SettingRepository
 
             $tableNames = collect($tables)->pluck('name')->toArray();
             
-            $requiredTables = ['users', 'knowledge_bases', 'themes', 'workspaces', 'modules', 'articles', 'article_ratings']; 
+            $requiredTables = config('constants.REQUIRED_TABLES_FOR_IMPORT'); 
 
             $missingTables = array_diff($requiredTables, $tableNames);
             if ($missingTables) {
@@ -142,19 +141,19 @@ class SettingRepository
 
             $destinationPath = database_path('database.sqlite'); 
 
-            if (file_exists($destinationPath)) {
-                unlink($destinationPath); 
+            if (file_exists($destinationPath)) {  
+                unlink($destinationPath);
             }
-
             copy($tempDBPath, $destinationPath); 
 
             chmod($destinationPath, 0777);
 
-            // (optional) Clean up temp file
+            //Clean up temp file
             unlink($tempDBPath);
 
-            Artisan::call('config:clear');
-            Artisan::call('cache:clear');
+            // Clear old sqlite connection
+            DB::purge('sqlite');        
+            DB::reconnect('sqlite'); 
 
             return true;
         } catch (\Exception $e) {

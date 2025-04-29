@@ -14,4 +14,14 @@
 
         'PARENT_ARCHIVED' => 1,
         'PARENT_NOT_ARCHIVED' => 0,
+
+        'REQUIRED_TABLES_FOR_IMPORT' => [
+            'knowledge_bases',
+            'articles',
+            'article_ratings',
+            'modules',
+            'workspaces',
+            'themes',
+            'users'
+        ],
     ];
