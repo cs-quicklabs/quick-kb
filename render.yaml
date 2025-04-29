@@ -2,7 +2,6 @@ services:
   - name: Quick-KB
     type: web
     env: docker
-    plan: free
     dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_ENV
