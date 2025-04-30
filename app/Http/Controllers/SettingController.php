@@ -72,12 +72,34 @@ class SettingController extends BaseController
     }
 
 
+    /**
+     * Import the database.
+     *
+     * @param  \App\Http\Requests\ImportDatabaseRequest  $request
+     * @return \Illuminate\Http\Response
+     */
     public function importDatabase(ImportDatabaseRequest $request)  {
         try {
             $this->settingRepository->importDatabase($request->all());
             return $this->sendSuccessResponse( [], config('response_messages.database_imported'), config('statuscodes.OK'));
         } catch (\Exception $e) {
             return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_import_database'), config('statuscodes.BAD_REQUEST'));        
+        }
+    }
+
+
+    /**
+     * Save the article footer text.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveArticleFooter(Request $request) {
+        try {
+            $this->settingRepository->saveArticleFooter($request->all());
+            return $this->sendSuccessResponse( [], config('response_messages.article_footer_saved'), config('statuscodes.OK'));
+        } catch (\Exception $e) {
+            return $this->sendErrorResponse($e->getMessage(), config('response_messages.failed_to_save_article_footer'), config('statuscodes.BAD_REQUEST'));   
         }
     }
 } 

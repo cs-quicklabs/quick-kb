@@ -1,5 +1,6 @@
 @extends('adminland.common.layout')
 @section('content')
+@vite('resources/js/utils/quill.js')
 <main class="max-w-xl pb-12 px-4 lg:col-span-6">
     <div>
         <h1 class="text-lg font-semibold dark:text-white">Account Settings</h1>
@@ -151,7 +152,33 @@
                     <span class="text-red-500 text-xs error-description" id="error-knowledge_base_name"></span>
                 </div>
             </div>
+
+            
         </form>
+
+        <div>
+            <h1 class="text-md font-semibold dark:text-white mt-8">Article Footer</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-xs">
+                Fill in the details if you want to show footer on article page. Leave the fields empty
+                if you do not want to show any footer.
+            </p>
+            <div class="flex flex-row items-start">
+                <!-- <textarea
+                    type="text"
+                    id="footer"
+                    class="bg-gray-50 mt-2 me-2 border border-gray-300 h-32 text-gray-900 text-sm rounded focus:ring-{{$color}}-500 focus:border-{{$color}}-500 w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"
+                    placeholder="More information.."
+                    required>{{$userSettings['themeData']['article_footer']??''}}</textarea> -->
+
+                    <div class="grow relative " style="--link-color: {{ $color }};">
+                        <input type="hidden" id="footer-content" value="{{$userSettings['themeData']['article_footer']??''}}">
+                        <div class="h-full w-full p-1.5 mb-12" style="line-height: 2rem;">
+                            <div  id ="footerQuill" class="bg-gray-50 mt-2 me-2 border border-gray-300 h-32 text-gray-900 text-sm rounded focus:ring-{{$color}}-500 focus:border-{{$color}}-500 w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-{{$color}}-500 dark:focus:border-{{$color}}-500"></div>
+                        </div>
+                    </div>
+                <button onclick="saveArticleFooter()" class="text-white mt-2 bg-{{$color}}-700 hover:bg-{{$color}}-800 focus:ring-4 focus:outline-none focus:ring-{{$color}}-300 font-medium rounded text-sm w-full sm:w-auto px-5 py-1.5 text-center dark:bg-{{$color}}-600 dark:hover:bg-{{$color}}-700 dark:focus:ring-{{$color}}-800 mt-2">Save</button>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -172,6 +199,36 @@
     @endif
 
     <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Disable Editing Initially
+            function disabledQuill(){
+                // Disable Editing Initially
+                setTimeout(() => {
+                    if (typeof quill.enable === "function") {
+                        quill.enable(true);
+
+                        // Load the content from the hidden input field
+                        const articleContent = document.getElementById("footer-content")?.value || "";
+
+                        if (articleContent.trim() !== "") {
+                            quill.root.dataset.placeholder = "";
+                            quill.root.innerHTML = articleContent;
+                        }
+                    } else {
+                        console.error("Quill is not initialized properly!");
+                    }
+                }, 500);
+
+
+                
+            }
+
+            disabledQuill();
+            
+        });
+
+
         document.getElementById('accountSettingsForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let formData = new FormData(e.target);
@@ -206,5 +263,48 @@
                 console.error('Error:', error);
             });
         });
+
+        function saveArticleFooter() {
+
+            let quillContent = quill.root.innerHTML; // Get Quill editor content
+            if(quillContent === "<p><br></p>") {
+                quillContent = ""; // Set to null if empty
+            }
+            console.log(quillContent);
+            let footerText = quillContent;
+            let formData = new FormData();
+            formData.append('footer', footerText);
+            formData.append('_token', '{{ csrf_token() }}');
+            
+            fetch('{{route("adminland.saveArticleFooter")}}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    toastify.success(data.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    if (typeof data.errors !== 'object') {
+                        toastify.error(data.message);
+                        Object.entries(data.errors).forEach(([key, messages])  => {
+                            messages.forEach(message => {
+                                document.querySelector(`#error-${key}`).textContent = `${message}`;
+                            });
+                            
+                        });
+                    } else {
+                        toastify.error(data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                toastify.error("Something went wrong.");
+                console.error('Error:', error);
+            });
+        }
     </script>
 @endsection 

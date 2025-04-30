@@ -38,7 +38,7 @@
                     
                     if(!empty($knowledgeBaseTheme)){
                         $theme = $knowledgeBaseTheme->theme;
-                        
+                        $theme['article_footer'] = $knowledgeBaseTheme->article_footer??"";
                     }
                 }
                 $userData['user'] = $user ?? [];

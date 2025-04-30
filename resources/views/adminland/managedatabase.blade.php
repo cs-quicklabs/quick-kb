@@ -24,7 +24,7 @@
                     @csrf
                     
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-                    <input class="block w-full text-sm text-{{$color}}-900 border border-{{$color}}-300 rounded-lg cursor-pointer bg-{{$color}}-50 dark:text-{{$color}}-400 focus:outline-none dark:bg-{{$color}}-700 dark:border-{{$color}}-600 dark:placeholder-{{$color}}-400" aria-describedby="file_input_help" id="file_input" type="file" name="database_file" accept=".sqlite" required>
+                    <input class="block w-full text-xs text-{{$color}}-900 border border-{{$color}}-300 rounded-lg cursor-pointer bg-{{$color}}-50 dark:text-{{$color}}-400 focus:outline-none dark:bg-{{$color}}-700 dark:border-{{$color}}-600 dark:placeholder-{{$color}}-400" aria-describedby="file_input_help" id="file_input" type="file" name="database_file" accept=".sqlite" required>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Only sqlite files are allowed.</p>
 
                     @error('database_file')

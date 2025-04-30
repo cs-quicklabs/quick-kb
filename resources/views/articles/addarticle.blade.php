@@ -1,5 +1,6 @@
 @extends('layouts.article_layout')
 @section('content')
+@vite('resources/js/utils/quill.js')
     <main class="max-w-screen-2xl mx-auto mt-16 py-3 md:px-4 sm:py-5 lg:px-8" style="--breadcrumb-color: {{ $color }};">
         <div class="bg-white relative z-0 flex-1 focus:outline-none h-screen">
             <div class="flex justify-center px-4 pb-4 pt-5 sm:px-6 lg:px-8">
@@ -84,6 +85,10 @@
                         <div class="grow relative" style="--link-color: {{ $color }};">
                             <div class="quill h-full mb-12" style="line-height: 2rem;">
                                 <div id ="editor" ></div>
+
+                                <div class="ql-editor" style="--link-color: {{ $color }};">
+                                    {!! getLoggedInUser()['themeData']['article_footer'] !!}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Theme; 
 
 
 class ArticleRepository
@@ -215,6 +215,12 @@ class ArticleRepository
                 })
                 ->where('slug', $article_slug)
                 ->first();
+        if(!$article) {
+            return false;
+        }
+        $article_footer = Theme::first()->article_footer??"";
+        
+        $article->footer = $article_footer;
         
         return $article??false;
     }
