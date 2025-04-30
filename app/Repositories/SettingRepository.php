@@ -110,6 +110,13 @@ class SettingRepository
     }
 
 
+    /**
+     * Import a SQLite database file to replace the current database.
+     *
+     * @param array $params An associative array containing a single key 'database_file' which is an instance of Illuminate\Http\UploadedFile.
+     * @return bool True on successful import.
+     * @throws \Exception If the database file is not a valid SQLite database or if the import fails.
+     */
     public function importDatabase($params)  {
         try {
             $file = $params['database_file'];
@@ -155,6 +162,27 @@ class SettingRepository
             DB::purge('sqlite');        
             DB::reconnect('sqlite'); 
 
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+/**
+ * Save the article footer in the theme.
+ *
+ * @param array $params The associative array containing the footer content to be saved.
+ * @return bool True if the footer was successfully saved, otherwise false.
+ * @throws \Exception If there's an error during the update process.
+ */
+
+    public function saveArticleFooter($params)  {
+        try {
+            $theme = Theme::first();
+            $theme->update([
+                'article_footer' => $params['footer']
+            ]);
             return true;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

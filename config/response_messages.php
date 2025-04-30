@@ -87,4 +87,7 @@
         'database_imported' => 'Database imported successfully',
         'failed_to_import_database' => 'Failed to import database',
         'missing_tables' => 'Required tables are missing from the database',
+
+        'article_footer_saved' => 'Article footer saved successfully',    
+        'failed_to_save_article_footer' => 'Failed to save article footer',
     ];

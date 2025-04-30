@@ -1,5 +1,7 @@
 @extends('layouts.article_layout')
 @section('content')
+@vite('resources/js/utils/quill.js')
+
     <meta property="og:url" content="{{url()->current()}}">
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{$articleData->title?? ''}}">
@@ -107,7 +109,12 @@
                         <div class="grow relative" style="--link-color: {{ $color }};">
                             <div class="quill h-full mb-12" style="line-height: 2rem;">
                                 <div id ="editor" ></div>
+                               
                             </div>
+                        </div>
+
+                        <div class="ql-editor" style="--link-color: {{ $color }};">
+                            {!!$articleData->footer!!}
                         </div>
                     </div>
 

@@ -13,7 +13,8 @@ class Theme extends Model
         'knowledge_base_id',
         'name',
         'theme_type',
-        'theme'
+        'theme',
+        'article_footer'
     ];
 
     protected function casts(): array 
