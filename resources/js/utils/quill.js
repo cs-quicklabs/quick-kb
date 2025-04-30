@@ -3,8 +3,10 @@ import "quill/dist/quill.snow.css";
 
 const ColorClass = Quill.import('attributors/class/color');
 const SizeStyle = Quill.import('attributors/style/size');
+const SizeClass = Quill.import('attributors/class/size');
 Quill.register(ColorClass, true);
 Quill.register(SizeStyle, true);
+Quill.register(SizeClass, true);
 
 
 document.addEventListener("DOMContentLoaded", () => {
