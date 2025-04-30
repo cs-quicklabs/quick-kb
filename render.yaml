@@ -3,7 +3,7 @@ services:
     type: web
     env: docker
     plan: free
-    dockerfilePath: ./DODockerfile
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_ENV
         value: production
